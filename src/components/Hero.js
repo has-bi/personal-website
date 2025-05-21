@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export default function Hero() {
   return (
-    <section className="px-5 pt-5">
+    <section id="hero-section" className="px-5 pt-5">
       <div className="relative h-225 w-full">
         <div className="absolute inset-0 z-0 bg-white">
           <Image
@@ -11,17 +11,18 @@ export default function Hero() {
             alt="Background"
             className="object-cover rounded-4xl"
             fill
+            priority
           ></Image>
         </div>
 
         <div className="container mx-auto px-4 py-20 relative z-10 h-full flex flex-col justify-end">
-          <div className="max-w-2xl">
+          <div className="w-full max-w-150">
             <h1 className="text-5xl font-bold leading-tight mb-4 text-white">
-              Join a passionate community of Developers!
+              I make machines do more so you can do less
             </h1>
 
             <p className="text-xl mb-8 text-white/80">
-              Sharing Knowledge, building projects, and growing together
+              Hi! I'm Hasbi, an Applied AI Engineer based in Jakarta.
             </p>
 
             <div className="flex gap-4">

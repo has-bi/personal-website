@@ -3,16 +3,45 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isHeroSection, setIsHeroSection] = useState(false);
+
+  useEffect(() => {
+    const checkSection = () => {
+      const heroSection = document.getElementById("hero-section");
+      if (!heroSection) return;
+
+      const heroBottom = heroSection.getBoundingClientRect().bottom;
+      setIsHeroSection(heroBottom > 0);
+    };
+
+    checkSection();
+
+    window.addEventListener("scroll", checkSection);
+
+    return () => {
+      window.removeEventListener("scroll", checkSection);
+    };
+  }, []);
 
   return (
-    <header className="fixed w-full top-8 z-50">
+    <header
+      className={`fixed w-full top-8 z-50 transition-all duration-300 ${
+        !isHeroSection
+          ? "bg-white/70 backdrop-blur-md shadow-sm rounded-full mx-auto max-w-7xl left-0 right-0 px-4"
+          : ""
+      }`}
+    >
       <div className="container mx-auto py-3 flex justify-between items-center">
         {/* Logo */}
-        <div className="bg-white rounded-full p-1 flex justify-between">
+        <div
+          className={`${
+            !isHeroSection ? "bg-transparent" : "bg-white"
+          } rounded-full p-1 flex justify-between transition-all duration-300`}
+        >
           <Link href="/" className="flex items-center">
             <Image
               src="/images/Logo Primary - Transparant.png"
@@ -28,25 +57,41 @@ export default function Header() {
         <nav className="hidden md:flex items-center space-x-6">
           <Link
             href="/"
-            className="text-white text-sm font-light px-3 py-1 rounded-full border border-white  hover:bg-gray-200/40 hover:text-black transition-colors"
+            className={`text-sm font-light px-3 py-1 rounded-full border transition-colors ${
+              isHeroSection
+                ? "text-white border-white hover:bg-gray-200/40 hover:text-black"
+                : "text-black border-black hover:bg-black hover:text-white"
+            }`}
           >
             Home
           </Link>
           <Link
             href="/"
-            className="text-white text-sm font-light px-3 py-1 rounded-full border border-white  hover:bg-gray-200/40 hover:text-black transition-colors"
+            className={`text-sm font-light px-3 py-1 rounded-full border transition-colors ${
+              isHeroSection
+                ? "text-white border-white hover:bg-gray-200/40 hover:text-black"
+                : "text-black border-black hover:bg-black hover:text-white"
+            }`}
           >
             Projects
           </Link>
           <Link
             href="/"
-            className="text-white text-sm font-light px-3 py-1 rounded-full border border-white  hover:bg-gray-200/40 hover:text-black transition-colors"
+            className={`text-sm font-light px-3 py-1 rounded-full border transition-colors ${
+              isHeroSection
+                ? "text-white border-white hover:bg-gray-200/40 hover:text-black"
+                : "text-black border-black hover:bg-black hover:text-white"
+            }`}
           >
             About
           </Link>
           <Link
             href="/"
-            className="text-white text-sm font-light px-3 py-1 rounded-full border border-white  hover:bg-gray-200/40 hover:text-black transition-colors"
+            className={`text-sm font-light px-3 py-1 rounded-full border transition-colors ${
+              isHeroSection
+                ? "text-white border-white hover:bg-gray-200/40 hover:text-black"
+                : "text-black border-black hover:bg-black hover:text-white"
+            }`}
           >
             Contact
           </Link>
@@ -55,7 +100,11 @@ export default function Header() {
         {/* CTA BUTTON */}
         <Link
           href="/contact"
-          className="hidden md:block bg-black text-white text-sm rounded-full px-4 py-2 font-medium hover:bg-opacity-80 transition-colors"
+          className={`hidden md:block text-sm rounded-full px-4 py-2 font-medium transition-colors ${
+            isHeroSection
+              ? "bg-black text-white hover:bg-opacity-80"
+              : "bg-black/80 text-white hover:bg-black"
+          }`}
         >
           Hire Me
         </Link>
@@ -69,7 +118,7 @@ export default function Header() {
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
-            stroke="currentColor"
+            stroke={isHeroSection ? "white" : "black"}
             className="w-6 h-6"
           >
             <path

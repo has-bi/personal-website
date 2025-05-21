@@ -4,25 +4,27 @@ import Link from "next/link";
 
 export default function ProjectCard({ project }) {
   return (
-    <div className="bg-white rounded-lg transition-all duration-300 hover:drop-shadow-2xl drop-shadow-md">
+    <div className="bg-gray-50 rounded-lg transition-all duration-300 hover:drop-shadow-2xl overflow-hidden">
       <Link
         href={`/projects/${project.slug}`}
         className="flex flex-col md:flex-row h-full"
       >
         {/* Left side - Image */}
-        <div className="md:w-5/12 relative h-64 md:h-auto rounded-lg">
-          <Image
-            src={project.coverImage || "https://via.placeholder.com/600x400"}
-            alt={project.title}
-            fill
-            sizes="(max-width: 768px) 100vw, 40vw"
-            className="object-cover"
-          />
+        <div className="md:w-5/12 p-6">
+          <div className="relative w-full pb-[75%] overflow-hidden rounded-lg">
+            <Image
+              src={project.coverImage || "https://via.placeholder.com/600x400"}
+              alt={project.title}
+              fill
+              className="object-cover"
+              sizes="(max-width: 768px) 100vw, 40vw"
+            />
+          </div>
         </div>
 
         {/* Right side - Content */}
         <div className="md:w-7/12 p-6 md:p-8 flex flex-col">
-          <h2 className="text-2xl font-semibold text-gray-900 mb-2">
+          <h2 className="text-3xl md:text-3xl font-normal mb-6 leading-snug">
             {project.title}
           </h2>
 
@@ -30,7 +32,7 @@ export default function ProjectCard({ project }) {
 
           {/* Author/Date section */}
           <div className="mt-auto flex items-center">
-            <div className="ml-3">
+            <div className="ml-0">
               <p className="font-medium text-gray-900">{project.client}</p>
               <p className="text-sm text-gray-500">{project.date}</p>
             </div>

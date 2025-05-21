@@ -1,0 +1,16 @@
+/* Enhanced 3D effect */
+.card-stack {
+  perspective: 1000px; /* Creates 3D space */
+}
+
+.card-wrapper {
+  opacity: 0;
+  transform: translateY(40px) translateZ(-20px) rotateX(10deg);
+  transform-origin: center bottom;
+  transition: all 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card-wrapper.visible {
+  opacity: 1;
+  transform: translateY(0) translateZ(0) rotateX(0);
+}

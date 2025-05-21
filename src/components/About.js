@@ -3,7 +3,7 @@ import Link from "next/link";
 
 function About() {
   return (
-    <section className="w-full py-16">
+    <section className="w-full pt-16">
       <div className="container mx-auto px-4">
         <div className="flex flex-col md:flex-row gap-8 md:gap-16">
           <div className="md:w-1/4">
