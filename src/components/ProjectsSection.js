@@ -10,38 +10,34 @@ import { motion, stagger, useInView } from "framer-motion";
 const projects = [
   {
     slug: "po-tracker-document-ai",
-    title:
-      "Intelligent Document Processing System for Automating Purchase Order Data Entry Workflows",
+    title: "Purchase Order Data Entry Automations using Document AI",
     desc: "Transformed manual document processing into an intelligent system that automatically extracts data from seven different (more) distributor formats. This cloud-based solution reduced processing costs by 99%, increased speed by 92%, and maintains a remarkable 0.2% error rate. Now the team tracks orders effortlessly while focusing on what humans do best—building relationships, not entering data.",
     coverImage: "/images/projects/po-cover.png",
-    date: "Jul 20, 2024",
+    date: "2024",
     client: "Youvit",
   },
   {
     slug: "whatsapp-affiliate-automation",
-    title:
-      "WhatsApp-Based Communication Platform for Managing and Automating Affiliate Partnerships",
+    title: "Streamlining Affiliate Communications with WhatsApp Automation",
     desc: "Built an intelligent WhatsApp-based system that automates and personalizes affiliate communications at scale. This Next.js platform enables templated messaging, scheduled broadcasts, and centralized contact management through an intuitive web interface. The system integrates seamlessly with Google Sheets, allowing the team to maintain affiliate relationships efficiently while focusing on strategy rather than manual message sending.",
-    coverImage: "/images/projects/po-cover.png",
-    date: "May 14, 2025",
+    coverImage: "/images/projects/affiliate-cover.png",
+    date: "2025",
     client: "Youvit",
   },
   {
     slug: "theramind-mental-wellness",
-    title:
-      "Mobile-First Digital Mental Wellness Application with Emotion-Centered Architecture Design",
+    title: "Emotion-Centered Digital Companion for Mental Wellness",
     desc: "Designed and built a comprehensive mental wellness application that helps users track their emotional states, engage in AI-powered therapeutic conversations, and discover relevant mental health content. This mobile-first platform uses an emotion-centric architecture where feelings serve as the connecting thread between journaling, mood tracking, and personalized recommendations—creating a cohesive experience that supports users on their mental health journey.",
-    coverImage: "/images/projects/po-cover.png",
-    date: "Mar 8, 2025",
+    coverImage: "/images/projects/theramind-cover.png",
+    date: "2025",
     client: "Devscale ",
   },
   {
     slug: "nutritalk-ai-customer-service",
-    title:
-      "AI-Powered WhatsApp Nutritional Guidance System with Retrieval-Augmented Knowledge Base",
+    title: "AI-Powered Customer Service on Indonesia's Most Popular Platform",
     desc: "Created an intelligent WhatsApp-based nutrition assistant that gives Youvit customers 24/7 access to personalized vitamin information. By moving from a traditional web interface to WhatsApp and implementing Retrieval-Augmented Generation (RAG), we achieved a 98% increase in user adoption while reducing response times from 4 hours to just 6 minutes. The system resolves 91% of customer inquiries automatically, freeing Youvit's nutritionist from repetitive questions and expanding their marketing database by 42%.",
-    coverImage: "/images/projects/po-cover.png",
-    date: "Nov 18, 2024",
+    coverImage: "/images/projects/nutritalk-cover.png",
+    date: "2024",
     client: "Youvit",
   },
 ];
@@ -89,22 +85,23 @@ export default function ProjectsSection() {
           </div>
         </div>
 
-        <motion.div
-          className="grid gap-8"
-          variants={containerVariants}
-          initial="hidden"
-          animate={isInView ? "visible" : "hidden"}
-        >
-          {projects.map((project) => (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {projects.map((project, index) => (
             <motion.div
               key={project.slug}
+              custom={index}
+              initial="hidden"
+              animate={isInView ? "visible" : "hidden"}
               variants={cardVariants}
-              className="card-item"
+              transition={{
+                delay: index * 0.1,
+              }}
+              className="h-full"
             >
               <ProjectCard project={project} />
             </motion.div>
           ))}
-        </motion.div>
+        </div>
 
         <div className="flex justify-end mt-8">
           <Link

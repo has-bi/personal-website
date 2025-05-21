@@ -49,7 +49,7 @@ function About() {
 
       {/* Bottom divider line */}
       <div className="w-full border-t border-gray-200 mt-16 flex justify-center">
-        <div className="w-5 h-5 bg-white flex items-center justify-center -mt-2.5">
+        <div className="w-5 h-5  flex items-center justify-center -mt-2.5">
           <span className="text-xl">+</span>
         </div>
       </div>

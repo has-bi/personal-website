@@ -5,7 +5,7 @@ export default function Hero() {
   return (
     <section id="hero-section" className="px-5 pt-5">
       <div className="relative h-225 w-full">
-        <div className="absolute inset-0 z-0 bg-white">
+        <div className="absolute inset-0 z-0 ">
           <Image
             src="/images/hero-bg.jpg"
             alt="Background"
@@ -16,9 +16,9 @@ export default function Hero() {
         </div>
 
         <div className="container mx-auto px-4 py-20 relative z-10 h-full flex flex-col justify-end">
-          <div className="w-full max-w-150">
+          <div className="w-full max-w-160">
             <h1 className="text-5xl font-bold leading-tight mb-4 text-white">
-              I make machines do more so you can do less
+              I Make Machines Do More So You Can Do Less
             </h1>
 
             <p className="text-xl mb-8 text-white/80">

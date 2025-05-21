@@ -4,31 +4,26 @@ import Link from "next/link";
 
 export default function ProjectCard({ project }) {
   return (
-    <div className="bg-gray-50 rounded-lg transition-all duration-300 hover:drop-shadow-2xl overflow-hidden">
-      <Link
-        href={`/projects/${project.slug}`}
-        className="flex flex-col md:flex-row h-full"
-      >
-        {/* Left side - Image */}
-        <div className="md:w-5/12 p-6">
-          <div className="relative w-full pb-[75%] overflow-hidden rounded-lg">
-            <Image
-              src={project.coverImage || "https://via.placeholder.com/600x400"}
-              alt={project.title}
-              fill
-              className="object-cover"
-              sizes="(max-width: 768px) 100vw, 40vw"
-            />
-          </div>
+    <Link href={`/projects/${project.slug}`} className="block h-full">
+      <div className="bg-white rounded-2xl transition-all duration-300 hover:shadow-lg outline-white hover:outline-indigo-400 overflow-hidden h-full flex flex-col">
+        {/* Image at the top */}
+        <div className="relative w-full pb-[65%] overflow-hidden">
+          <Image
+            src={project.coverImage || "https://via.placeholder.com/600x400"}
+            alt={project.title}
+            fill
+            className="object-cover"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          />
         </div>
 
-        {/* Right side - Content */}
-        <div className="md:w-7/12 p-6 md:p-8 flex flex-col">
-          <h2 className="text-3xl md:text-3xl font-normal mb-6 leading-snug">
+        {/* Content */}
+        <div className="p-6 flex flex-col flex-grow">
+          <h2 className="text-xl md:text-2xl font-normal mb-3 line-clamp-2">
             {project.title}
           </h2>
 
-          <p className="text-gray-600 mb-6">{project.desc}</p>
+          <p className="text-gray-600 mb-6 line-clamp-3">{project.desc}</p>
 
           {/* Author/Date section */}
           <div className="mt-auto flex items-center">
@@ -56,7 +51,7 @@ export default function ProjectCard({ project }) {
             </div>
           </div>
         </div>
-      </Link>
-    </div>
+      </div>
+    </Link>
   );
 }
