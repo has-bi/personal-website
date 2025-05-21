@@ -159,7 +159,9 @@ export default function Footer() {
 
         {/* Footer Bottom / Copyright */}
         <div className="pt-8 border-t border-gray-800 text-gray-400 text-sm">
-          <p>Copyright © {currentYear} Your Name. All rights reserved.</p>
+          <p>
+            Copyright © {currentYear} Hasbi Hassadiqin. All rights reserved.
+          </p>
         </div>
       </div>
     </footer>
