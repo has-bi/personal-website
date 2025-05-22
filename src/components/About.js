@@ -1,45 +1,50 @@
 import React from "react";
 import Link from "next/link";
 
-function About() {
+export default function About() {
   return (
-    <section className="w-full pt-16">
-      <div className="container mx-auto px-4">
-        <div className="flex flex-col md:flex-row gap-8 md:gap-16">
-          <div className="md:w-1/4">
-            <div className="flex items-center gap-2">
-              <div className="w-3 h-3 bg-indigo-500 rounded-full"></div>
-              <h2 className="uppercase text-sm font-medium tracking-wider">
-                What I do
-              </h2>
+    <section className="py-24">
+      <div className="container mx-auto px-6">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-12">
+          {/* Left Column - Label */}
+          <div className="lg:col-span-1">
+            <div className="inline-flex items-center gap-3">
+              <div className="w-2 h-2 bg-indigo-500 rounded-full"></div>
+              <span className="text-sm font-medium text-gray-600 uppercase tracking-wider">
+                What I Do
+              </span>
             </div>
           </div>
 
-          {/* RIGHT COLUMN */}
-          <div className="md:w-3/4">
-            <h1 className="text-3xl md:text-4xl font-normal mb-6 leading-snug">
-              A Frontend developer based in Jakarta, passionate about creating
-              immersive web experiences. From crafting responsive interfaces to
-              dynamic animations and interactions.
-            </h1>
+          {/* Right Column - Content */}
+          <div className="lg:col-span-3">
+            <h2 className="text-4xl lg:text-5xl font-light mb-8 leading-tight text-gray-900 max-w-4xl">
+              A Frontend developer based in{" "}
+              <span className="text-gray-500">Jakarta</span>, passionate about
+              creating immersive web experiences.
+            </h2>
+
+            <p className="text-lg text-gray-600 leading-relaxed mb-8 max-w-3xl">
+              From crafting responsive interfaces to dynamic animations and
+              interactions, I bring ideas to life through code and design.
+            </p>
 
             <Link
-              href="/"
-              className="inline-flex items-center gap-2 mt-4 hover:underline"
+              href="/about"
+              className="inline-flex items-center gap-3 text-gray-900 hover:text-indigo-600 transition-colors duration-300 group"
             >
-              About Us
+              <span className="font-medium">Learn more about me</span>
               <svg
-                xmlns="http://www.w3.org/2000/svg"
+                className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
-                className="w-4 h-4"
+                strokeWidth={2}
               >
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M14 5l7 7m0 0l-7 7m7-7H3"
+                  d="M17 8l4 4m0 0l-4 4m4-4H3"
                 />
               </svg>
             </Link>
@@ -47,14 +52,27 @@ function About() {
         </div>
       </div>
 
-      {/* Bottom divider line */}
-      <div className="w-full border-t border-gray-200 mt-16 flex justify-center">
-        <div className="w-5 h-5  flex items-center justify-center -mt-2.5">
-          <span className="text-xl">+</span>
+      {/* Decorative Divider */}
+      <div className="relative mt-24">
+        <div className="w-full h-px bg-gray-200"></div>
+        <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2">
+          <div className="w-8 h-8 bg-white border border-gray-200 rounded-full flex items-center justify-center text-gray-400">
+            <svg
+              className="w-4 h-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+              />
+            </svg>
+          </div>
         </div>
       </div>
     </section>
   );
 }
-
-export default About;
