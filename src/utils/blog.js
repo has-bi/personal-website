@@ -3,7 +3,7 @@ import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
 
-const BLOG_PATH = path.join(process.cwd(), "content/blog");
+const BLOG_PATH = path.join(process.cwd(), "src/content/blog");
 
 // Ensure directories exist
 if (!fs.existsSync(BLOG_PATH)) {
