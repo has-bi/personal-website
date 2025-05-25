@@ -1,11 +1,120 @@
-# Welcome to my MDX page!
+import { Metadata } from "next";
 
-This is some **bold** and _italics_ text.
+export const metadata = {
+  title: "Building Interactive Code Examples with MDX - Hasbi Hassadiqin",
+  description:
+    "Learn how to create engaging technical blog posts with interactive code examples using MDX and Next.js",
+};
 
-This is a list in markdown:
+# Building Interactive Code Examples with MDX
 
-- One
-- Two
-- Three
+Writing about code is one thing, but showing interactive examples takes your technical content to the next level. In this post, I'll show you how to create engaging code examples using MDX.
 
-Checkout my React component:
+## What Makes Code Examples Interactive?
+
+Interactive code examples allow readers to:
+
+- See live code execution
+- Edit and experiment with code
+- Compare different approaches side by side
+
+Let's start with a simple example:
+
+<CodeEditor language="javascript" title="Simple React Hook">
+```javascript
+import { useState } from 'react';
+
+function useCounter(initialValue = 0) {
+const [count, setCount] = useState(initialValue);
+
+const increment = () => setCount(count + 1);
+const decrement = () => setCount(count - 1);
+const reset = () => setCount(initialValue);
+
+return { count, increment, decrement, reset };
+}
+
+```
+</CodeEditor>
+
+## Using Code Tabs for Comparisons
+
+Sometimes you want to show different approaches or different parts of a solution. Code tabs are perfect for this:
+
+<CodeTabs
+  tabs={[
+    {
+      label: "React Hook",
+      language: "javascript",
+      code: `import { useState, useEffect } from 'react';
+
+function useLocalStorage(key, initialValue) {
+  const [storedValue, setStoredValue] = useState(() => {
+    try {
+      const item = window.localStorage.getItem(key);
+      return item ? JSON.parse(item) : initialValue;
+    } catch (error) {
+      return initialValue;
+    }
+  });
+
+  const setValue = (value) => {
+    try {
+      setStoredValue(value);
+      window.localStorage.setItem(key, JSON.stringify(value));
+    } catch (error) {
+      console.error('Error saving to localStorage:', error);
+    }
+  };
+
+  return [storedValue, setValue];
+}`
+    },
+    {
+      label: "Usage Example",
+      language: "jsx",
+      code: `function App() {
+  const [name, setName] = useLocalStorage('name', '');
+
+  return (
+    <div>
+      <input
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+        placeholder="Enter your name"
+      />
+      <p>Hello, {name}!</p>
+    </div>
+  );
+}`
+    }
+  ]}
+/>
+
+## Adding Callouts for Important Information
+
+<Callout type="info">
+**Pro Tip:** Always include error handling in your localStorage hooks. Browsers can disable localStorage in private mode or when storage is full.
+</Callout>
+
+<Callout type="warning">
+Remember that localStorage is synchronous and can block the main thread with large amounts of data. Consider using IndexedDB for larger datasets.
+</Callout>
+
+## Best Practices for Technical Content
+
+1. **Start Simple**: Begin with basic examples before moving to complex ones
+2. **Provide Context**: Explain why the code matters
+3. **Show Real Use Cases**: Don't just show syntax, show practical applications
+4. **Make it Interactive**: Let readers experiment and learn by doing
+
+<Callout type="success">
+Interactive code examples can increase reader engagement by up to 60% compared to static code blocks!
+</Callout>
+
+## Conclusion
+
+MDX gives us incredible flexibility to create rich, interactive technical content. By combining markdown with React components, we can build educational experiences that go far beyond traditional blog posts.
+
+The examples shown here are just the beginning. You can extend these patterns to create code playgrounds, interactive tutorials, and comprehensive documentation systems.
+```
