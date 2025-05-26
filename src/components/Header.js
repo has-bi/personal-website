@@ -12,13 +12,28 @@ export default function Header() {
   useEffect(() => {
     const handleScroll = () => {
       const heroSection = document.getElementById("hero-section");
-      if (!heroSection) return;
 
+      if (!heroSection) {
+        // If no hero section exists (like blog pages), always show blurry bg
+        setIsScrolled(true);
+        return;
+      }
+
+      // If hero section exists, check if we're still within it
       const heroBottom = heroSection.getBoundingClientRect().bottom;
       setIsScrolled(heroBottom <= 100);
     };
 
-    handleScroll();
+    // Set initial state
+    const heroSection = document.getElementById("hero-section");
+    if (!heroSection) {
+      // No hero section = always blurry
+      setIsScrolled(true);
+    } else {
+      // Hero section exists, check initial position
+      handleScroll();
+    }
+
     window.addEventListener("scroll", handleScroll);
 
     return () => window.removeEventListener("scroll", handleScroll);
@@ -28,6 +43,7 @@ export default function Header() {
     { name: "Home", href: "/" },
     { name: "Projects", href: "/projects" },
     { name: "About", href: "/about" },
+    { name: "Blog", href: "/blog" },
     { name: "Contact", href: "/contact" },
   ];
 
@@ -35,21 +51,17 @@ export default function Header() {
     <header
       className={`fixed w-full top-6 z-50 transition-all duration-500 ${
         isScrolled
-          ? "bg-white/90 backdrop-blur-md shadow-sm border border-gray-200/50"
+          ? "bg-white/95 backdrop-blur-xl shadow-sm border border-gray-200/50"
           : "bg-transparent"
       } rounded-full mx-auto max-w-6xl left-0 right-0 px-4`}
     >
       <div className="container mx-auto px-6 py-4 flex justify-between items-center">
         {/* Logo */}
         <Link href="/" className="flex items-center group">
-          <div
-            className={`${
-              isScrolled ? "bg-transparent" : "bg-white/10 backdrop-blur-sm"
-            } rounded-full p-2 transition-all duration-300 group-hover:scale-105`}
-          >
+          <div className="bg-white/10 backdrop-blur-sm rounded-full p-2 transition-all duration-300 group-hover:scale-105">
             <Image
               src="/images/Logo Primary - Transparant.png"
-              alt="Logo"
+              alt="Hasbi Hassadiqin"
               width={32}
               height={32}
               className="rounded-full"
@@ -64,9 +76,9 @@ export default function Header() {
               key={item.name}
               href={item.href}
               className={`text-sm font-medium px-4 py-2 rounded-full transition-all duration-300 ${
-                !isScrolled
-                  ? "text-white/90 hover:text-white hover:bg-white/10"
-                  : "text-gray-700 hover:text-gray-900 hover:bg-gray-50"
+                isScrolled
+                  ? "text-gray-700 hover:text-gray-900 hover:bg-gray-100/50"
+                  : "text-white/90 hover:text-white hover:bg-white/10"
               }`}
             >
               {item.name}
@@ -78,9 +90,9 @@ export default function Header() {
         <Link
           href="/contact"
           className={`hidden md:inline-flex items-center gap-2 text-sm font-medium rounded-full px-6 py-2.5 transition-all duration-300 group ${
-            !isScrolled
-              ? "bg-white text-gray-900 hover:bg-gray-100"
-              : "bg-indigo-600 text-white hover:bg-indigo-700"
+            isScrolled
+              ? "bg-gray-900 text-white hover:bg-gray-800"
+              : "bg-white/20 backdrop-blur-sm text-white hover:bg-white/30"
           }`}
         >
           <span>Hire Me</span>
@@ -101,7 +113,7 @@ export default function Header() {
 
         {/* Mobile Menu Button */}
         <button
-          className="md:hidden p-2 rounded-full transition-colors duration-300"
+          className="md:hidden p-2 rounded-full hover:bg-white/10 transition-colors duration-300"
           onClick={() => setIsMenuOpen(!isMenuOpen)}
           aria-label="Toggle menu"
         >
@@ -109,7 +121,7 @@ export default function Header() {
             className="w-5 h-5 transition-transform duration-300"
             fill="none"
             viewBox="0 0 24 24"
-            stroke={!isScrolled ? "white" : "currentColor"}
+            stroke={isScrolled ? "currentColor" : "white"}
             strokeWidth={2}
           >
             <path
@@ -125,7 +137,7 @@ export default function Header() {
 
       {/* Mobile Menu */}
       {isMenuOpen && (
-        <div className="md:hidden absolute top-full left-4 right-4 mt-2 bg-white border border-gray-200 rounded-2xl shadow-lg overflow-hidden">
+        <div className="md:hidden absolute top-full left-4 right-4 mt-2 bg-white/95 backdrop-blur-xl border border-gray-200/50 rounded-2xl shadow-lg overflow-hidden">
           <nav className="p-4 space-y-1">
             {navItems.map((item) => (
               <Link
@@ -140,7 +152,7 @@ export default function Header() {
             <div className="pt-2 mt-2 border-t border-gray-100">
               <Link
                 href="/contact"
-                className="flex items-center justify-center gap-2 bg-indigo-600 text-white hover:bg-indigo-700 px-4 py-3 rounded-xl font-medium transition-colors duration-200"
+                className="flex items-center justify-center gap-2 bg-gray-900 text-white hover:bg-gray-800 px-4 py-3 rounded-xl font-medium transition-colors duration-200"
                 onClick={() => setIsMenuOpen(false)}
               >
                 <span>Hire Me</span>
