@@ -1,0 +1,190 @@
+// src/app/projects/page.js
+import { getProjects, getAllCategories } from "@/utils/projects";
+import ProjectCard from "@/components/ProjectCard";
+
+export const metadata = {
+  title: "Projects - Hasbi Hassadiqin",
+  description:
+    "A showcase of my work in AI, automation, and web development. Explore projects that demonstrate innovation and technical expertise.",
+};
+
+export default function ProjectsPage() {
+  const projects = getProjects();
+  const categories = getAllCategories();
+
+  return (
+    <div className="min-h-screen ">
+      {/* Hero Section */}
+      <section className="pt-32 pb-16 px-6">
+        <div className="container mx-auto max-w-6xl">
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-12">
+            {/* Left Column - Label */}
+            <div className="lg:col-span-1">
+              <div className="inline-flex items-center gap-3">
+                <div className="w-2 h-2 bg-indigo-500 rounded-full"></div>
+                <span className="text-sm font-medium text-gray-600 uppercase tracking-wider">
+                  Portfolio
+                </span>
+              </div>
+            </div>
+
+            {/* Right Column - Content */}
+            <div className="lg:col-span-3">
+              <h1 className="text-4xl lg:text-5xl font-light mb-6 leading-tight text-gray-900">
+                Projects that solve real problems
+                <br />
+                <span className="text-gray-500">
+                  with intelligent solutions
+                </span>
+              </h1>
+              <p className="text-lg text-gray-600 leading-relaxed max-w-3xl mb-8">
+                From AI-powered automation to full-stack applications, each
+                project represents a unique challenge solved through thoughtful
+                engineering and design. Explore the intersection of technology
+                and impact.
+              </p>
+
+              {/* Categories */}
+              <div className="flex flex-wrap gap-3">
+                <span className="px-4 py-2 bg-gray-900 text-white rounded-full text-sm font-medium">
+                  All Projects
+                </span>
+                {categories.map((category) => (
+                  <span
+                    key={category}
+                    className="px-4 py-2 bg-gray-100 text-gray-700 hover:bg-gray-200 rounded-full text-sm transition-colors cursor-pointer"
+                  >
+                    {category}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Projects Grid */}
+      <section className="pb-24 px-6">
+        <div className="container mx-auto max-w-6xl">
+          {projects.length === 0 ? (
+            <EmptyState />
+          ) : (
+            <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {projects.map((project) => (
+                <ProjectCard key={project.slug} project={project} />
+              ))}
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* Call to Action */}
+      <section className="border-t border-gray-200 py-16 px-6">
+        <div className="container mx-auto max-w-6xl">
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-12">
+            {/* Left Column - Label */}
+            <div className="lg:col-span-1">
+              <div className="inline-flex items-center gap-3">
+                <div className="w-2 h-2 bg-indigo-500 rounded-full"></div>
+                <span className="text-sm font-medium text-gray-600 uppercase tracking-wider">
+                  Let's Work
+                </span>
+              </div>
+            </div>
+
+            {/* Right Column - Content */}
+            <div className="lg:col-span-3">
+              <h2 className="text-3xl lg:text-4xl font-light mb-6 leading-tight text-gray-900">
+                Have a project in mind?
+              </h2>
+              <p className="text-lg text-gray-600 leading-relaxed mb-8 max-w-2xl">
+                I'm always interested in taking on new challenges and creating
+                intelligent solutions that make a difference.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4">
+                <a
+                  href="/contact"
+                  className="inline-flex items-center gap-2 bg-gray-900 text-white hover:bg-gray-800 px-6 py-3 rounded-lg font-medium transition-colors group"
+                >
+                  <span>Start a Project</span>
+                  <svg
+                    className="w-4 h-4 group-hover:translate-x-0.5 transition-transform"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M17 8l4 4m0 0l-4 4m4-4H3"
+                    />
+                  </svg>
+                </a>
+                <a
+                  href="/about"
+                  className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 px-6 py-3 font-medium transition-colors"
+                >
+                  <span>Learn About Me</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Decorative Divider */}
+      <div className="relative">
+        <div className="w-full h-px bg-gray-200"></div>
+        <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2">
+          <div className="w-8 h-8 bg-white border border-gray-200 rounded-full flex items-center justify-center text-gray-400">
+            <svg
+              className="w-4 h-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+              />
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Empty State Component
+function EmptyState() {
+  return (
+    <div className="text-center py-24">
+      <div className="max-w-md mx-auto">
+        <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
+          <svg
+            className="w-12 h-12 text-gray-400"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={1}
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
+            />
+          </svg>
+        </div>
+        <h3 className="text-xl font-medium text-gray-900 mb-2">
+          No projects yet
+        </h3>
+        <p className="text-gray-600 leading-relaxed">
+          Check back soon for new projects and case studies.
+        </p>
+      </div>
+    </div>
+  );
+}

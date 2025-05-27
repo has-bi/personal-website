@@ -4,45 +4,14 @@ import React, { useRef } from "react";
 import Link from "next/link";
 import ProjectCard from "./ProjectCard";
 import { motion, useInView } from "framer-motion";
-
-const projects = [
-  {
-    slug: "po-tracker-document-ai",
-    title: "Purchase Order Data Entry Automations using Document AI",
-    desc: "Transformed manual document processing into an intelligent system that automatically extracts data from seven different distributor formats. This cloud-based solution reduced processing costs by 99%, increased speed by 92%, and maintains a remarkable 0.2% error rate.",
-    coverImage: "/images/projects/po-cover.png",
-    date: "2024",
-    client: "Youvit",
-  },
-  {
-    slug: "whatsapp-affiliate-automation",
-    title: "Streamlining Affiliate Communications with WhatsApp Automation",
-    desc: "Built an intelligent WhatsApp-based system that automates and personalizes affiliate communications at scale. This Next.js platform enables templated messaging, scheduled broadcasts, and centralized contact management through an intuitive web interface.",
-    coverImage: "/images/projects/affiliate-cover.png",
-    date: "2025",
-    client: "Youvit",
-  },
-  {
-    slug: "theramind-mental-wellness",
-    title: "Emotion-Centered Digital Companion for Mental Wellness",
-    desc: "Designed and built a comprehensive mental wellness application that helps users track their emotional states, engage in AI-powered therapeutic conversations, and discover relevant mental health content.",
-    coverImage: "/images/projects/theramind-cover.png",
-    date: "2025",
-    client: "Devscale",
-  },
-  {
-    slug: "nutritalk-ai-customer-service",
-    title: "AI-Powered Customer Service on Indonesia's Most Popular Platform",
-    desc: "Created an intelligent WhatsApp-based nutrition assistant that gives Youvit customers 24/7 access to personalized vitamin information. By implementing Retrieval-Augmented Generation (RAG), we achieved a 98% increase in user adoption.",
-    coverImage: "/images/projects/nutritalk-cover.png",
-    date: "2024",
-    client: "Youvit",
-  },
-];
+import { getFeaturedProjects } from "@/utils/projects";
 
 export default function ProjectsSection() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, amount: 0.1 });
+
+  // Get featured projects from utils
+  const projects = getFeaturedProjects();
 
   const cardVariants = {
     hidden: { y: 30, opacity: 0 },
@@ -107,7 +76,7 @@ export default function ProjectsSection() {
         <div className="flex justify-center">
           <Link
             href="/projects"
-            className="inline-flex items-center gap-3 text-gray-900 hover:text-indigo-600 transition-colors duration-300 group"
+            className="inline-flex items-center gap-3 text-gray-900 hover:text-gray-700 transition-colors duration-300 group"
           >
             <span className="font-medium">View all projects</span>
             <svg
@@ -124,6 +93,28 @@ export default function ProjectsSection() {
               />
             </svg>
           </Link>
+        </div>
+      </div>
+
+      {/* Decorative Divider */}
+      <div className="relative mt-24">
+        <div className="w-full h-px bg-gray-200"></div>
+        <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2">
+          <div className="w-8 h-8 bg-white border border-gray-200 rounded-full flex items-center justify-center text-gray-400">
+            <svg
+              className="w-4 h-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+              />
+            </svg>
+          </div>
         </div>
       </div>
     </section>

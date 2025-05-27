@@ -117,7 +117,6 @@ export default function AIChatSection() {
                     <h3 className="text-lg font-medium text-gray-900">
                       Hasbi AI Assistant
                     </h3>
-                    <p className="text-gray-500">Online • Ready to help</p>
                   </div>
                   <div className="ml-auto">
                     <div className="w-3 h-3 bg-green-500 rounded-full"></div>
@@ -233,7 +232,7 @@ export default function AIChatSection() {
             </div>
 
             {/* Disclaimer */}
-            <p className="text-gray-600 leading-relaxed mt-8 max-w-2xl">
+            <p className="text-gray-600 leading-relaxed mt-8 max-w-5xl">
               This AI assistant has been trained on my professional experience
               and can answer questions about my projects, skills, and
               background. For direct inquiries, feel free to{" "}
