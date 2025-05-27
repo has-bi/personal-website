@@ -1,6 +1,13 @@
 // src/utils/projects.js
 
-// Project data - this will be our single source of truth
+import fs from "fs";
+import path from "path";
+
+async function loadProjectContent(contentPath) {
+  const fullPath = path.join(process.cwd(), contentPath);
+  return fs.readFileSync(fullPath, "utf8");
+}
+
 const projectsData = [
   {
     slug: "po-tracker-document-ai",
@@ -12,6 +19,7 @@ const projectsData = [
     category: "AI & Automation",
     technologies: ["Document AI", "Google Cloud", "Python", "Machine Learning"],
     featured: true,
+    content: "content/projects/po-tracker-document-ai.mdx",
   },
   {
     slug: "whatsapp-affiliate-automation",
@@ -81,11 +89,10 @@ export function getProject(slug) {
   const project = projectsData.find((p) => p.slug === slug);
   if (!project) return null;
 
-  // For now, return project data without MDX content
-  // We'll add MDX loading later when we create the individual pages
+  // If you want to add MDX content, statically import it and add here
   return {
     ...project,
-    content: "", // Placeholder for MDX content
+    content: "", // Placeholder for MDX content if needed
   };
 }
 

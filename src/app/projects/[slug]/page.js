@@ -3,6 +3,8 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { getProject, getAllProjectSlugs } from "@/utils/projects";
+import { MDXRemote } from "next-mdx-remote/rsc";
+import { useMDXComponents } from "../../../../mdx-components";
 
 // Generate static params for all projects
 export async function generateStaticParams() {
@@ -14,7 +16,8 @@ export async function generateStaticParams() {
 
 // Generate metadata for each project
 export async function generateMetadata({ params }) {
-  const project = getProject(params.slug);
+  const { slug } = await params;
+  const project = getProject(slug);
 
   if (!project) {
     return {
@@ -34,8 +37,10 @@ export async function generateMetadata({ params }) {
   };
 }
 
-export default function ProjectPage({ params }) {
-  const project = getProject(params.slug);
+export default async function ProjectPage({ params }) {
+  const { slug } = await params;
+  const project = getProject(slug);
+  const components = useMDXComponents({});
 
   if (!project) {
     notFound();
@@ -189,276 +194,46 @@ export default function ProjectPage({ params }) {
         </section>
       )}
 
-      {/* Content Sections - Sample Placeholder Content */}
+      {/* Content - Use MDX if available, otherwise show simple message */}
       <main className="px-6 pb-24">
         <div className="container mx-auto max-w-4xl">
-          {/* Overview Section */}
-          <section className="mb-16">
-            <h2 className="text-3xl font-light text-gray-900 mb-6">Overview</h2>
-            <div className="prose prose-lg prose-gray max-w-none">
-              <p className="text-gray-700 leading-relaxed mb-6">
-                This project represents a significant step forward in automating
-                complex business processes through intelligent document
-                processing and machine learning. The challenge was to create a
-                system that could understand and extract data from various
-                document formats while maintaining high accuracy and
-                reliability.
-              </p>
-              <p className="text-gray-700 leading-relaxed">
-                Working closely with the {project.client} team, we identified
-                key pain points in their existing workflow and designed a
-                solution that not only addressed immediate needs but also scaled
-                for future growth.
-              </p>
+          {project.content ? (
+            // Render MDX content
+            <div
+              className="prose prose-lg prose-gray max-w-none
+              prose-headings:font-light prose-headings:text-gray-900
+              prose-h1:text-4xl prose-h1:mt-12 prose-h1:mb-6 prose-h1:leading-tight
+              prose-h2:text-3xl prose-h2:mt-12 prose-h2:mb-6 prose-h2:leading-tight
+              prose-h3:text-2xl prose-h3:mt-10 prose-h3:mb-4
+              prose-h4:text-xl prose-h4:mt-8 prose-h4:mb-3
+              prose-p:text-gray-700 prose-p:leading-relaxed prose-p:mb-6 prose-p:text-lg
+              prose-a:text-gray-900 prose-a:underline prose-a:decoration-gray-300 prose-a:underline-offset-4 hover:prose-a:decoration-gray-600 prose-a:transition-colors
+              prose-strong:text-gray-900 prose-strong:font-medium
+              prose-em:text-gray-700
+              prose-code:text-gray-900 prose-code:bg-gray-100 prose-code:px-2 prose-code:py-1 prose-code:rounded prose-code:text-base prose-code:font-mono
+              prose-blockquote:border-l-2 prose-blockquote:border-gray-300 prose-blockquote:pl-6 prose-blockquote:text-gray-600 prose-blockquote:italic prose-blockquote:text-lg
+              prose-ul:my-6 prose-ul:space-y-2
+              prose-ol:my-6 prose-ol:space-y-2
+              prose-li:text-gray-700 prose-li:leading-relaxed prose-li:text-lg
+              prose-img:rounded-xl prose-img:my-8"
+            >
+              <MDXRemote source={project.content} components={components} />
             </div>
-          </section>
-
-          {/* Challenge Section */}
-          <section className="mb-16">
-            <h2 className="text-3xl font-light text-gray-900 mb-6">
-              The Challenge
-            </h2>
-            <div className="bg-gray-50 rounded-2xl p-8 mb-8">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div>
-                  <h3 className="font-medium text-gray-900 mb-2">
-                    Manual Processing
-                  </h3>
-                  <p className="text-gray-600 text-sm">
-                    Hours spent on repetitive data entry tasks that could be
-                    automated
-                  </p>
-                </div>
-                <div>
-                  <h3 className="font-medium text-gray-900 mb-2">
-                    Error-Prone
-                  </h3>
-                  <p className="text-gray-600 text-sm">
-                    Human errors in data extraction leading to downstream issues
-                  </p>
-                </div>
-                <div>
-                  <h3 className="font-medium text-gray-900 mb-2">
-                    Scalability
-                  </h3>
-                  <p className="text-gray-600 text-sm">
-                    Unable to handle increasing document volumes efficiently
-                  </p>
-                </div>
+          ) : (
+            // Simple message when no MDX content
+            <div className="text-center py-24">
+              <div className="max-w-md mx-auto">
+                <h2 className="text-2xl font-light text-gray-900 mb-4">
+                  Detailed case study coming soon
+                </h2>
+                <p className="text-gray-600 leading-relaxed">
+                  We're preparing a comprehensive breakdown of this project.
+                  Check back soon for the full story, technical details, and
+                  results.
+                </p>
               </div>
             </div>
-            <p className="text-gray-700 leading-relaxed">
-              The existing process required manual review and data entry for
-              hundreds of documents daily, creating bottlenecks and introducing
-              opportunities for human error. The team needed a solution that
-              could maintain accuracy while dramatically increasing processing
-              speed.
-            </p>
-          </section>
-
-          {/* Solution Section */}
-          <section className="mb-16">
-            <h2 className="text-3xl font-light text-gray-900 mb-6">
-              The Solution
-            </h2>
-            <div className="prose prose-lg prose-gray max-w-none">
-              <p className="text-gray-700 leading-relaxed mb-8">
-                We developed an intelligent document processing system using
-                cutting-edge AI technologies. The solution combines computer
-                vision, natural language processing, and machine learning to
-                automatically extract, validate, and process document data.
-              </p>
-
-              {/* Feature Grid */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                <div className="bg-white border border-gray-200 rounded-xl p-6">
-                  <div className="w-12 h-12 bg-indigo-100 rounded-xl flex items-center justify-center mb-4">
-                    <svg
-                      className="w-6 h-6 text-indigo-600"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                      />
-                    </svg>
-                  </div>
-                  <h3 className="font-medium text-gray-900 mb-2">
-                    Automated Extraction
-                  </h3>
-                  <p className="text-gray-600 text-sm">
-                    AI-powered data extraction with 99.8% accuracy across
-                    multiple document formats
-                  </p>
-                </div>
-
-                <div className="bg-white border border-gray-200 rounded-xl p-6">
-                  <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center mb-4">
-                    <svg
-                      className="w-6 h-6 text-green-600"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M13 10V3L4 14h7v7l9-11h-7z"
-                      />
-                    </svg>
-                  </div>
-                  <h3 className="font-medium text-gray-900 mb-2">
-                    Real-time Processing
-                  </h3>
-                  <p className="text-gray-600 text-sm">
-                    Process documents in seconds rather than hours, with instant
-                    validation
-                  </p>
-                </div>
-
-                <div className="bg-white border border-gray-200 rounded-xl p-6">
-                  <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center mb-4">
-                    <svg
-                      className="w-6 h-6 text-purple-600"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-                      />
-                    </svg>
-                  </div>
-                  <h3 className="font-medium text-gray-900 mb-2">
-                    Smart Validation
-                  </h3>
-                  <p className="text-gray-600 text-sm">
-                    Built-in validation rules and anomaly detection for data
-                    quality assurance
-                  </p>
-                </div>
-
-                <div className="bg-white border border-gray-200 rounded-xl p-6">
-                  <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mb-4">
-                    <svg
-                      className="w-6 h-6 text-blue-600"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
-                      />
-                    </svg>
-                  </div>
-                  <h3 className="font-medium text-gray-900 mb-2">
-                    Analytics Dashboard
-                  </h3>
-                  <p className="text-gray-600 text-sm">
-                    Comprehensive reporting and analytics for process
-                    optimization
-                  </p>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          {/* Results Section */}
-          <section className="mb-16">
-            <h2 className="text-3xl font-light text-gray-900 mb-6">
-              Results & Impact
-            </h2>
-
-            {/* Results Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
-              <div className="text-center">
-                <div className="text-4xl font-light text-gray-900 mb-2">
-                  99%
-                </div>
-                <div className="text-sm text-gray-600">Cost Reduction</div>
-              </div>
-              <div className="text-center">
-                <div className="text-4xl font-light text-gray-900 mb-2">
-                  92%
-                </div>
-                <div className="text-sm text-gray-600">Faster Processing</div>
-              </div>
-              <div className="text-center">
-                <div className="text-4xl font-light text-gray-900 mb-2">
-                  0.2%
-                </div>
-                <div className="text-sm text-gray-600">Error Rate</div>
-              </div>
-            </div>
-
-            <p className="text-gray-700 leading-relaxed">
-              The implementation resulted in dramatic improvements across all
-              key metrics. Processing time was reduced from hours to minutes,
-              while maintaining exceptional accuracy. The solution now handles
-              thousands of documents monthly with minimal human intervention,
-              allowing the team to focus on higher-value activities.
-            </p>
-          </section>
-
-          {/* Technical Implementation */}
-          <section className="mb-16">
-            <h2 className="text-3xl font-light text-gray-900 mb-6">
-              Technical Implementation
-            </h2>
-            <div className="bg-gray-50 rounded-2xl p-8">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div>
-                  <h3 className="font-medium text-gray-900 mb-4">
-                    Architecture
-                  </h3>
-                  <ul className="space-y-2 text-gray-600">
-                    <li className="flex items-center gap-2">
-                      <div className="w-1.5 h-1.5 bg-gray-400 rounded-full"></div>
-                      Microservices architecture on Google Cloud
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <div className="w-1.5 h-1.5 bg-gray-400 rounded-full"></div>
-                      Containerized deployment with Docker
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <div className="w-1.5 h-1.5 bg-gray-400 rounded-full"></div>
-                      Event-driven processing pipeline
-                    </li>
-                  </ul>
-                </div>
-                <div>
-                  <h3 className="font-medium text-gray-900 mb-4">
-                    AI/ML Stack
-                  </h3>
-                  <ul className="space-y-2 text-gray-600">
-                    <li className="flex items-center gap-2">
-                      <div className="w-1.5 h-1.5 bg-gray-400 rounded-full"></div>
-                      Google Document AI for OCR
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <div className="w-1.5 h-1.5 bg-gray-400 rounded-full"></div>
-                      Custom NLP models for data extraction
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <div className="w-1.5 h-1.5 bg-gray-400 rounded-full"></div>
-                      TensorFlow for model training and inference
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </section>
+          )}
         </div>
       </main>
 
