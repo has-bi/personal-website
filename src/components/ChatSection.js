@@ -14,9 +14,13 @@ export default function AIChatSection() {
   const [inputValue, setInputValue] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef(null);
+  const chatContainerRef = useRef(null);
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTop =
+        chatContainerRef.current.scrollHeight;
+    }
   };
 
   useEffect(() => {
@@ -122,7 +126,10 @@ export default function AIChatSection() {
               </div>
 
               {/* Chat Messages */}
-              <div className="h-[480px] overflow-y-auto p-8 space-y-6">
+              <div
+                ref={chatContainerRef}
+                className="h-[480px] overflow-y-auto p-8 space-y-6"
+              >
                 {messages.map((message) => (
                   <div
                     key={message.id}
