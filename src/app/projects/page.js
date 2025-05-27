@@ -52,7 +52,7 @@ export default function ProjectsPage() {
                 {categories.map((category) => (
                   <span
                     key={category}
-                    className="px-4 py-2 bg-gray-100 text-gray-700 hover:bg-gray-200 rounded-full text-sm transition-colors cursor-pointer"
+                    className="px-4 py-2 bg-white text-gray-700 hover:bg-gray-200 rounded-full text-sm transition-colors cursor-pointer"
                   >
                     {category}
                   </span>
