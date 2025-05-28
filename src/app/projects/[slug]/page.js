@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { getProject, getAllProjectSlugs } from "@/utils/projects";
+import { loadProjectContent } from "@/utils/LoadProjectContent";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import { useMDXComponents } from "../../../../mdx-components";
 
@@ -45,6 +46,9 @@ export default async function ProjectPage({ params }) {
   if (!project) {
     notFound();
   }
+
+  // Load MDX content on the server
+  const mdxContent = await loadProjectContent(slug);
 
   return (
     <div className="min-h-screen bg-white">
@@ -197,7 +201,7 @@ export default async function ProjectPage({ params }) {
       {/* Content - Use MDX if available, otherwise show simple message */}
       <main className="px-6 pb-24">
         <div className="container mx-auto max-w-4xl">
-          {project.content ? (
+          {mdxContent ? (
             // Render MDX content
             <div
               className="prose prose-lg prose-gray max-w-none
@@ -217,7 +221,7 @@ export default async function ProjectPage({ params }) {
               prose-li:text-gray-700 prose-li:leading-relaxed prose-li:text-lg
               prose-img:rounded-xl prose-img:my-8"
             >
-              <MDXRemote source={project.content} components={components} />
+              <MDXRemote source={mdxContent} components={components} />
             </div>
           ) : (
             // Simple message when no MDX content
