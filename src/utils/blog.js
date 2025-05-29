@@ -1,4 +1,4 @@
-// utils/blog.js
+// utils/blog.js - Server-only functions
 import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
@@ -20,7 +20,6 @@ export function getBlogPosts() {
     const files = fs
       .readdirSync(BLOG_PATH)
       .filter((file) => file.endsWith(".mdx"));
-    console.log("Found blog files:", files);
 
     const posts = files.map((file) => {
       const slug = file.replace(".mdx", "");
@@ -39,6 +38,7 @@ export function getBlogPosts() {
           tags: [],
           coverImage: "",
           author: "Hasbi Hassadiqin",
+          readTime: calculateReadTime(fileContent),
           ...frontmatter,
         },
       };
@@ -57,22 +57,13 @@ export function getBlogPosts() {
 export function getBlogPost(slug) {
   try {
     const filePath = path.join(BLOG_PATH, `${slug}.mdx`);
-    console.log("Looking for blog post at:", filePath);
 
     if (!fs.existsSync(filePath)) {
-      console.log("Blog post file does not exist:", filePath);
       return null;
     }
 
     const fileContent = fs.readFileSync(filePath, "utf-8");
-    console.log("Raw file content length:", fileContent.length);
-
-    // Parse frontmatter and content separately
     const { data: frontmatter, content } = matter(fileContent);
-
-    console.log("Parsed frontmatter:", frontmatter);
-    console.log("Content without frontmatter length:", content.length);
-    console.log("First 200 chars of content:", content.substring(0, 200));
 
     return {
       slug,
@@ -86,11 +77,27 @@ export function getBlogPost(slug) {
         readTime: calculateReadTime(content),
         ...frontmatter,
       },
-      content: content.trim(), // Remove any leading/trailing whitespace
+      content: content.trim(),
     };
   } catch (error) {
     console.error("Error reading blog post:", error);
     return null;
+  }
+}
+
+export function getAllBlogSlugs() {
+  try {
+    if (!fs.existsSync(BLOG_PATH)) {
+      return [];
+    }
+
+    return fs
+      .readdirSync(BLOG_PATH)
+      .filter((file) => file.endsWith(".mdx"))
+      .map((file) => file.replace(".mdx", ""));
+  } catch (error) {
+    console.error("Error reading blog slugs:", error);
+    return [];
   }
 }
 
