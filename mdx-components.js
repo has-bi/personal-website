@@ -28,6 +28,121 @@ function Callout({ type = "info", children }) {
   );
 }
 
+// Custom image components to prevent hydration errors
+function CenteredImage({ src, alt, caption, width = 600, height = 400 }) {
+  return (
+    <figure className="not-prose my-12 text-center">
+      <img
+        src={src}
+        alt={alt}
+        width={width}
+        height={height}
+        className="mx-auto rounded-lg shadow-lg"
+      />
+      {caption && (
+        <figcaption className="text-sm text-gray-600 mt-4 italic">
+          {caption}
+        </figcaption>
+      )}
+    </figure>
+  );
+}
+
+function FullWidthImage({ src, alt, caption }) {
+  return (
+    <figure className="not-prose my-12 -mx-6 lg:-mx-12">
+      <img src={src} alt={alt} className="w-full h-auto" />
+      {caption && (
+        <figcaption className="text-center text-sm text-gray-600 mt-4 italic px-6 lg:px-12">
+          {caption}
+        </figcaption>
+      )}
+    </figure>
+  );
+}
+
+function ImageGrid({ children, cols = 2 }) {
+  return (
+    <div className={`not-prose my-12 grid grid-cols-${cols} gap-6`}>
+      {children}
+    </div>
+  );
+}
+
+// Statistics or metrics display component - Improved responsive design
+function MetricCard({ title, value, description }) {
+  return (
+    <div className="not-prose bg-white border border-gray-100 rounded-2xl p-6 sm:p-8 my-6 hover:shadow-sm transition-all duration-200">
+      {/* Value - Large and prominent */}
+      <div className="text-4xl sm:text-5xl lg:text-6xl font-light text-gray-900 mb-3 sm:mb-4 tracking-tight leading-none">
+        {value}
+      </div>
+
+      {/* Title - Medium weight, good spacing */}
+      <div className="text-base sm:text-lg font-medium text-gray-900 mb-2 leading-tight">
+        {title}
+      </div>
+
+      {/* Description - Subtle and spacious */}
+      {description && (
+        <div className="text-sm sm:text-base text-gray-600 leading-relaxed max-w-sm">
+          {description}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// Grid layout for multiple metrics - Improved responsive design
+function MetricsGrid({ children }) {
+  return (
+    <div className="not-prose my-12 sm:my-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
+      {children}
+    </div>
+  );
+}
+
+// Single row layout for 3 metrics
+function MetricsRow({ children }) {
+  return (
+    <div className="not-prose my-12 sm:my-16 grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
+      {children}
+    </div>
+  );
+}
+
+// Testimonial component
+function Testimonial({ quote, author, role, company }) {
+  return (
+    <div className="not-prose my-12 bg-gray-50 rounded-2xl p-8">
+      <blockquote className="text-xl text-gray-700 italic mb-6 leading-relaxed">
+        "{quote}"
+      </blockquote>
+      <div className="flex items-center">
+        <div>
+          <div className="font-medium text-gray-900">{author}</div>
+          {role && company && (
+            <div className="text-sm text-gray-600">
+              {role} | {company}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Feature highlight component
+function FeatureHighlight({ title, description, icon }) {
+  return (
+    <div className="not-prose bg-white border border-gray-200 rounded-lg p-6 my-6">
+      {icon && <div className="text-2xl mb-3">{icon}</div>}
+      <h4 className="text-lg font-medium text-gray-900 mb-2">{title}</h4>
+      <p className="text-gray-600 leading-relaxed">{description}</p>
+    </div>
+  );
+}
+
 function CodeEditor(props) {
   return <ClientCodeEditor {...props} />;
 }
@@ -173,15 +288,20 @@ export function useMDXComponents(components) {
       </div>
     ),
 
-    // Clean images
+    // Clean images - FIXED to prevent hydration errors with not-prose
     img: ({ src, alt, caption, ...props }) => (
-      <figure className="my-12">
+      <figure className="not-prose my-12">
         <div className="relative rounded-xl overflow-hidden">
-          <img src={src} alt={alt} className="w-full h-auto" {...props} />
+          <img
+            src={src}
+            alt={alt}
+            className="w-full h-auto shadow-lg"
+            {...props}
+          />
         </div>
-        {caption && (
+        {(caption || alt) && (
           <figcaption className="text-center text-sm text-gray-600 mt-4 italic">
-            {caption}
+            {caption || alt}
           </figcaption>
         )}
       </figure>
@@ -191,6 +311,16 @@ export function useMDXComponents(components) {
     Callout,
     CodeEditor,
     CodeTabs,
+
+    // New image and layout components
+    CenteredImage,
+    FullWidthImage,
+    ImageGrid,
+    MetricCard,
+    MetricsGrid,
+    MetricsRow,
+    Testimonial,
+    FeatureHighlight,
 
     // Override any passed components
     ...components,

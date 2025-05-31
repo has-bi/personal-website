@@ -53,9 +53,6 @@
     {
       "path": "[[workspace]]/src/content/blog",
       "title": "blog"
-    },
-    {
-      "path": "[[workspace]]/src/app/blog/abc"
     }
   ],
   "frontMatter.git.enabled": true
