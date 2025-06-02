@@ -1,4 +1,4 @@
-// mdx-components.js (in your root directory)
+// mdx-components.js
 import {
   ClientCodeEditor,
   ClientCodeTabs,
@@ -288,24 +288,27 @@ export function useMDXComponents(components) {
       </div>
     ),
 
-    // Clean images - FIXED to prevent hydration errors with not-prose
-    img: ({ src, alt, caption, ...props }) => (
-      <figure className="not-prose my-12">
-        <div className="relative rounded-xl overflow-hidden">
-          <img
-            src={src}
-            alt={alt}
-            className="w-full h-auto shadow-lg"
-            {...props}
-          />
-        </div>
-        {(caption || alt) && (
-          <figcaption className="text-center text-sm text-gray-600 mt-4 italic">
-            {caption || alt}
-          </figcaption>
-        )}
-      </figure>
-    ),
+    // Clean images - PROPERLY FIXED to prevent hydration errors
+    img: ({ src, alt, caption, ...props }) => {
+      // Return a simple img tag that won't cause nesting issues
+      return (
+        <span className="not-prose block my-12">
+          <span className="block relative rounded-xl overflow-hidden">
+            <img
+              src={src}
+              alt={alt}
+              className="w-full h-auto shadow-lg"
+              {...props}
+            />
+          </span>
+          {(caption || alt) && (
+            <span className="block text-center text-sm text-gray-600 mt-4 italic">
+              {caption || alt}
+            </span>
+          )}
+        </span>
+      );
+    },
 
     // Custom components
     Callout,

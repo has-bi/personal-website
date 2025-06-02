@@ -13,9 +13,9 @@ export default function ProjectsPage() {
   const categories = getAllCategories();
 
   return (
-    <div className="min-h-screen ">
+    <div className="min-h-screen bg-white ">
       {/* Hero Section */}
-      <section className="pt-32 pb-16 px-6">
+      <section className="pt-40 pb-5 px-6">
         <div className="container mx-auto max-w-6xl">
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-12">
             {/* Left Column - Label */}
@@ -23,7 +23,7 @@ export default function ProjectsPage() {
               <div className="inline-flex items-center gap-3">
                 <div className="w-2 h-2 bg-indigo-500 rounded-full"></div>
                 <span className="text-sm font-medium text-gray-600 uppercase tracking-wider">
-                  Portfolio
+                  projects
                 </span>
               </div>
             </div>
@@ -43,21 +43,6 @@ export default function ProjectsPage() {
                 engineering and design. Explore the intersection of technology
                 and impact.
               </p>
-
-              {/* Categories */}
-              <div className="flex flex-wrap gap-3">
-                <span className="px-4 py-2 bg-gray-900 text-white rounded-full text-sm font-medium">
-                  All Projects
-                </span>
-                {categories.map((category) => (
-                  <span
-                    key={category}
-                    className="px-4 py-2 bg-white text-gray-700 hover:bg-gray-200 rounded-full text-sm transition-colors cursor-pointer"
-                  >
-                    {category}
-                  </span>
-                ))}
-              </div>
             </div>
           </div>
         </div>

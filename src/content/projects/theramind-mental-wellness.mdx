@@ -1,118 +1,139 @@
----
-title: "Emotion-Centered Digital Companion for Mental Wellness"
-description: "Designed and built a comprehensive mental wellness application that helps users track their emotional states, engage in AI-powered therapeutic conversations, and discover relevant mental health content."
-coverImage: "/images/projects/theramind-cover.png"
-client: "Devscale"
-date: "2025"
-category: "Healthcare & AI"
-technologies: ["React Native", "AI/ML", "OpenAI", "Firebase"]
----
+TheraMind is a mental wellness companion web app built with Next.js that was created as our final project for the Devscale Full Stack Developer Bootcamp. Working in a team of four as the project lead, I was responsible for AI integration, frontend development, and ensuring successful feature implementation.
 
-# Project Overview
+The application helps users track their daily moods, interact with an AI-powered chatbot that responds based on their emotional state, and provides personalized mental wellness content. Built with a mobile-first approach, TheraMind represents our team's ability to develop a complex, full-stack application under real-world constraints.
 
-TheraMind represents a new approach to digital mental wellness, combining emotion tracking, AI-powered conversations, and personalized content discovery in one comprehensive platform. Built for Devscale, this application provides users with 24/7 access to mental health support and resources.
-
-## The Challenge
-
-Mental health support often faces significant barriers:
-
-- **Accessibility**: Limited access to mental health professionals
-- **Cost**: High costs of traditional therapy sessions
-- **Stigma**: Reluctance to seek help due to social stigma
-- **Timing**: Mental health crises don't follow business hours
-- **Consistency**: Difficulty maintaining regular self-care routines
-- **Personalization**: One-size-fits-all approaches don't work for everyone
-
-## The Solution
-
-I designed and developed TheraMind as a comprehensive digital companion that addresses these challenges through intelligent technology and thoughtful user experience design.
-
-### Core Features
-
-#### Emotion Tracking & Analytics
-
-- Daily mood check-ins with detailed emotion mapping
-- Pattern recognition to identify triggers and trends
-- Visual analytics showing emotional progress over time
-- Customizable tracking categories for personal relevance
-
-#### AI-Powered Therapeutic Conversations
-
-- Natural language processing for empathetic responses
-- Context-aware conversations that remember user history
-- Evidence-based therapeutic techniques integrated into dialogue
-- Crisis detection with appropriate resource recommendations
-
-#### Personalized Content Discovery
-
-- Curated articles, podcasts, and videos based on user needs
-- Meditation and mindfulness exercises tailored to current mood
-- Goal-setting tools with progress tracking
-- Community features for peer support (optional and anonymous)
+![TheraMind App](https://picsum.photos/800/500?random=1)
 
 ## Technical Implementation
 
-### Mobile Architecture
+### Core Features
 
-- **React Native**: Cross-platform mobile development for iOS and Android
-- **Firebase**: Real-time database and user authentication
-- **OpenAI Integration**: GPT-based conversational AI with fine-tuning
-- **Local Storage**: Sensitive data encrypted and stored locally
-- **Push Notifications**: Gentle reminders and check-ins
+#### 1. Mood Tracking System
 
-### AI & Machine Learning
+Multi-step form with state persistence across pages using React Context API. User mood data is stored with timestamps for pattern analysis.
 
-- **Natural Language Processing**: Understanding user emotional language
-- **Sentiment Analysis**: Real-time mood detection from text input
-- **Recommendation Engine**: Content suggestions based on user patterns
-- **Privacy-First**: All AI processing respects user privacy and consent
+#### 2. AI-Powered Chatbot
 
-### Security & Privacy
+Integration with OpenAI API to provide contextual responses based on user's mood input. System prompts dynamically adjust based on mood state to offer appropriate support.
 
-- **End-to-End Encryption**: All personal data encrypted
-- **HIPAA Compliance**: Healthcare data protection standards
-- **Anonymous Options**: Users can choose level of data sharing
-- **Local Processing**: Sensitive computations done on-device when possible
+#### 3. Authentication & Data Privacy
 
-## User Experience Design
+Implemented Arctic Auth for secure user authentication. All mood data and journal entries are private and linked to user accounts with proper data encryption.
 
-### Empathetic Interface
+#### 4. Multi-page Form State Management
 
-- Calming color palettes that adapt to user's emotional state
-- Intuitive navigation that doesn't overwhelm during difficult moments
-- Accessibility features for users with different abilities
-- Customizable interface based on personal preferences
+Created system to maintain form state across multiple screens (mood input, journaling, recap) with a final submission that combines all data into a single POST request.
 
-### Gentle Engagement
+## Technical Architecture
 
-- Non-intrusive notifications that respect user boundaries
-- Progress celebrations that acknowledge small wins
-- Crisis support that connects users to human help when needed
-- Offline functionality for times when connectivity is limited
+### Frontend
 
-## Results & Impact
+- Next.js 14 with App Router for optimized routing and server components
+- Mobile-first responsive design with Tailwind CSS
+- Context API for multi-page form state management
+- MDX for dynamic content rendering in blog section
 
-TheraMind has shown promising results in its initial deployment:
+### Backend
 
-- **85% Daily Engagement**: Users actively engage with the app daily
-- **70% Mood Improvement**: Users report better emotional awareness
-- **90% Privacy Satisfaction**: High trust in data handling
-- **24/7 Availability**: Round-the-clock support access
+- Next.js API routes for serverless functions
+- PostgreSQL database for structured data storage
+- Prisma ORM for type-safe database queries
+- OpenAI API integration for chatbot functionality
 
-### User Feedback Highlights
+### Authentication
 
-- "Finally, mental health support that understands my schedule"
-- "The AI conversations feel genuine and helpful"
-- "I love how it learns my patterns without being creepy"
-- "The privacy controls give me peace of mind"
+- Arctic Auth for user authentication and profile management
+- JWT tokens for secure API requests
+- Role-based access control for admin features
 
-## Future Enhancements
+### Deployment
 
-Based on user feedback and clinical research, planned improvements include:
+- Vercel for hosting and continuous deployment
+- Environment variable management for API keys
+- Automated testing via CI/CD pipeline
 
-- **Integration with Wearables**: Heart rate and sleep data integration
-- **Professional Network**: Connection to licensed therapists when needed
-- **Group Therapy Features**: Facilitated peer support sessions
-- **Family Sharing**: Support for family members and caregivers
+![TheraMind Mood Selection Screen](https://picsum.photos/600/400?random=2)
 
-TheraMind demonstrates how thoughtful technology can make mental health support more accessible, personalized, and effective while maintaining the highest standards of privacy and clinical efficacy.
+![TheraMind Chat Interface](https://picsum.photos/700/450?random=3)
+
+![TheraMind Journal Summary](https://picsum.photos/600/400?random=4)
+
+![TheraMind Dashboard](https://picsum.photos/700/400?random=5)
+
+## Video Demo
+
+Watch a complete walkthrough of the TheraMind application features
+
+<iframe
+  width="800"
+  height="450"
+  src="https://www.youtube.com/embed/VIDEO_ID"
+  title="YouTube video player"
+  frameBorder="0"
+  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+  allowFullScreen
+  className="rounded-xl shadow-lg my-8"
+></iframe>
+
+[Visit TheraMind App](https://theramind.app)  
+_It might be error while visiting the apps due to limited service from the database or API_
+
+## Challenges & Solutions
+
+### Technical Challenges
+
+#### 1. Multi-page Form State Management
+
+**Challenge:** Maintaining state across multiple pages (mood input, journaling, recap) while only POSTing data after completing all steps.
+
+**Solution:** Implemented React Context API to store form data across all steps and created a final submission function that combines all data into a single POST request. This preserved user progress while ensuring data integrity.
+
+#### 2. AI Integration & Context Preservation
+
+**Challenge:** Creating a chatbot that remembered user's mood input and provided appropriate responses based on emotional state.
+
+**Solution:** Developed dynamic system prompts that incorporated the user's mood data into each API call, allowing the AI to maintain context throughout the conversation and provide more relevant support.
+
+#### 3. Performance Optimization
+
+**Challenge:** Initial AI responses were slow, causing a poor user experience, especially on mobile devices.
+
+**Solution:** Implemented streaming responses from the OpenAI API and added optimistic UI updates to show typing indicators. Also utilized Next.js server components where appropriate to improve initial load times.
+
+### 4. Project Management Challenges
+
+**Challenge:** All team members were employed full-time, leaving limited hours for project development and causing timeline pressures.
+
+**Solution:** Implemented strict prioritization using MoSCoW method (Must have, Should have, Could have, Won't have). Created a detailed sprint plan with clearly defined responsibilities and daily async standups via Slack.
+
+#### 5. Communication & Task Overlap
+
+**Challenge:** Miscommunication led to task overlap where multiple team members worked on the same features unknowingly.
+
+**Solution:** Established a more robust GitHub workflow with feature branches and pull request reviews. Implemented a shared Notion board for task tracking with clear ownership assignments.
+
+#### 6. Team Motivation
+
+**Challenge:** Maintaining team motivation through technical difficulties and tight deadlines while everyone balanced full-time jobs.
+
+**Solution:** As project lead, I focused on leading by example, taking on challenging tasks first to demonstrate feasibility. Scheduled regular celebration of small wins and implemented pair programming sessions to tackle difficult problems together.
+
+## Key Learnings
+
+### Technical Growth
+
+Gained hands-on experience with modern web development practices including Next.js App Router, React Context API, and API integration. Learning to manage state across multi-page forms was particularly valuable.
+
+### Project Management
+
+Developed practical leadership skills by managing a remote team with limited availability. Learned how crucial clear communication, documentation, and task prioritization are to project success.
+
+### Problem-Solving
+
+Enhanced ability to tackle complex technical challenges through research, experimentation, and collaboration. Documentation reading skills improved significantly by necessity, a crucial skill for any developer.
+
+## Conclusion
+
+TheraMind represents more than just a bootcamp final project—it was a transformative learning experience that pushed our technical and collaborative skills to new heights. Despite working within the constraints of full-time jobs and limited experience, our team delivered a functioning mental wellness application with meaningful features.
+
+As project lead, I'm particularly proud of how we overcame both technical and logistical challenges through persistence and teamwork. The experience of building a multi-step form with state management across pages, integrating AI capabilities, and coordinating remote development has provided invaluable lessons that will serve us all in our future development careers.

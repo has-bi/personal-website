@@ -1,149 +1,76 @@
----
-title: "AI-Powered Customer Service on Indonesia's Most Popular Platform"
-description: "Created an intelligent WhatsApp-based nutrition assistant that gives Youvit customers 24/7 access to personalized vitamin information."
-coverImage: "/images/projects/nutritalk-cover.png"
-client: "Youvit"
-date: "2024"
-category: "AI & Customer Service"
-technologies: ["RAG", "WhatsApp API", "OpenAI", "Vector Database"]
----
+Youvit, Indonesia's leading gummy vitamin brand, faced a customer service challenge: with only one nutritionist available during business hours, they couldn't effectively handle the volume of customer inquiries coming in 24/7.
 
-# Project Overview
+Nutritalk was created as a WhatsApp-based AI assistant that uses Retrieval-Augmented Generation (RAG) to provide accurate nutritional guidance and product information instantly, at any time of day. By moving from a traditional web interface to Indonesia's most popular messaging platform, we achieved a 98% increase in user adoption.
 
-NutriTalk revolutionized Youvit's customer service by creating an AI-powered nutrition assistant accessible through WhatsApp - Indonesia's most popular messaging platform. This intelligent system provides 24/7 personalized vitamin and nutrition guidance, dramatically improving customer satisfaction and engagement.
+## Key Challenges & Solutions
 
-## The Challenge
+### Platform Adoption
 
-Youvit's customer service team was overwhelmed with repetitive nutrition questions:
+**Problem:** Initial web-based version had low adoption rates as users didn't want to visit a dedicated site.
 
-- **High Volume**: Hundreds of daily inquiries about vitamins and supplements
-- **Repetitive Queries**: Same questions asked repeatedly about product benefits
-- **Limited Hours**: Customer service only available during business hours
-- **Scaling Issues**: Unable to hire enough agents to handle growing customer base
-- **Response Delays**: Long wait times leading to customer frustration
-- **Knowledge Gaps**: Inconsistent answers from different support agents
+**Solution:** Moved to WhatsApp integration via Wati.io, enabling customers to get answers through a platform they already use daily.
 
-## The Solution
+### Knowledge Structure
 
-I developed NutriTalk, an AI-powered WhatsApp assistant that combines Retrieval-Augmented Generation (RAG) with Youvit's comprehensive nutrition database to provide instant, accurate, and personalized responses to customer inquiries.
+**Problem:** Creating an effective knowledge base that could provide accurate nutrition information for different products and demographics.
 
-### Core Capabilities
+**Solution:** Implemented a three-category structure (General, Ingredients, Benefits) with RAG to search across all categories and combine results intelligently.
 
-#### Intelligent Question Understanding
+### Team Capabilities
 
-- Natural language processing in Bahasa Indonesia and English
-- Context-aware conversations that remember previous interactions
-- Intent recognition for different types of nutrition queries
-- Fallback to human agents for complex medical questions
+**Problem:** Youvit lacked developers who could maintain a complex custom system long-term.
 
-#### Personalized Recommendations
+**Solution:** Used n8n for workflow automation, allowing non-technical team members to monitor and maintain the system through a visual interface rather than code.
 
-- Product suggestions based on individual health goals
-- Dosage recommendations considering user profile
-- Interaction warnings between different supplements
-- Lifestyle-based nutrition advice
+## Technical Implementation
 
-#### 24/7 Availability
+How Nutritalk processes customer inquiries
 
-- Instant responses at any time of day
-- No wait times or queue systems
-- Consistent service quality regardless of volume
-- Seamless handoff to human agents when needed
+### System Architecture
 
-## Technical Architecture
+Nutritalk uses a pragmatic architecture designed for both effectiveness and maintainability:
 
-### RAG Implementation
+- **WhatsApp Integration:** Wati.io handles messaging on the platform most Indonesians use daily
+- **n8n Workflows:** Visual automation platform manages the entire process flow
+- **Qdrant Vector DB:** Stores and retrieves knowledge across multiple categories
+- **RAG Implementation:** Combines search results with GPT-4o for natural responses
 
-- **Vector Database**: Pinecone for storing nutrition knowledge embeddings
-- **Knowledge Base**: Comprehensive database of Youvit products and nutrition science
-- **Retrieval System**: Semantic search for finding relevant information
-- **Generation**: OpenAI GPT models fine-tuned for nutrition conversations
+### Process Flow
 
-### WhatsApp Integration
-
-- **Business API**: Official WhatsApp Business Platform integration
-- **Webhook Processing**: Real-time message handling and responses
-- **Media Support**: Ability to share product images and infographics
-- **Rich Messaging**: Interactive buttons and quick reply options
-
-### Backend Infrastructure
-
-- **Node.js API**: High-performance message processing
-- **Redis Caching**: Fast response times for common queries
-- **PostgreSQL**: User conversation history and analytics
-- **AWS Hosting**: Scalable cloud infrastructure
-
-## Key Features
-
-### Smart Product Matching
-
-- Analyzes user health goals and lifestyle
-- Matches with appropriate Youvit products
-- Explains benefits in simple, understandable language
-- Provides usage instructions and timing recommendations
-
-### Health Goal Tracking
-
-- Remembers user's health objectives across conversations
-- Provides progress check-ins and motivation
-- Suggests complementary products for comprehensive wellness
-- Tracks satisfaction and adjusts recommendations
-
-### Educational Content
-
-- Explains vitamin functions and benefits
-- Shares nutrition tips and healthy lifestyle advice
-- Provides scientific backing for recommendations
-- Links to additional resources and research
+![Nutritalk providing personalized nutrition advice via WhatsApp](https://picsum.photos/800/500?random=1)
 
 ## Results & Impact
 
-NutriTalk has transformed Youvit's customer service landscape:
+How Nutritalk transformed Youvit's customer service
 
-- **98% User Adoption Increase**: Dramatic improvement in customer engagement
-- **80% Query Resolution**: Most questions answered without human intervention
-- **24/7 Availability**: Round-the-clock customer support
-- **90% Satisfaction Rate**: High customer satisfaction scores
-- **Cost Reduction**: Significant decrease in customer service operational costs
+<MetricsRow>
+  <MetricCard
+    title="Faster Response Time"
+    value="99%"
+    description="(4 hours → 2 minutes)"
+  />
+  <MetricCard
+    title="Reduction in Basic Queries"
+    value="68%"
+    description="(340+ hours saved/month)"
+  />
+  <MetricCard
+    title="Query Resolution Rate"
+    value="91%"
+    description="(Without human intervention)"
+  />
+</MetricsRow>
 
-### Customer Feedback
+### For Customers
 
-- "Finally got nutrition advice at 2 AM when I needed it most"
-- "The recommendations are spot-on for my fitness goals"
-- "Love how it remembers my previous questions"
-- "WhatsApp makes it so convenient to get help"
+- Instant answers 24/7, regardless of time zone
+- Personalized interactions addressing customers by name
+- Demographic-specific nutrition guidance (for pregnant women, elderly, families)
+- Consistent, accurate information on a familiar platform
 
-## Advanced Features
+### For Youvit
 
-### Conversation Memory
-
-- Maintains context across multiple interactions
-- Remembers user preferences and health conditions
-- Builds comprehensive user profiles for better recommendations
-- Respects privacy with opt-out options
-
-### Multilingual Support
-
-- Primary support in Bahasa Indonesia
-- English language capability for international customers
-- Cultural sensitivity in health recommendations
-- Local nutrition preferences and dietary habits consideration
-
-### Integration Capabilities
-
-- CRM integration for customer service teams
-- Analytics dashboard for conversation insights
-- Product inventory integration for real-time availability
-- Order system integration for seamless purchasing
-
-## Future Enhancements
-
-Based on success metrics and user feedback, planned improvements include:
-
-- **Voice Message Support**: Audio query processing
-- **Image Recognition**: Analyze food photos for nutrition advice
-- **Habit Tracking**: Integration with fitness and health apps
-- **Community Features**: Peer support and success stories
-- **Telehealth Integration**: Connection with registered nutritionists
-
-NutriTalk demonstrates how AI can enhance customer service while maintaining the personal touch that health and wellness customers value, setting a new standard for digital customer engagement in the nutrition industry.
+- Nutritionist freed from repetitive questions (60% time savings)
+- Elimination of after-hours support gaps
+- System maintainable by non-technical team members
+- Valuable data insights for product development

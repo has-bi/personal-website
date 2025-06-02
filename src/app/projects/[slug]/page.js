@@ -140,42 +140,6 @@ export default async function ProjectPage({ params }) {
               <p className="text-lg lg:text-xl text-gray-600 mb-8 leading-relaxed max-w-3xl">
                 {project.desc}
               </p>
-
-              {/* Action Buttons */}
-              <div className="flex flex-col sm:flex-row gap-4">
-                <button className="inline-flex items-center gap-2 bg-gray-900 text-white hover:bg-gray-800 px-6 py-3 rounded-lg font-medium transition-colors group">
-                  <span>View Live Project</span>
-                  <svg
-                    className="w-4 h-4 group-hover:translate-x-0.5 transition-transform"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={2}
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                    />
-                  </svg>
-                </button>
-                <button className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 px-6 py-3 font-medium transition-colors">
-                  <svg
-                    className="w-4 h-4"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={2}
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"
-                    />
-                  </svg>
-                  <span>View Code</span>
-                </button>
-              </div>
             </div>
           </div>
         </div>
@@ -244,32 +208,12 @@ export default async function ProjectPage({ params }) {
       {/* Next Project Navigation */}
       <section className="border-t border-gray-200 py-12 px-6">
         <div className="container mx-auto max-w-6xl">
-          <div className="flex justify-between items-center">
+          <div className="flex justify-end items-center">
             <Link
               href="/projects"
               className="flex items-center text-gray-600 hover:text-gray-900 transition-colors"
             >
-              <svg
-                className="w-4 h-4 mr-2"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={1.5}
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M10 19l-7-7m0 0l7-7m-7 7h18"
-                />
-              </svg>
               <span>All Projects</span>
-            </Link>
-
-            <Link
-              href="/contact"
-              className="flex items-center text-gray-600 hover:text-gray-900 transition-colors"
-            >
-              <span>Start a Project</span>
               <svg
                 className="w-4 h-4 ml-2"
                 fill="none"
