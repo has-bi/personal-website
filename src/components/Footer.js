@@ -9,32 +9,6 @@ export default function Footer() {
     <footer className="bg-black text-white">
       {/* Main Footer Content */}
       <div className="container mx-auto px-6 py-24">
-        {/* Hero Section */}
-        <div className="flex flex-col md:flex-row justify-between items-start gap-12 mb-24">
-          <div className="flex-1">
-            <h2 className="text-5xl md:text-6xl lg:text-7xl font-light leading-[1.1] tracking-tight">
-              Let's Connect
-              <br />
-              <span className="text-gray-400">There</span>
-            </h2>
-          </div>
-
-          <div className="flex-shrink-0">
-            <Link
-              href="/contact"
-              className="bg-white text-black hover:bg-gray-100 px-8 py-4 rounded-full inline-flex items-center gap-3 transition-all duration-300 group font-medium"
-            >
-              <span className="text-xl group-hover:translate-x-1 transition-transform duration-300">
-                →
-              </span>
-              <span>Hire Me Now</span>
-            </Link>
-          </div>
-        </div>
-
-        {/* Divider */}
-        <div className="h-px bg-gray-800 mb-16"></div>
-
         {/* Content Section */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24">
           {/* Profile Section */}

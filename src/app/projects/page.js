@@ -63,61 +63,6 @@ export default function ProjectsPage() {
         </div>
       </section>
 
-      {/* Call to Action */}
-      <section className="border-t border-gray-200 py-16 px-6">
-        <div className="container mx-auto max-w-6xl">
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-12">
-            {/* Left Column - Label */}
-            <div className="lg:col-span-1">
-              <div className="inline-flex items-center gap-3">
-                <div className="w-2 h-2 bg-indigo-500 rounded-full"></div>
-                <span className="text-sm font-medium text-gray-600 uppercase tracking-wider">
-                  Let's Work
-                </span>
-              </div>
-            </div>
-
-            {/* Right Column - Content */}
-            <div className="lg:col-span-3">
-              <h2 className="text-3xl lg:text-4xl font-light mb-6 leading-tight text-gray-900">
-                Have a project in mind?
-              </h2>
-              <p className="text-lg text-gray-600 leading-relaxed mb-8 max-w-2xl">
-                I'm always interested in taking on new challenges and creating
-                intelligent solutions that make a difference.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4">
-                <a
-                  href="/contact"
-                  className="inline-flex items-center gap-2 bg-gray-900 text-white hover:bg-gray-800 px-6 py-3 rounded-lg font-medium transition-colors group"
-                >
-                  <span>Start a Project</span>
-                  <svg
-                    className="w-4 h-4 group-hover:translate-x-0.5 transition-transform"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={2}
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M17 8l4 4m0 0l-4 4m4-4H3"
-                    />
-                  </svg>
-                </a>
-                <a
-                  href="/about"
-                  className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 px-6 py-3 font-medium transition-colors"
-                >
-                  <span>Learn About Me</span>
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* Decorative Divider */}
       <div className="relative">
         <div className="w-full h-px bg-gray-200"></div>
