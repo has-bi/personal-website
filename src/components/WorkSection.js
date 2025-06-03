@@ -11,6 +11,15 @@ export default function WorkSection() {
       duration: "2024 - Present",
       isActive: true,
     },
+    {
+      id: 2,
+      position: "Data Analytics Consultant - Freelance",
+      company: "Altrabyte",
+      description:
+        "Co-founded a consulting venture where I handled all technical aspects while my partner managed business operations and client relations. Built comprehensive analytics dashboards for Rose All Day Cosmetics covering General Trade, Modern Trade, Sales Operations, Digital Advertising, and E-commerce channels. Developed sales operations dashboard for Amser PTE LTD, a Singapore-based distributor. Managed full-stack development from data pipeline architecture to user interface design, enabling data-driven decision making across multiple business verticals.",
+      duration: "2024 - Present",
+      isActive: true,
+    },
   ];
 
   return (
