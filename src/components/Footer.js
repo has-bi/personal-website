@@ -27,9 +27,9 @@ export default function Footer() {
             </div>
 
             <p className="text-gray-400 text-lg leading-relaxed max-w-md">
-              Frontend Developer specializing in modern web applications. I
-              create seamless digital experiences using cutting-edge
-              technologies and design principles.
+              AI Engineer specializing in intelligent automation solutions. I
+              create systems that eliminate manual processes and scale
+              operations using cutting-edge AI technologies.
             </p>
           </div>
 

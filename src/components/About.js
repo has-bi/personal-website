@@ -19,14 +19,15 @@ export default function About() {
           {/* Right Column - Content */}
           <div className="lg:col-span-3">
             <h2 className="text-4xl lg:text-5xl font-light mb-8 leading-tight text-gray-900 max-w-4xl">
-              A Frontend developer based in{" "}
-              <span className="text-gray-500">Jakarta</span>, passionate about
-              creating immersive web experiences.
+              An AI Engineer based in{" "}
+              <span className="text-gray-500">Jakarta</span>, transforming
+              complex problems into intelligent digital solutions.
             </h2>
 
             <p className="text-lg text-gray-600 leading-relaxed mb-8 max-w-3xl">
-              From crafting responsive interfaces to dynamic animations and
-              interactions, I bring ideas to life through code and design.
+              From AI-powered automation to full-stack applications, I build
+              systems that eliminate repetitive tasks so people can focus on
+              what truly matters.
             </p>
 
             <Link

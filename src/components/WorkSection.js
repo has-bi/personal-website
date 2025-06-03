@@ -40,11 +40,12 @@ export default function WorkSection() {
             <h2 className="text-4xl lg:text-5xl font-light mb-6 leading-tight text-gray-900">
               A yearly snapshot of my
               <br />
-              <span className="text-gray-500">creative growth</span>
+              <span className="text-gray-500">technical evolution</span>
             </h2>
             <p className="text-gray-600 text-lg leading-relaxed max-w-2xl">
-              An annual summary that captures my creative journey and
-              professional development throughout the years.
+              An annual summary that captures my journey from data analytics to
+              AI engineering, building solutions that automate processes and
+              scale businesses.
             </p>
           </div>
         </div>

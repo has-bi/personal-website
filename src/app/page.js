@@ -5,6 +5,7 @@ import ProjectsSection from "@/components/ProjectsSection";
 import WorkSection from "@/components/WorkSection";
 import AIChatSection from "@/components/ChatSection";
 import BlogSection from "@/components/BlogSection";
+import { PrimaryCTA } from "@/components/CTA";
 
 export default function Home() {
   return (
@@ -15,6 +16,7 @@ export default function Home() {
       {/* <AIChatSection /> */}
       <ProjectsSection />
       <BlogSection />
+      <PrimaryCTA />
     </div>
   );
 }

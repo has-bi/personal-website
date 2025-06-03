@@ -45,11 +45,12 @@ export default function ProjectsSection() {
             <h2 className="text-4xl lg:text-5xl font-light mb-6 leading-tight text-gray-900">
               Selected work that showcases
               <br />
-              <span className="text-gray-500">innovation and impact</span>
+              <span className="text-gray-500">automation and intelligence</span>
             </h2>
             <p className="text-lg text-gray-600 leading-relaxed max-w-2xl">
               A curated collection of projects that demonstrate my approach to
-              solving complex problems through technology and design.
+              solving complex business problems through AI integration and smart
+              automation.
             </p>
           </div>
         </div>
