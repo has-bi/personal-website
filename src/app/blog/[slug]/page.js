@@ -31,7 +31,7 @@ export async function generateMetadata({ params }) {
 }
 
 export default async function BlogPage({ params }) {
-  const { slug } = params;
+  const { slug } = await params;
   const post = getBlogPost(slug);
 
   if (!post) {

@@ -28,7 +28,7 @@ export default function ProjectsSection() {
   };
 
   return (
-    <section className="py-24" id="projects-section" ref={ref}>
+    <section className="pt-24" id="projects-section" ref={ref}>
       <div className="container mx-auto px-6">
         {/* Header Section */}
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-12 mb-16">

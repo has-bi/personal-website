@@ -12,7 +12,7 @@ export function PrimaryCTA({
   className = "",
 }) {
   return (
-    <section className={`py-12 px-6 ${className}`}>
+    <section className={`py-24 px-6 ${className}`}>
       <div className="container mx-auto max-w-4xl text-center">
         <h2 className="text-3xl lg:text-4xl font-light text-gray-900 mb-6 leading-tight">
           {title}
@@ -149,7 +149,7 @@ export function ContactCTA({
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-3xl mx-auto">
           {/* Email CTA */}
           <a
-            href="mailto:hello@hasbihassadiqin.com"
+            href="mailto:hasbiatwork@gmail.com"
             className="flex flex-col items-center p-6 bg-white rounded-xl border border-gray-200 hover:border-indigo-200 hover:bg-indigo-50 transition-all duration-300 group"
           >
             <div className="w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center mb-4 group-hover:bg-indigo-200 transition-colors">
@@ -175,7 +175,7 @@ export function ContactCTA({
 
           {/* WhatsApp CTA */}
           <a
-            href="https://wa.me/6281234567890"
+            href="https://wa.me/6281932596925"
             target="_blank"
             rel="noopener noreferrer"
             className="flex flex-col items-center p-6 bg-white rounded-xl border border-gray-200 hover:border-green-200 hover:bg-green-50 transition-all duration-300 group"

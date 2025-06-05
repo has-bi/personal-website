@@ -80,9 +80,9 @@ export default function AboutPage() {
     {
       year: "2024 - Present",
       role: "Data Analytics Consultant",
-      company: "Altrabyte (Co-founder)",
+      company: "Altrabyte",
       description:
-        "Co-founded consulting venture handling full-stack analytics solutions for retail and e-commerce clients.",
+        "Handling full-stack analytics solutions for retail and e-commerce clients.",
     },
   ];
 
@@ -108,7 +108,7 @@ export default function AboutPage() {
       institution: "Devscale Indonesia",
       description:
         "Intensive 3-month bootcamp achieving excellent grade in modern web development. Mastered full-stack JavaScript development from dynamic frontend interfaces to scalable backend APIs. Built complete end-to-end applications using industry best practices, covering both relational and non-relational databases, responsive design, and seamless frontend-backend integration.",
-      image: "/images/about/devscale-bootcamp.jpg",
+      image: "/images/about/devscale-certificate.jpg",
       highlights: [
         "React.js & State Management",
         "Node.js & Express.js",
@@ -125,7 +125,7 @@ export default function AboutPage() {
       institution: "RevoU",
       description:
         "Comprehensive data analytics program covering the complete data pipeline from collection to visualization. Gained hands-on experience in data gathering, manipulation, and creating actionable business insights through modern analytics tools and methodologies.",
-      image: "/images/about/revou-analytics.jpg",
+      image: "/images/about/revou-certificate.jpg",
       highlights: [
         "Data Manipulation (SQL, Python)",
         "Data Visualization (Tableau, Google Data Studio)",
@@ -201,7 +201,7 @@ export default function AboutPage() {
                   <div className="aspect-[4/5] relative overflow-hidden rounded-3xl border-4 border-white shadow-xl bg-gray-100">
                     {/* Professional Photo */}
                     <Image
-                      src="/images/Me-1.jpg"
+                      src="/images/Me-1.png"
                       alt="Hasbi Hassadiqin - Professional"
                       fill
                       className={`object-cover transition-opacity duration-500 ${
@@ -531,11 +531,11 @@ export default function AboutPage() {
                       <div
                         className={`overflow-hidden transition-all duration-500 ${
                           selectedEducation === index
-                            ? "max-h-80 opacity-100 mt-8"
+                            ? "max-h-[450px] opacity-100 mt-8"
                             : "max-h-0 opacity-0"
                         }`}
                       >
-                        <div className="aspect-[16/9] relative rounded-xl overflow-hidden bg-gray-100">
+                        <div className="aspect-[3/2] relative rounded-xl overflow-hidden bg-gray-100">
                           <Image
                             src={item.image}
                             alt={`${item.title} at ${item.institution}`}
