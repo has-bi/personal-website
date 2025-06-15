@@ -3,7 +3,7 @@
 import React from "react";
 import { getPlainText } from "@/utils/notion";
 
-export default function NotionRenderer({ blocks, title, showTitle = true }) {
+export default function NotionRenderer({ blocks, title, showTitle = false }) {
   if (!blocks || blocks.length === 0) {
     return (
       <div className="text-center py-24">
@@ -47,6 +47,38 @@ export default function NotionRenderer({ blocks, title, showTitle = true }) {
       ))}
     </div>
   );
+}
+
+// Helper functions for video URL processing
+function isYouTubeUrl(url) {
+  return url.includes("youtube.com") || url.includes("youtu.be");
+}
+
+function isVimeoUrl(url) {
+  return url.includes("vimeo.com");
+}
+
+function getYouTubeEmbedUrl(url) {
+  // Handle different YouTube URL formats
+  if (url.includes("youtu.be/")) {
+    const videoId = url.split("youtu.be/")[1].split("?")[0];
+    return `https://www.youtube.com/embed/${videoId}`;
+  } else if (url.includes("youtube.com/watch?v=")) {
+    const videoId = url.split("watch?v=")[1].split("&")[0];
+    return `https://www.youtube.com/embed/${videoId}`;
+  } else if (url.includes("youtube.com/embed/")) {
+    return url; // Already an embed URL
+  }
+  return url;
+}
+
+function getVimeoEmbedUrl(url) {
+  // Handle Vimeo URL formats
+  if (url.includes("vimeo.com/")) {
+    const videoId = url.split("vimeo.com/")[1].split("?")[0];
+    return `https://player.vimeo.com/video/${videoId}`;
+  }
+  return url;
 }
 
 function NotionBlock({ block }) {
@@ -149,6 +181,105 @@ function NotionBlock({ block }) {
           {caption && (
             <p className="text-center text-gray-500 text-sm mt-2 italic">
               {caption}
+            </p>
+          )}
+        </div>
+      );
+
+    case "video":
+      const videoUrl = block.video.file?.url || block.video.external?.url;
+      const videoCaption = block.video.caption
+        ? getPlainText(block.video.caption)
+        : "";
+
+      return (
+        <div className="my-8">
+          {videoUrl && (
+            <div className="relative aspect-video rounded-xl overflow-hidden shadow-lg bg-gray-100">
+              {/* Check if it's a YouTube URL */}
+              {isYouTubeUrl(videoUrl) ? (
+                <iframe
+                  src={getYouTubeEmbedUrl(videoUrl)}
+                  title={videoCaption || "Video content"}
+                  className="w-full h-full"
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+              ) : isVimeoUrl(videoUrl) ? (
+                <iframe
+                  src={getVimeoEmbedUrl(videoUrl)}
+                  title={videoCaption || "Video content"}
+                  className="w-full h-full"
+                  frameBorder="0"
+                  allow="autoplay; fullscreen; picture-in-picture"
+                  allowFullScreen
+                />
+              ) : (
+                /* Direct video file */
+                <video
+                  controls
+                  className="w-full h-full object-cover"
+                  preload="metadata"
+                >
+                  <source src={videoUrl} type="video/mp4" />
+                  <source src={videoUrl} type="video/webm" />
+                  <source src={videoUrl} type="video/ogg" />
+                  Your browser does not support the video tag.
+                </video>
+              )}
+            </div>
+          )}
+          {videoCaption && (
+            <p className="text-center text-gray-500 text-sm mt-3 italic">
+              {videoCaption}
+            </p>
+          )}
+        </div>
+      );
+
+    case "embed":
+      const embedUrl = block.embed.url;
+      const embedCaption = block.embed.caption
+        ? getPlainText(block.embed.caption)
+        : "";
+
+      return (
+        <div className="my-8">
+          <div className="relative aspect-video rounded-xl overflow-hidden shadow-lg bg-gray-100">
+            {/* Check if it's a YouTube URL */}
+            {isYouTubeUrl(embedUrl) ? (
+              <iframe
+                src={getYouTubeEmbedUrl(embedUrl)}
+                title={embedCaption || "Embedded content"}
+                className="w-full h-full"
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              />
+            ) : isVimeoUrl(embedUrl) ? (
+              <iframe
+                src={getVimeoEmbedUrl(embedUrl)}
+                title={embedCaption || "Embedded content"}
+                className="w-full h-full"
+                frameBorder="0"
+                allow="autoplay; fullscreen; picture-in-picture"
+                allowFullScreen
+              />
+            ) : (
+              /* Generic embed */
+              <iframe
+                src={embedUrl}
+                title={embedCaption || "Embedded content"}
+                className="w-full h-full"
+                frameBorder="0"
+                allowFullScreen
+              />
+            )}
+          </div>
+          {embedCaption && (
+            <p className="text-center text-gray-500 text-sm mt-3 italic">
+              {embedCaption}
             </p>
           )}
         </div>
