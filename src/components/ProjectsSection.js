@@ -4,14 +4,10 @@ import React, { useRef } from "react";
 import Link from "next/link";
 import ProjectCard from "./ProjectCard";
 import { motion, useInView } from "framer-motion";
-import { getFeaturedProjects } from "@/utils/projects";
 
-export default function ProjectsSection() {
+export default function ProjectsSection({ projects }) {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, amount: 0.1 });
-
-  // Get featured projects from utils
-  const projects = getFeaturedProjects();
 
   const cardVariants = {
     hidden: { y: 30, opacity: 0 },
@@ -30,7 +26,6 @@ export default function ProjectsSection() {
   return (
     <section className="pt-24" id="projects-section" ref={ref}>
       <div className="container mx-auto px-6">
-        {/* Header Section */}
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-12 mb-16">
           <div className="lg:col-span-1">
             <div className="inline-flex items-center gap-3">
@@ -55,7 +50,6 @@ export default function ProjectsSection() {
           </div>
         </div>
 
-        {/* Projects Grid */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
           {projects.map((project, index) => (
             <motion.div
@@ -73,7 +67,6 @@ export default function ProjectsSection() {
           ))}
         </div>
 
-        {/* View All Link */}
         <div className="flex justify-center">
           <Link
             href="/projects"
@@ -97,7 +90,6 @@ export default function ProjectsSection() {
         </div>
       </div>
 
-      {/* Decorative Divider */}
       <div className="relative mt-24">
         <div className="w-full h-px bg-gray-200"></div>
         <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2">
