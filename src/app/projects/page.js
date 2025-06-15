@@ -1,5 +1,5 @@
-// src/app/projects/page.js
-import { getProjects, getAllCategories } from "@/utils/projects";
+// src/app/projects/page.js - Final with title fix
+import { getProjectsFromNotion } from "@/utils/notion";
 import ProjectCard from "@/components/ProjectCard";
 
 export const metadata = {
@@ -8,9 +8,8 @@ export const metadata = {
     "A showcase of my work in AI, automation, and web development. Explore projects that demonstrate innovation and technical expertise.",
 };
 
-export default function ProjectsPage() {
-  const projects = getProjects();
-  const categories = getAllCategories();
+export default async function ProjectsPage() {
+  const projects = await getProjectsFromNotion();
 
   return (
     <div className="min-h-screen bg-white ">
@@ -18,7 +17,6 @@ export default function ProjectsPage() {
       <section className="pt-40 pb-5 px-6">
         <div className="container mx-auto max-w-6xl">
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-12">
-            {/* Left Column - Label */}
             <div className="lg:col-span-1">
               <div className="inline-flex items-center gap-3">
                 <div className="w-2 h-2 bg-indigo-500 rounded-full"></div>
@@ -28,7 +26,6 @@ export default function ProjectsPage() {
               </div>
             </div>
 
-            {/* Right Column - Content */}
             <div className="lg:col-span-3">
               <h1 className="text-4xl lg:text-5xl font-light mb-6 leading-tight text-gray-900">
                 Projects that solve real problems

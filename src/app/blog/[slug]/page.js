@@ -1,16 +1,16 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { getBlogPost, getAllBlogSlugs } from "@/utils/blog";
-import MDXContent from "@/components/MDXContent";
+import { getBlogPostFromNotion, getBlogPostsFromNotion } from "@/utils/notion";
+import NotionRenderer from "@/components/NotionRenderer";
 
 export async function generateStaticParams() {
-  const slugs = getAllBlogSlugs();
-  return slugs.map((slug) => ({ slug }));
+  const posts = await getBlogPostsFromNotion();
+  return posts.map((post) => ({ slug: post.slug }));
 }
 
 export async function generateMetadata({ params }) {
   const { slug } = await params;
-  const post = getBlogPost(slug);
+  const post = await getBlogPostFromNotion(slug);
 
   if (!post) {
     return {
@@ -20,25 +20,42 @@ export async function generateMetadata({ params }) {
   }
 
   return {
-    title: `${post.title} - Hasbi Hassadiqin`,
-    description: post.frontmatter.excerpt || post.frontmatter.desc,
+    title: `${post.title || "Blog Post"} - Hasbi Hassadiqin`,
+    description: post.excerpt || post.desc || "A blog post by Hasbi Hassadiqin",
     openGraph: {
-      title: post.frontmatter.title,
-      description: post.frontmatter.excerpt || post.frontmatter.desc,
-      images: post.frontmatter.coverImage ? [post.frontmatter.coverImage] : [],
+      title: post.title || "Blog Post",
+      description:
+        post.excerpt || post.desc || "A blog post by Hasbi Hassadiqin",
+      images: post.coverImage ? [post.coverImage] : [],
     },
   };
 }
 
 export default async function BlogPage({ params }) {
   const { slug } = await params;
-  const post = getBlogPost(slug);
+  const post = await getBlogPostFromNotion(slug);
 
   if (!post) {
     notFound();
   }
 
-  const { frontmatter, content } = post;
+  // Helper function to format date safely
+  const formatDate = (dateString) => {
+    if (!dateString) return "Recently";
+
+    try {
+      const date = new Date(dateString);
+      if (isNaN(date.getTime())) return "Recently";
+
+      return date.toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      });
+    } catch (error) {
+      return "Recently";
+    }
+  };
 
   return (
     <div className="min-h-screen bg-white">
@@ -72,43 +89,37 @@ export default async function BlogPage({ params }) {
           <div className="mb-12">
             {/* Meta Information */}
             <div className="flex items-center gap-4 text-sm text-gray-500 mb-6">
-              <time>
-                {new Date(frontmatter.date).toLocaleDateString("en-US", {
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric",
-                })}
-              </time>
-              {frontmatter.readTime && (
+              <time>{formatDate(post.date)}</time>
+              {post.readTime && (
                 <>
                   <span>•</span>
-                  <span>{frontmatter.readTime}</span>
+                  <span>{post.readTime}</span>
                 </>
               )}
-              {frontmatter.author && (
+              {post.author && (
                 <>
                   <span>•</span>
-                  <span>by {frontmatter.author}</span>
+                  <span>by {post.author}</span>
                 </>
               )}
             </div>
 
             {/* Title */}
             <h1 className="text-4xl lg:text-5xl font-light mb-6 leading-tight text-gray-900">
-              {frontmatter.title}
+              {post.title || "Untitled Post"}
             </h1>
 
             {/* Excerpt */}
-            {frontmatter.excerpt && (
+            {post.excerpt && (
               <p className="text-xl text-gray-600 leading-relaxed mb-8 max-w-3xl">
-                {frontmatter.excerpt}
+                {post.excerpt}
               </p>
             )}
 
             {/* Tags */}
-            {frontmatter.tags && frontmatter.tags.length > 0 && (
+            {post.tags && post.tags.length > 0 && (
               <div className="flex flex-wrap gap-3 mb-8">
-                {frontmatter.tags.map((tag) => (
+                {post.tags.map((tag) => (
                   <span
                     key={tag}
                     className="px-4 py-2 bg-indigo-50 text-indigo-600 text-sm rounded-full font-medium"
@@ -121,11 +132,11 @@ export default async function BlogPage({ params }) {
           </div>
 
           {/* Cover Image */}
-          {frontmatter.coverImage && (
+          {post.coverImage && (
             <div className="aspect-[16/9] relative overflow-hidden rounded-2xl mb-12 bg-gray-100">
               <img
-                src={frontmatter.coverImage}
-                alt={frontmatter.title}
+                src={post.coverImage}
+                alt={post.title || "Blog post cover"}
                 className="w-full h-full object-cover"
               />
             </div>
@@ -136,36 +147,11 @@ export default async function BlogPage({ params }) {
       {/* Article Content */}
       <main className="px-6 pb-24">
         <div className="container mx-auto max-w-4xl">
-          {content ? (
-            <MDXContent source={content} />
-          ) : (
-            <div className="text-center py-24">
-              <div className="max-w-md mx-auto">
-                <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                  <svg
-                    className="w-12 h-12 text-gray-400"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={1}
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                    />
-                  </svg>
-                </div>
-                <h2 className="text-xl font-medium text-gray-900 mb-2">
-                  Content coming soon
-                </h2>
-                <p className="text-gray-600 leading-relaxed">
-                  This article is being prepared. Check back soon for the full
-                  content.
-                </p>
-              </div>
-            </div>
-          )}
+          <NotionRenderer
+            blocks={post.content}
+            title={post.title}
+            showTitle={false}
+          />
         </div>
       </main>
 
@@ -181,7 +167,7 @@ export default async function BlogPage({ params }) {
               <div className="flex gap-4">
                 <a
                   href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(
-                    frontmatter.title
+                    post.title || "Check out this article"
                   )}&url=${encodeURIComponent(
                     typeof window !== "undefined" ? window.location.href : ""
                   )}`}

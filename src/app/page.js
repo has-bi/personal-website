@@ -1,20 +1,21 @@
-// src/app/page.js
+// src/app/page.js - Final Notion version
 import Hero from "@/components/Hero";
 import About from "@/components/About";
 import ProjectsSection from "@/components/ProjectsSection";
 import WorkSection from "@/components/WorkSection";
-import AIChatSection from "@/components/ChatSection";
 import BlogSection from "@/components/BlogSection";
 import { PrimaryCTA } from "@/components/CTA";
+import { getFeaturedProjects } from "@/utils/notion";
 
-export default function Home() {
+export default async function Home() {
+  const featuredProjects = await getFeaturedProjects(4);
+
   return (
     <div className="px-20">
       <Hero />
       <About />
       <WorkSection />
-      {/* <AIChatSection /> */}
-      <ProjectsSection />
+      <ProjectsSection projects={featuredProjects} />
       <BlogSection />
       <PrimaryCTA />
     </div>

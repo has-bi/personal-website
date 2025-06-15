@@ -1,33 +1,58 @@
-import createMDX from "@next/mdx";
-import remarkGfm from "remark-gfm";
-import rehypeHighlight from "rehype-highlight";
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "m.media-amazon.com",
-        port: "",
-        pathname: "/images/**",
-      },
-      {
-        protocol: "https",
-        hostname: "covers.openlibrary.org",
+        hostname: "via.placeholder.com",
         port: "",
         pathname: "/**",
       },
+      {
+        protocol: "https",
+        hostname: "picsum.photos",
+        port: "",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "m.media-amazon.com",
+        port: "",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "prod-files-secure.s3.us-west-2.amazonaws.com",
+        port: "",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "www.notion.so",
+        port: "",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "images.unsplash.com",
+        port: "",
+        pathname: "/**",
+      },
+      // Add common Notion image hostnames
+      {
+        protocol: "https",
+        hostname: "file.notion.so",
+        port: "",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "s3.us-west-2.amazonaws.com",
+        port: "",
+        pathname: "/secure.notion-static.com/**",
+      },
     ],
   },
-  pageExtensions: ["js", "jsx", "mdx", "ts", "tsx"],
 };
 
-const withMDX = createMDX({
-  options: {
-    remarkPlugins: [remarkGfm],
-    rehypePlugins: [rehypeHighlight],
-  },
-});
-
-export default withMDX(nextConfig);
+export default nextConfig;

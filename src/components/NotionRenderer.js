@@ -3,7 +3,7 @@
 import React from "react";
 import { getPlainText } from "@/utils/notion";
 
-export default function NotionRenderer({ blocks }) {
+export default function NotionRenderer({ blocks, title, showTitle = true }) {
   if (!blocks || blocks.length === 0) {
     return (
       <div className="text-center py-24">
@@ -37,6 +37,11 @@ export default function NotionRenderer({ blocks }) {
 
   return (
     <div className="prose prose-lg prose-gray max-w-none">
+      {showTitle && title && (
+        <h1 className="text-4xl lg:text-5xl font-light mb-8 leading-tight text-gray-900">
+          {title}
+        </h1>
+      )}
       {blocks.map((block, index) => (
         <NotionBlock key={block.id || index} block={block} />
       ))}

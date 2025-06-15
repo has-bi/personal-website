@@ -1,4 +1,4 @@
-// src/utils/notion.js
+// src/utils/notion.js - Final version
 import { Client } from "@notionhq/client";
 
 const notion = new Client({
@@ -16,11 +16,21 @@ export function getPlainText(richText) {
 
 // Helper to get property value based on type
 export function getPropertyValue(property) {
-  switch (property?.type) {
+  if (!property) {
+    console.log("Property is null or undefined");
+    return "";
+  }
+
+  console.log("Processing property:", property.type, property);
+
+  switch (property.type) {
     case "title":
-      return getPlainText(property.title);
+      const titleValue =
+        property.title?.map((text) => text.plain_text).join("") || "";
+      console.log("Title value extracted:", titleValue);
+      return titleValue;
     case "rich_text":
-      return getPlainText(property.rich_text);
+      return property.rich_text?.map((text) => text.plain_text).join("") || "";
     case "select":
       return property.select?.name || "";
     case "multi_select":
@@ -40,6 +50,7 @@ export function getPropertyValue(property) {
         ""
       );
     default:
+      console.log("Unknown property type:", property.type, property);
       return "";
   }
 }
@@ -63,19 +74,31 @@ export async function getBlogPostsFromNotion() {
       ],
     });
 
-    return response.results.map((page) => ({
-      id: page.id,
-      slug: getPropertyValue(page.properties.Slug),
-      title: getPropertyValue(page.properties.Title),
-      excerpt: getPropertyValue(page.properties.Excerpt),
-      date: getPropertyValue(page.properties.Date),
-      tags: getPropertyValue(page.properties.Tags),
-      coverImage: getPropertyValue(page.properties["Cover Image"]),
-      author: getPropertyValue(page.properties.Author) || "Hasbi Hassadiqin",
-      readTime: getPropertyValue(page.properties["Read Time"]) || "5 min read",
-      featured: getPropertyValue(page.properties.Featured),
-      published: getPropertyValue(page.properties.Published),
-    }));
+    return response.results.map((page) => {
+      // Try Content Title first, then fallback to Title, then fallback text
+      const contentTitle = getPropertyValue(page.properties["Content Title"]);
+      const defaultTitle = getPropertyValue(page.properties.Title);
+      const finalTitle = contentTitle || defaultTitle || "Untitled Post";
+
+      console.log("Content Title:", contentTitle);
+      console.log("Default Title:", defaultTitle);
+      console.log("Final Title:", finalTitle);
+
+      return {
+        id: page.id,
+        slug: getPropertyValue(page.properties.Slug),
+        title: finalTitle,
+        excerpt: getPropertyValue(page.properties.Excerpt),
+        date: getPropertyValue(page.properties.Date),
+        tags: getPropertyValue(page.properties.Tags),
+        coverImage: getPropertyValue(page.properties["Cover Image"]),
+        author: getPropertyValue(page.properties.Author) || "Hasbi Hassadiqin",
+        readTime:
+          getPropertyValue(page.properties["Read Time"]) || "5 min read",
+        featured: getPropertyValue(page.properties.Featured),
+        published: getPropertyValue(page.properties.Published),
+      };
+    });
   } catch (error) {
     console.error("Error fetching blog posts from Notion:", error);
     return [];
@@ -110,14 +133,17 @@ export async function getBlogPostFromNotion(slug) {
     }
 
     const page = response.results[0];
-
-    // Get page content
     const content = await getPageContent(page.id);
+
+    // Try Content Title first, then fallback to Title
+    const contentTitle = getPropertyValue(page.properties["Content Title"]);
+    const defaultTitle = getPropertyValue(page.properties.Title);
+    const finalTitle = contentTitle || defaultTitle || "Untitled Post";
 
     return {
       id: page.id,
       slug: getPropertyValue(page.properties.Slug),
-      title: getPropertyValue(page.properties.Title),
+      title: finalTitle,
       excerpt: getPropertyValue(page.properties.Excerpt),
       date: getPropertyValue(page.properties.Date),
       tags: getPropertyValue(page.properties.Tags),
@@ -153,19 +179,26 @@ export async function getProjectsFromNotion() {
       ],
     });
 
-    return response.results.map((page) => ({
-      id: page.id,
-      slug: getPropertyValue(page.properties.Slug),
-      title: getPropertyValue(page.properties.Title),
-      desc: getPropertyValue(page.properties.Description),
-      coverImage: getPropertyValue(page.properties["Cover Image"]),
-      date: getPropertyValue(page.properties.Date),
-      client: getPropertyValue(page.properties.Client),
-      category: getPropertyValue(page.properties.Category),
-      technologies: getPropertyValue(page.properties.Technologies),
-      featured: getPropertyValue(page.properties.Featured),
-      published: getPropertyValue(page.properties.Published),
-    }));
+    return response.results.map((page) => {
+      // Try Content Title first, then fallback to Title
+      const contentTitle = getPropertyValue(page.properties["Content Title"]);
+      const defaultTitle = getPropertyValue(page.properties.Title);
+      const finalTitle = contentTitle || defaultTitle || "Untitled Project";
+
+      return {
+        id: page.id,
+        slug: getPropertyValue(page.properties.Slug),
+        title: finalTitle,
+        desc: getPropertyValue(page.properties.Description),
+        coverImage: getPropertyValue(page.properties["Cover Image"]),
+        date: getPropertyValue(page.properties.Date),
+        client: getPropertyValue(page.properties.Client),
+        category: getPropertyValue(page.properties.Category),
+        technologies: getPropertyValue(page.properties.Technologies),
+        featured: getPropertyValue(page.properties.Featured),
+        published: getPropertyValue(page.properties.Published),
+      };
+    });
   } catch (error) {
     console.error("Error fetching projects from Notion:", error);
     return [];
@@ -200,14 +233,17 @@ export async function getProjectFromNotion(slug) {
     }
 
     const page = response.results[0];
-
-    // Get page content
     const content = await getPageContent(page.id);
+
+    // Try Content Title first, then fallback to Title
+    const contentTitle = getPropertyValue(page.properties["Content Title"]);
+    const defaultTitle = getPropertyValue(page.properties.Title);
+    const finalTitle = contentTitle || defaultTitle || "Untitled Project";
 
     return {
       id: page.id,
       slug: getPropertyValue(page.properties.Slug),
-      title: getPropertyValue(page.properties.Title),
+      title: finalTitle,
       desc: getPropertyValue(page.properties.Description),
       coverImage: getPropertyValue(page.properties["Cover Image"]),
       date: getPropertyValue(page.properties.Date),
@@ -238,6 +274,27 @@ export async function getPageContent(pageId) {
     }));
   } catch (error) {
     console.error("Error fetching page content:", error);
+    return [];
+  }
+}
+
+// Helper functions for homepage
+export async function getFeaturedBlogPosts(limit = 3) {
+  try {
+    const posts = await getBlogPostsFromNotion();
+    return posts.filter((post) => post.featured).slice(0, limit);
+  } catch (error) {
+    console.error("Error fetching featured blog posts:", error);
+    return [];
+  }
+}
+
+export async function getFeaturedProjects(limit = 4) {
+  try {
+    const projects = await getProjectsFromNotion();
+    return projects.filter((project) => project.featured).slice(0, limit);
+  } catch (error) {
+    console.error("Error fetching featured projects:", error);
     return [];
   }
 }

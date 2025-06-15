@@ -1,4 +1,4 @@
-// components/BlogSectionClient.js - Pure Client Component (no server imports!)
+// components/BlogSectionClient.js - Final clean version
 "use client";
 
 import React, { useRef } from "react";
@@ -23,6 +23,28 @@ export default function BlogSectionClient({ posts }) {
       },
     },
   };
+
+  // Helper function to format date safely
+  const formatDate = (dateString) => {
+    if (!dateString) return "Recently";
+
+    try {
+      const date = new Date(dateString);
+      if (isNaN(date.getTime())) return "Recently";
+
+      return date.toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      });
+    } catch (error) {
+      return "Recently";
+    }
+  };
+
+  if (!posts || posts.length === 0) {
+    return <ClientEmptyState />;
+  }
 
   return (
     <section className="pt-24" id="blog-section" ref={ref}>
@@ -51,65 +73,58 @@ export default function BlogSectionClient({ posts }) {
           </div>
         </div>
 
-        {/* Blog Posts */}
-        {posts && posts.length > 0 ? (
-          <>
-            {/* Featured Post (First/Latest) */}
-            <motion.div
-              initial="hidden"
-              animate={isInView ? "visible" : "hidden"}
-              variants={cardVariants}
-              className="mb-16"
-            >
-              <ClientFeaturedBlogCard post={posts[0]} />
-            </motion.div>
+        {/* Featured Post (First/Latest) */}
+        <motion.div
+          initial="hidden"
+          animate={isInView ? "visible" : "hidden"}
+          variants={cardVariants}
+          className="mb-16"
+        >
+          <ClientFeaturedBlogCard post={posts[0]} formatDate={formatDate} />
+        </motion.div>
 
-            {/* Other Posts Grid */}
-            {posts.length > 1 && (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-                {posts.slice(1).map((post, index) => (
-                  <motion.div
-                    key={post.slug}
-                    initial="hidden"
-                    animate={isInView ? "visible" : "hidden"}
-                    variants={cardVariants}
-                    transition={{
-                      delay: (index + 1) * 0.1,
-                    }}
-                    className="h-full"
-                  >
-                    <ClientBlogCard post={post} />
-                  </motion.div>
-                ))}
-              </div>
-            )}
-
-            {/* View All Link */}
-            <div className="flex justify-center">
-              <Link
-                href="/blog"
-                className="inline-flex items-center gap-3 text-gray-900 hover:text-gray-700 transition-colors duration-300 group"
+        {/* Other Posts Grid */}
+        {posts.length > 1 && (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+            {posts.slice(1).map((post, index) => (
+              <motion.div
+                key={post.slug}
+                initial="hidden"
+                animate={isInView ? "visible" : "hidden"}
+                variants={cardVariants}
+                transition={{
+                  delay: (index + 1) * 0.1,
+                }}
+                className="h-full"
               >
-                <span className="font-medium">Read all articles</span>
-                <svg
-                  className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M17 8l4 4m0 0l-4 4m4-4H3"
-                  />
-                </svg>
-              </Link>
-            </div>
-          </>
-        ) : (
-          <ClientEmptyState />
+                <ClientBlogCard post={post} formatDate={formatDate} />
+              </motion.div>
+            ))}
+          </div>
         )}
+
+        {/* View All Link */}
+        <div className="flex justify-center">
+          <Link
+            href="/blog"
+            className="inline-flex items-center gap-3 text-gray-900 hover:text-gray-700 transition-colors duration-300 group"
+          >
+            <span className="font-medium">Read all articles</span>
+            <svg
+              className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M17 8l4 4m0 0l-4 4m4-4H3"
+              />
+            </svg>
+          </Link>
+        </div>
       </div>
 
       {/* Decorative Divider */}
@@ -138,19 +153,17 @@ export default function BlogSectionClient({ posts }) {
 }
 
 // Client-side versions of components (no server imports)
-function ClientFeaturedBlogCard({ post }) {
-  const { slug, frontmatter } = post;
-
+function ClientFeaturedBlogCard({ post, formatDate }) {
   return (
-    <Link href={`/blog/${slug}`} className="block group">
+    <Link href={`/blog/${post.slug}`} className="block group">
       <article className="bg-white rounded-2xl overflow-hidden border border-gray-100 hover:border-indigo-200 transition-all duration-300 hover:shadow-sm">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-0">
           {/* Image */}
-          {frontmatter.coverImage && (
+          {post.coverImage && (
             <div className="aspect-[16/10] lg:aspect-square overflow-hidden bg-gray-50">
               <Image
-                src={frontmatter.coverImage}
-                alt={frontmatter.title}
+                src={post.coverImage}
+                alt={post.title || "Blog post"}
                 width={600}
                 height={400}
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
@@ -163,37 +176,31 @@ function ClientFeaturedBlogCard({ post }) {
           <div className="p-8 lg:p-12 flex flex-col justify-center">
             {/* Meta */}
             <div className="flex items-center gap-4 text-sm text-gray-500 mb-4">
-              <time>
-                {new Date(frontmatter.date).toLocaleDateString("en-US", {
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric",
-                })}
-              </time>
-              {frontmatter.readTime && (
+              <time>{formatDate(post.date)}</time>
+              {post.readTime && (
                 <>
                   <span>•</span>
-                  <span>{frontmatter.readTime}</span>
+                  <span>{post.readTime}</span>
                 </>
               )}
             </div>
 
             {/* Title */}
             <h3 className="text-2xl lg:text-3xl font-light text-gray-900 mb-4 group-hover:text-gray-700 transition-colors duration-200 leading-tight">
-              {frontmatter.title}
+              {post.title || "Untitled Post"}
             </h3>
 
             {/* Excerpt */}
-            {frontmatter.excerpt && (
+            {post.excerpt && (
               <p className="text-gray-600 leading-relaxed mb-6 text-lg">
-                {frontmatter.excerpt}
+                {post.excerpt}
               </p>
             )}
 
             {/* Tags */}
-            {frontmatter.tags && frontmatter.tags.length > 0 && (
+            {post.tags && post.tags.length > 0 && (
               <div className="flex flex-wrap gap-2 mb-6">
-                {frontmatter.tags.slice(0, 3).map((tag) => (
+                {post.tags.slice(0, 3).map((tag) => (
                   <span
                     key={tag}
                     className="px-3 py-1 bg-indigo-50 text-indigo-600 text-sm rounded-full font-medium"
@@ -228,18 +235,16 @@ function ClientFeaturedBlogCard({ post }) {
   );
 }
 
-function ClientBlogCard({ post }) {
-  const { slug, frontmatter } = post;
-
+function ClientBlogCard({ post, formatDate }) {
   return (
-    <Link href={`/blog/${slug}`} className="block group">
+    <Link href={`/blog/${post.slug}`} className="block group">
       <article className="bg-white rounded-xl border border-gray-100 hover:border-indigo-200 transition-all duration-300 hover:shadow-sm overflow-hidden h-full flex flex-col">
         {/* Cover Image */}
-        {frontmatter.coverImage && (
+        {post.coverImage && (
           <div className="aspect-[16/10] overflow-hidden bg-gray-50">
             <Image
-              src={frontmatter.coverImage}
-              alt={frontmatter.title}
+              src={post.coverImage}
+              alt={post.title || "Blog post"}
               width={400}
               height={250}
               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
@@ -252,37 +257,31 @@ function ClientBlogCard({ post }) {
         <div className="p-6 flex flex-col flex-grow">
           {/* Meta */}
           <div className="flex items-center gap-4 text-sm text-gray-500 mb-3">
-            <time>
-              {new Date(frontmatter.date).toLocaleDateString("en-US", {
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-              })}
-            </time>
-            {frontmatter.readTime && (
+            <time>{formatDate(post.date)}</time>
+            {post.readTime && (
               <>
                 <span>•</span>
-                <span>{frontmatter.readTime}</span>
+                <span>{post.readTime}</span>
               </>
             )}
           </div>
 
           {/* Title */}
           <h3 className="text-lg font-medium text-gray-900 mb-3 group-hover:text-gray-700 transition-colors duration-200 line-clamp-2 flex-grow">
-            {frontmatter.title}
+            {post.title || "Untitled Post"}
           </h3>
 
           {/* Excerpt */}
-          {frontmatter.excerpt && (
+          {post.excerpt && (
             <p className="text-gray-600 leading-relaxed mb-4 line-clamp-2 text-sm">
-              {frontmatter.excerpt}
+              {post.excerpt}
             </p>
           )}
 
           {/* Tags */}
-          {frontmatter.tags && frontmatter.tags.length > 0 && (
+          {post.tags && post.tags.length > 0 && (
             <div className="flex flex-wrap gap-2 mt-auto">
-              {frontmatter.tags.slice(0, 2).map((tag) => (
+              {post.tags.slice(0, 2).map((tag) => (
                 <span
                   key={tag}
                   className="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded-full"
@@ -290,9 +289,9 @@ function ClientBlogCard({ post }) {
                   {tag}
                 </span>
               ))}
-              {frontmatter.tags.length > 2 && (
+              {post.tags.length > 2 && (
                 <span className="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded-full">
-                  +{frontmatter.tags.length - 2}
+                  +{post.tags.length - 2}
                 </span>
               )}
             </div>

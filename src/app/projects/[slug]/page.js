@@ -1,22 +1,21 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-import { getProject, getAllProjectSlugs } from "@/utils/projects";
-import { loadProjectContent } from "@/utils/LoadProjectContent";
-import MDXContent from "@/components/MDXContent";
+import { getProjectFromNotion, getProjectsFromNotion } from "@/utils/notion";
+import NotionRenderer from "@/components/NotionRenderer";
 
 // Generate static params for all projects
 export async function generateStaticParams() {
-  const slugs = getAllProjectSlugs();
-  return slugs.map((slug) => ({
-    slug: slug,
+  const projects = await getProjectsFromNotion();
+  return projects.map((project) => ({
+    slug: project.slug,
   }));
 }
 
 // Generate metadata for each project
 export async function generateMetadata({ params }) {
   const { slug } = await params;
-  const project = getProject(slug);
+  const project = await getProjectFromNotion(slug);
 
   if (!project) {
     return {
@@ -26,11 +25,11 @@ export async function generateMetadata({ params }) {
   }
 
   return {
-    title: `${project.title} - Hasbi Hassadiqin`,
-    description: project.desc,
+    title: `${project.title || "Project"} - Hasbi Hassadiqin`,
+    description: project.desc || "A project by Hasbi Hassadiqin",
     openGraph: {
-      title: project.title,
-      description: project.desc,
+      title: project.title || "Project",
+      description: project.desc || "A project by Hasbi Hassadiqin",
       images: project.coverImage ? [project.coverImage] : [],
     },
   };
@@ -38,14 +37,11 @@ export async function generateMetadata({ params }) {
 
 export default async function ProjectPage({ params }) {
   const { slug } = await params;
-  const project = getProject(slug);
+  const project = await getProjectFromNotion(slug);
 
   if (!project) {
     notFound();
   }
-
-  // Load MDX content on the server
-  const mdxContent = await loadProjectContent(slug);
 
   return (
     <div className="min-h-screen bg-white">
@@ -92,7 +88,7 @@ export default async function ProjectPage({ params }) {
                     Client
                   </h3>
                   <p className="text-gray-900 font-medium text-lg">
-                    {project.client}
+                    {project.client || "Not specified"}
                   </p>
                 </div>
 
@@ -101,7 +97,7 @@ export default async function ProjectPage({ params }) {
                     Year
                   </h3>
                   <p className="text-gray-900 font-medium text-lg">
-                    {project.date}
+                    {project.date || "Not specified"}
                   </p>
                 </div>
 
@@ -110,7 +106,7 @@ export default async function ProjectPage({ params }) {
                     Category
                   </h3>
                   <p className="text-gray-900 font-medium text-lg">
-                    {project.category}
+                    {project.category || "Not specified"}
                   </p>
                 </div>
 
@@ -119,14 +115,20 @@ export default async function ProjectPage({ params }) {
                     Technologies
                   </h3>
                   <div className="flex flex-wrap gap-2">
-                    {project.technologies.map((tech) => (
-                      <span
-                        key={tech}
-                        className="px-3 py-1 bg-indigo-50 text-indigo-600 rounded-full text-sm font-medium"
-                      >
-                        {tech}
+                    {project.technologies && project.technologies.length > 0 ? (
+                      project.technologies.map((tech) => (
+                        <span
+                          key={tech}
+                          className="px-3 py-1 bg-indigo-50 text-indigo-600 rounded-full text-sm font-medium"
+                        >
+                          {tech}
+                        </span>
+                      ))
+                    ) : (
+                      <span className="text-gray-500 text-sm">
+                        Not specified
                       </span>
-                    ))}
+                    )}
                   </div>
                 </div>
 
@@ -179,18 +181,18 @@ export default async function ProjectPage({ params }) {
             {/* Right Column - Project Title & Description */}
             <div className="lg:col-span-3">
               <h1 className="text-3xl lg:text-4xl xl:text-5xl font-light text-gray-900 mb-8 leading-tight">
-                {project.title}
+                {project.title || "Untitled Project"}
               </h1>
 
               <p className="text-xl lg:text-2xl text-gray-600 mb-12 leading-relaxed max-w-4xl">
-                {project.desc}
+                {project.desc || "No description available"}
               </p>
 
-              {/* Project Stats/Highlights (if you want to add them) */}
+              {/* Project Stats/Highlights */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
                 <div className="bg-gray-50 rounded-xl p-6">
                   <div className="text-2xl font-light text-gray-900 mb-2">
-                    {project.category}
+                    {project.category || "General"}
                   </div>
                   <div className="text-sm text-gray-500 uppercase tracking-wider">
                     Project Type
@@ -198,7 +200,7 @@ export default async function ProjectPage({ params }) {
                 </div>
                 <div className="bg-gray-50 rounded-xl p-6">
                   <div className="text-2xl font-light text-gray-900 mb-2">
-                    {project.technologies.length}
+                    {project.technologies ? project.technologies.length : 0}
                   </div>
                   <div className="text-sm text-gray-500 uppercase tracking-wider">
                     Technologies Used
@@ -206,7 +208,7 @@ export default async function ProjectPage({ params }) {
                 </div>
                 <div className="bg-gray-50 rounded-xl p-6">
                   <div className="text-2xl font-light text-gray-900 mb-2">
-                    {project.date}
+                    {project.date || "TBD"}
                   </div>
                   <div className="text-sm text-gray-500 uppercase tracking-wider">
                     Completion Year
@@ -225,7 +227,7 @@ export default async function ProjectPage({ params }) {
             <div className="aspect-[16/9] relative overflow-hidden rounded-2xl bg-gray-100">
               <Image
                 src={project.coverImage}
-                alt={project.title}
+                alt={project.title || "Project cover"}
                 fill
                 className="object-cover"
                 priority
@@ -238,7 +240,7 @@ export default async function ProjectPage({ params }) {
               {/* Image Caption */}
               <div className="absolute bottom-6 left-6 text-white">
                 <p className="text-sm font-medium opacity-90">
-                  {project.title} • {project.client}
+                  {project.title || "Project"} • {project.client || "Client"}
                 </p>
               </div>
             </div>
@@ -246,71 +248,14 @@ export default async function ProjectPage({ params }) {
         </section>
       )}
 
-      {/* Content - Use MDX if available, otherwise show coming soon message */}
+      {/* Content - Use Notion Renderer */}
       <main className="px-6 pb-24">
         <div className="container mx-auto max-w-4xl">
-          {mdxContent ? (
-            // Render MDX content using the client component
-            <MDXContent source={mdxContent} />
-          ) : (
-            // Fallback content when no MDX file exists
-            <div className="text-center py-24">
-              <div className="max-w-lg mx-auto">
-                <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-8">
-                  <svg
-                    className="w-12 h-12 text-gray-400"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={1}
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                    />
-                  </svg>
-                </div>
-                <h2 className="text-2xl font-light text-gray-900 mb-4">
-                  Detailed case study coming soon
-                </h2>
-                <p className="text-gray-600 leading-relaxed mb-8">
-                  We're preparing a comprehensive breakdown of this project.
-                  Check back soon for the full story, technical details, and
-                  results.
-                </p>
-
-                {/* CTA Buttons */}
-                <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                  <Link
-                    href="/contact"
-                    className="inline-flex items-center justify-center gap-2 bg-indigo-600 text-white hover:bg-indigo-700 px-6 py-3 rounded-lg font-medium transition-colors"
-                  >
-                    <span>Discuss Similar Project</span>
-                    <svg
-                      className="w-4 h-4"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      strokeWidth={2}
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M17 8l4 4m0 0l-4 4m4-4H3"
-                      />
-                    </svg>
-                  </Link>
-                  <Link
-                    href="/projects"
-                    className="inline-flex items-center justify-center gap-2 text-gray-600 hover:text-gray-900 px-6 py-3 font-medium transition-colors"
-                  >
-                    <span>View Other Projects</span>
-                  </Link>
-                </div>
-              </div>
-            </div>
-          )}
+          <NotionRenderer
+            blocks={project.content}
+            title={project.title}
+            showTitle={false}
+          />
         </div>
       </main>
 
@@ -326,21 +271,23 @@ export default async function ProjectPage({ params }) {
               <div className="space-y-3 text-gray-600">
                 <p>
                   <span className="font-medium text-gray-900">Client:</span>{" "}
-                  {project.client}
+                  {project.client || "Not specified"}
                 </p>
                 <p>
                   <span className="font-medium text-gray-900">Category:</span>{" "}
-                  {project.category}
+                  {project.category || "Not specified"}
                 </p>
                 <p>
                   <span className="font-medium text-gray-900">Year:</span>{" "}
-                  {project.date}
+                  {project.date || "Not specified"}
                 </p>
                 <p>
                   <span className="font-medium text-gray-900">
                     Technologies:
                   </span>{" "}
-                  {project.technologies.join(", ")}
+                  {project.technologies && project.technologies.length > 0
+                    ? project.technologies.join(", ")
+                    : "Not specified"}
                 </p>
               </div>
             </div>
