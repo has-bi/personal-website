@@ -17,9 +17,6 @@ export function SafeImage({
   const [imageError, setImageError] = useState(false);
   const [imageLoading, setImageLoading] = useState(true);
 
-  // Debug: Log image src
-  console.log("🖼️ SafeImage attempting to load:", src);
-
   // Check if src is valid
   if (!src || src.trim() === "" || imageError) {
     console.log("❌ SafeImage: No src or error occurred:", { src, imageError });

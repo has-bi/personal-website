@@ -42,9 +42,8 @@ export default function Header() {
   const navItems = [
     { name: "Home", href: "/" },
     { name: "Projects", href: "/projects" },
-    { name: "About", href: "/about" },
     { name: "Blog", href: "/blog" },
-    { name: "Contact", href: "/contact" },
+    { name: "About", href: "/about" },
   ];
 
   return (
@@ -95,7 +94,7 @@ export default function Header() {
               : "bg-white/20 backdrop-blur-sm text-white hover:bg-white/30"
           }`}
         >
-          <span>Hire Me</span>
+          <span>Contact Me</span>
           <svg
             className="w-4 h-4 group-hover:translate-x-0.5 transition-transform duration-300"
             fill="none"

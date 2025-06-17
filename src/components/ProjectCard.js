@@ -8,12 +8,12 @@ export default function ProjectCard({ project }) {
     "https://picsum.photos/600/400?random=" + (project.slug?.length || 1);
   const imageUrl = project.coverImage || defaultImage;
 
-  console.log("🎯 ProjectCard:", {
-    title: project.title,
-    slug: project.slug,
-    hasImage: !!project.coverImage,
-    imageUrl: imageUrl,
-  });
+  // console.log("ProjectCard:", {
+  //   title: project.title,
+  //   slug: project.slug,
+  //   hasImage: !!project.coverImage,
+  //   imageUrl: imageUrl,
+  // });
 
   return (
     <Link href={`/projects/${project.slug}`} className="block group">
