@@ -1,6 +1,7 @@
-// src/app/projects/page.js - Final with title fix
 import { getProjectsFromNotion } from "@/utils/notion";
 import ProjectCard from "@/components/ProjectCard";
+
+export const dynamic = "force-dynamic";
 
 export const metadata = {
   title: "Projects - Hasbi Hassadiqin",
@@ -9,10 +10,18 @@ export const metadata = {
 };
 
 export default async function ProjectsPage() {
-  const projects = await getProjectsFromNotion();
+  let projects = [];
+
+  try {
+    projects = await getProjectsFromNotion();
+    console.log("✅ Projects fetched:", projects.length);
+  } catch (error) {
+    console.error("❌ Error fetching projects:", error);
+    // Continue with empty array if fetch fails
+  }
 
   return (
-    <div className="min-h-screen bg-white ">
+    <div className="min-h-screen bg-white">
       {/* Hero Section */}
       <section className="pt-40 pb-5 px-6">
         <div className="container mx-auto max-w-6xl">
@@ -51,7 +60,7 @@ export default async function ProjectsPage() {
           {projects.length === 0 ? (
             <EmptyState />
           ) : (
-            <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {projects.map((project) => (
                 <ProjectCard key={project.slug} project={project} />
               ))}

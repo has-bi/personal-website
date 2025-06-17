@@ -1,12 +1,10 @@
-// components/BlogSection.js - Final Notion version
+// src/components/BlogSection.js - Updated for SSR
 import React from "react";
-import { getFeaturedBlogPosts } from "@/utils/notion";
 import BlogSectionClient from "./BlogSectionClient";
 
-export default async function BlogSection() {
-  const allPosts = await getFeaturedBlogPosts(3);
-
-  const serializedPosts = allPosts.map((post) => ({
+export default function BlogSection({ posts = [] }) {
+  // Serialize posts for client component
+  const serializedPosts = posts.map((post) => ({
     ...post,
     date: post.date ? new Date(post.date).toISOString() : "",
   }));
