@@ -88,7 +88,7 @@ export function SafeImage({
             setImageLoading(false);
           }}
           onLoad={() => {
-            console.log("✅ Image loaded successfully:", src);
+            // console.log("✅ Image loaded successfully:", src);
             setImageLoading(false);
           }}
           {...props}

@@ -13,6 +13,7 @@ export default function Hero() {
             className="object-cover"
             fill
             priority
+            loading="eager"
             sizes="100vw"
           />
           {/* Gradient Overlay for better text readability */}
