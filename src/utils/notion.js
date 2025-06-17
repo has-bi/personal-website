@@ -21,13 +21,13 @@ export function getPropertyValue(property) {
     return "";
   }
 
-  console.log("Processing property:", property.type, property);
+  // console.log("Processing property:", property.type, property);
 
   switch (property.type) {
     case "title":
       const titleValue =
         property.title?.map((text) => text.plain_text).join("") || "";
-      console.log("Title value extracted:", titleValue);
+      // console.log("Title value extracted:", titleValue);
       return titleValue;
     case "rich_text":
       return property.rich_text?.map((text) => text.plain_text).join("") || "";

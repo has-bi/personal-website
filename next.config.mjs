@@ -20,6 +20,12 @@ const nextConfig = {
         protocol: "https",
         hostname: "unsplash.com",
       },
+      {
+        protocol: "https",
+        hostname: "m.media-amazon.com",
+        port: "",
+        pathname: "/**",
+      },
       // Notion Images
       {
         protocol: "https",

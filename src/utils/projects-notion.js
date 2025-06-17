@@ -1,4 +1,4 @@
-// src/utils/projects-notion.js - New Notion-based projects utils
+// src/utils/projects-notion.js
 import { getProjectsFromNotion, getProjectFromNotion } from "./notion";
 
 export async function getAllProjectSlugs() {
