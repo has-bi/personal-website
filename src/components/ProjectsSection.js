@@ -1,3 +1,4 @@
+// src/components/ProjectsSection.js - Updated for SSR
 "use client";
 
 import React, { useRef } from "react";
@@ -5,7 +6,7 @@ import Link from "next/link";
 import ProjectCard from "./ProjectCard";
 import { motion, useInView } from "framer-motion";
 
-export default function ProjectsSection({ projects }) {
+export default function ProjectsSection({ projects = [] }) {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, amount: 0.1 });
 
@@ -50,22 +51,28 @@ export default function ProjectsSection({ projects }) {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
-          {projects.map((project, index) => (
-            <motion.div
-              key={project.slug}
-              initial="hidden"
-              animate={isInView ? "visible" : "hidden"}
-              variants={cardVariants}
-              transition={{
-                delay: index * 0.1,
-              }}
-              className="h-full"
-            >
-              <ProjectCard project={project} />
-            </motion.div>
-          ))}
-        </div>
+        {projects.length === 0 ? (
+          <div className="text-center py-12">
+            <p className="text-gray-500">No featured projects available.</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+            {projects.map((project, index) => (
+              <motion.div
+                key={project.slug}
+                initial="hidden"
+                animate={isInView ? "visible" : "hidden"}
+                variants={cardVariants}
+                transition={{
+                  delay: index * 0.1,
+                }}
+                className="h-full"
+              >
+                <ProjectCard project={project} />
+              </motion.div>
+            ))}
+          </div>
+        )}
 
         <div className="flex justify-center">
           <Link
@@ -78,11 +85,11 @@ export default function ProjectsSection({ projects }) {
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
-              strokeWidth={2}
             >
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
+                strokeWidth={2}
                 d="M17 8l4 4m0 0l-4 4m4-4H3"
               />
             </svg>
@@ -90,6 +97,7 @@ export default function ProjectsSection({ projects }) {
         </div>
       </div>
 
+      {/* Decorative Divider */}
       <div className="relative mt-24">
         <div className="w-full h-px bg-gray-200"></div>
         <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2">
@@ -99,11 +107,11 @@ export default function ProjectsSection({ projects }) {
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
-              strokeWidth={2}
             >
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
+                strokeWidth={2}
                 d="M12 6v6m0 0v6m0-6h6m-6 0H6"
               />
             </svg>

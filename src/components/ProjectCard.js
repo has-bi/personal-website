@@ -1,12 +1,19 @@
 import React from "react";
-import Image from "next/image";
 import Link from "next/link";
+import { SafeProjectImage } from "@/components/SafeImage";
 
 export default function ProjectCard({ project }) {
   // Fallback image for projects without cover images
   const defaultImage =
-    "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop&crop=center";
+    "https://picsum.photos/600/400?random=" + (project.slug?.length || 1);
   const imageUrl = project.coverImage || defaultImage;
+
+  console.log("🎯 ProjectCard:", {
+    title: project.title,
+    slug: project.slug,
+    hasImage: !!project.coverImage,
+    imageUrl: imageUrl,
+  });
 
   return (
     <Link href={`/projects/${project.slug}`} className="block group">
@@ -14,11 +21,12 @@ export default function ProjectCard({ project }) {
         {/* Image Container */}
         <div className="relative aspect-[4/3] overflow-hidden bg-gray-50">
           {imageUrl ? (
-            <Image
+            <SafeProjectImage
               src={imageUrl}
               alt={project.title || "Project"}
-              fill
-              className="object-cover group-hover:scale-105 transition-transform duration-500"
+              width={600}
+              height={450}
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             />
           ) : (
@@ -52,7 +60,7 @@ export default function ProjectCard({ project }) {
           </h3>
 
           {/* Description */}
-          <p className="text-gray-600 text-sm leading-relaxed mb-6 line-clamp-2 flex-grow">
+          <p className="text-gray-600 text-sm leading-relaxed mb-6 line-clamp-3 flex-grow">
             {project.desc || "No description available"}
           </p>
 

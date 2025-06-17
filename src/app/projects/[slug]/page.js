@@ -1,45 +1,58 @@
+// src/app/projects/[slug]/page.js - Final Complete Version
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import Image from "next/image";
-import { getProjectFromNotion, getProjectsFromNotion } from "@/utils/notion";
+import { getProjectFromNotion } from "@/utils/notion";
 import NotionRenderer from "@/components/NotionRenderer";
+import { SafeProjectImage } from "@/components/SafeImage";
 
-// Generate static params for all projects
-export async function generateStaticParams() {
-  const projects = await getProjectsFromNotion();
-  return projects.map((project) => ({
-    slug: project.slug,
-  }));
-}
+// Enable SSR for live updates
+export const dynamic = "force-dynamic";
 
-// Generate metadata for each project
 export async function generateMetadata({ params }) {
   const { slug } = await params;
-  const project = await getProjectFromNotion(slug);
 
-  if (!project) {
+  try {
+    const project = await getProjectFromNotion(slug);
+
+    if (!project) {
+      return {
+        title: "Project Not Found - Hasbi Hassadiqin",
+        description: "The requested project could not be found.",
+      };
+    }
+
     return {
-      title: "Project Not Found - Hasbi Hassadiqin",
-      description: "The requested project could not be found.",
+      title: `${project.title || "Project"} - Hasbi Hassadiqin`,
+      description: project.desc || "A project by Hasbi Hassadiqin",
+      openGraph: {
+        title: project.title || "Project",
+        description: project.desc || "A project by Hasbi Hassadiqin",
+        images: project.coverImage ? [project.coverImage] : [],
+      },
+    };
+  } catch (error) {
+    console.error("Error generating project metadata:", error);
+    return {
+      title: "Project - Hasbi Hassadiqin",
+      description: "A project by Hasbi Hassadiqin",
     };
   }
-
-  return {
-    title: `${project.title || "Project"} - Hasbi Hassadiqin`,
-    description: project.desc || "A project by Hasbi Hassadiqin",
-    openGraph: {
-      title: project.title || "Project",
-      description: project.desc || "A project by Hasbi Hassadiqin",
-      images: project.coverImage ? [project.coverImage] : [],
-    },
-  };
 }
 
 export default async function ProjectPage({ params }) {
   const { slug } = await params;
-  const project = await getProjectFromNotion(slug);
+
+  let project;
+  try {
+    project = await getProjectFromNotion(slug);
+    console.log("✅ Project fetched:", project?.title);
+  } catch (error) {
+    console.error("❌ Error fetching project:", error);
+    notFound();
+  }
 
   if (!project) {
+    console.log("❌ Project not found for slug:", slug);
     notFound();
   }
 
@@ -225,10 +238,10 @@ export default async function ProjectPage({ params }) {
         <section className="px-6 mb-16">
           <div className="container mx-auto max-w-6xl">
             <div className="aspect-[16/9] relative overflow-hidden rounded-2xl bg-gray-100">
-              <Image
+              <SafeProjectImage
                 src={project.coverImage}
                 alt={project.title || "Project cover"}
-                fill
+                fill={true}
                 className="object-cover"
                 priority
                 sizes="(max-width: 1200px) 100vw, 1200px"
