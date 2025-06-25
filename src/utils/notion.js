@@ -263,15 +263,31 @@ export async function getProjectFromNotion(slug) {
 // Get page content blocks
 export async function getPageContent(pageId) {
   try {
-    const blocks = await notion.blocks.children.list({
-      block_id: pageId,
-    });
+    let allBlocks = [];
+    let hasMore = true;
+    let nextCursor = undefined;
 
-    return blocks.results.map((block) => ({
-      id: block.id,
-      type: block.type,
-      [block.type]: block[block.type],
-    }));
+    while (hasMore) {
+      const response = await notion.blocks.children.list({
+        block_id: pageId,
+        start_cursor: nextCursor,
+        page_size: 100, // Max allowed by Notion API
+      });
+
+      const blocks = response.results.map((block) => ({
+        id: block.id,
+        type: block.type,
+        [block.type]: block[block.type],
+      }));
+
+      allBlocks = [...allBlocks, ...blocks];
+
+      hasMore = response.has_more;
+      nextCursor = response.next_cursor;
+    }
+
+    console.log(`✅ Fetched ${allBlocks.length} blocks for page ${pageId}`);
+    return allBlocks;
   } catch (error) {
     console.error("Error fetching page content:", error);
     return [];
