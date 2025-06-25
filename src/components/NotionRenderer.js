@@ -35,18 +35,65 @@ export default function NotionRenderer({ blocks, title, showTitle = false }) {
     );
   }
 
+  // Group consecutive list items
+  const groupedBlocks = groupListItems(blocks);
+
   return (
     <div className="prose prose-lg prose-gray max-w-none">
       {showTitle && title && (
-        <h1 className="text-4xl lg:text-5xl font-light mb-8 leading-tight text-gray-900">
+        <h1 className="text-3xl lg:text-4xl font-bold mb-8 mt-0 leading-tight text-gray-900 border-b border-gray-200 pb-4">
           {title}
         </h1>
       )}
-      {blocks.map((block, index) => (
-        <NotionBlock key={block.id || index} block={block} />
+      {groupedBlocks.map((block, index) => (
+        <NotionBlock key={block.id || `group-${index}`} block={block} />
       ))}
     </div>
   );
+}
+
+// Function to group consecutive list items
+function groupListItems(blocks) {
+  const grouped = [];
+  let currentBulletGroup = [];
+  let currentNumberGroup = [];
+
+  blocks.forEach((block, index) => {
+    if (block.type === "bulleted_list_item") {
+      // Add to current bullet group
+      currentBulletGroup.push(block);
+
+      // If next block is not a bullet item, close the group
+      const nextBlock = blocks[index + 1];
+      if (!nextBlock || nextBlock.type !== "bulleted_list_item") {
+        grouped.push({
+          type: "bulleted_list_group",
+          id: `bullet-group-${index}`,
+          items: currentBulletGroup,
+        });
+        currentBulletGroup = [];
+      }
+    } else if (block.type === "numbered_list_item") {
+      // Add to current number group
+      currentNumberGroup.push(block);
+
+      // If next block is not a numbered item, close the group
+      const nextBlock = blocks[index + 1];
+      if (!nextBlock || nextBlock.type !== "numbered_list_item") {
+        grouped.push({
+          type: "numbered_list_group",
+          id: `number-group-${index}`,
+          items: currentNumberGroup,
+        });
+        currentNumberGroup = [];
+      }
+    } else {
+      // Regular block, add as-is
+      grouped.push(block);
+    }
+  });
+
+  return grouped;
 }
 
 // Helper functions for video URL processing
@@ -59,7 +106,6 @@ function isVimeoUrl(url) {
 }
 
 function getYouTubeEmbedUrl(url) {
-  // Handle different YouTube URL formats
   if (url.includes("youtu.be/")) {
     const videoId = url.split("youtu.be/")[1].split("?")[0];
     return `https://www.youtube.com/embed/${videoId}`;
@@ -67,13 +113,12 @@ function getYouTubeEmbedUrl(url) {
     const videoId = url.split("watch?v=")[1].split("&")[0];
     return `https://www.youtube.com/embed/${videoId}`;
   } else if (url.includes("youtube.com/embed/")) {
-    return url; // Already an embed URL
+    return url;
   }
   return url;
 }
 
 function getVimeoEmbedUrl(url) {
-  // Handle Vimeo URL formats
   if (url.includes("vimeo.com/")) {
     const videoId = url.split("vimeo.com/")[1].split("?")[0];
     return `https://player.vimeo.com/video/${videoId}`;
@@ -87,49 +132,84 @@ function NotionBlock({ block }) {
   switch (type) {
     case "paragraph":
       return (
-        <p className="text-gray-700 leading-relaxed mb-6 text-lg">
+        <p className="text-gray-700 leading-relaxed mb-6 text-base lg:text-lg">
           <RichText richText={block.paragraph.rich_text} />
         </p>
       );
 
     case "heading_1":
       return (
-        <h1 className="text-4xl lg:text-5xl font-light mb-8 mt-12 leading-tight text-gray-900">
+        <h1 className="text-3xl lg:text-4xl font-bold mb-8 mt-16 leading-tight text-gray-900 border-b border-gray-100 pb-3">
           <RichText richText={block.heading_1.rich_text} />
         </h1>
       );
 
     case "heading_2":
       return (
-        <h2 className="text-3xl lg:text-4xl font-light mb-6 mt-12 leading-tight text-gray-900">
+        <h2 className="text-2xl lg:text-3xl font-semibold mb-6 mt-12 leading-tight text-gray-900">
           <RichText richText={block.heading_2.rich_text} />
         </h2>
       );
 
     case "heading_3":
       return (
-        <h3 className="text-2xl lg:text-3xl font-medium mb-4 mt-10 text-gray-900">
+        <h3 className="text-xl lg:text-2xl font-medium mb-4 mt-10 leading-tight text-gray-900">
           <RichText richText={block.heading_3.rich_text} />
         </h3>
       );
 
+    // NEW: Grouped bulleted list
+    case "bulleted_list_group":
+      return (
+        <ul className="my-6 space-y-2 ml-6 list-disc">
+          {block.items.map((item, index) => (
+            <li
+              key={item.id || index}
+              className="text-gray-700 leading-relaxed text-base lg:text-lg"
+            >
+              <RichText richText={item.bulleted_list_item.rich_text} />
+            </li>
+          ))}
+        </ul>
+      );
+
+    // NEW: Grouped numbered list
+    case "numbered_list_group":
+      return (
+        <ol className="my-6 space-y-2 ml-6 list-decimal">
+          {block.items.map((item, index) => (
+            <li
+              key={item.id || index}
+              className="text-gray-700 leading-relaxed text-base lg:text-lg"
+            >
+              <RichText richText={item.numbered_list_item.rich_text} />
+            </li>
+          ))}
+        </ol>
+      );
+
+    // Keep individual cases for backward compatibility (shouldn't be used now)
     case "bulleted_list_item":
       return (
-        <li className="text-gray-700 leading-relaxed text-lg ml-6 list-disc mb-2">
-          <RichText richText={block.bulleted_list_item.rich_text} />
-        </li>
+        <ul className="my-6 space-y-2 ml-6 list-disc">
+          <li className="text-gray-700 leading-relaxed text-base lg:text-lg">
+            <RichText richText={block.bulleted_list_item.rich_text} />
+          </li>
+        </ul>
       );
 
     case "numbered_list_item":
       return (
-        <li className="text-gray-700 leading-relaxed text-lg ml-6 list-decimal mb-2">
-          <RichText richText={block.numbered_list_item.rich_text} />
-        </li>
+        <ol className="my-6 space-y-2 ml-6 list-decimal">
+          <li className="text-gray-700 leading-relaxed text-base lg:text-lg">
+            <RichText richText={block.numbered_list_item.rich_text} />
+          </li>
+        </ol>
       );
 
     case "quote":
       return (
-        <blockquote className="border-l-4 border-indigo-500 pl-6 my-8 text-gray-600 italic text-lg">
+        <blockquote className="border-l-4 border-indigo-500 pl-6 my-8 text-gray-600 italic text-lg bg-gray-50 py-4 rounded-r-lg">
           <RichText richText={block.quote.rich_text} />
         </blockquote>
       );
@@ -179,7 +259,7 @@ function NotionBlock({ block }) {
             />
           )}
           {caption && (
-            <p className="text-center text-gray-500 text-sm mt-2 italic">
+            <p className="text-center text-gray-500 text-sm mt-3 italic">
               {caption}
             </p>
           )}
@@ -196,7 +276,6 @@ function NotionBlock({ block }) {
         <div className="my-8">
           {videoUrl && (
             <div className="relative aspect-video rounded-xl overflow-hidden shadow-lg bg-gray-100">
-              {/* Check if it's a YouTube URL */}
               {isYouTubeUrl(videoUrl) ? (
                 <iframe
                   src={getYouTubeEmbedUrl(videoUrl)}
@@ -216,7 +295,6 @@ function NotionBlock({ block }) {
                   allowFullScreen
                 />
               ) : (
-                /* Direct video file */
                 <video
                   controls
                   className="w-full h-full object-cover"
@@ -247,7 +325,6 @@ function NotionBlock({ block }) {
       return (
         <div className="my-8">
           <div className="relative aspect-video rounded-xl overflow-hidden shadow-lg bg-gray-100">
-            {/* Check if it's a YouTube URL */}
             {isYouTubeUrl(embedUrl) ? (
               <iframe
                 src={getYouTubeEmbedUrl(embedUrl)}
@@ -267,7 +344,6 @@ function NotionBlock({ block }) {
                 allowFullScreen
               />
             ) : (
-              /* Generic embed */
               <iframe
                 src={embedUrl}
                 title={embedCaption || "Embedded content"}
@@ -294,7 +370,7 @@ function NotionBlock({ block }) {
         <div className="my-8 p-6 bg-indigo-50 border border-indigo-200 rounded-2xl">
           <div className="flex items-start gap-3">
             <span className="text-xl">{icon}</span>
-            <div className="flex-1">
+            <div className="flex-1 text-gray-800">
               <RichText richText={block.callout.rich_text} />
             </div>
           </div>
@@ -308,14 +384,12 @@ function NotionBlock({ block }) {
             <RichText richText={block.toggle.rich_text} />
           </summary>
           <div className="mt-4">
-            {/* Note: Notion toggle children would need separate API call */}
             <p className="text-gray-600">Toggle content...</p>
           </div>
         </details>
       );
 
     default:
-      // Fallback for unsupported block types
       return (
         <div className="my-4 p-4 bg-gray-50 border-l-4 border-gray-300 rounded">
           <p className="text-gray-600 text-sm">
@@ -335,29 +409,37 @@ function RichText({ richText }) {
     // Apply formatting
     if (text.annotations.bold) {
       element = (
-        <strong key={index} className="text-gray-900 font-medium">
+        <strong key={index} className="font-semibold text-gray-900">
           {element}
         </strong>
       );
     }
     if (text.annotations.italic) {
       element = (
-        <em key={index} className="text-gray-700">
+        <em key={index} className="italic text-gray-700">
           {element}
         </em>
       );
     }
     if (text.annotations.strikethrough) {
-      element = <del key={index}>{element}</del>;
+      element = (
+        <del key={index} className="line-through">
+          {element}
+        </del>
+      );
     }
     if (text.annotations.underline) {
-      element = <u key={index}>{element}</u>;
+      element = (
+        <u key={index} className="underline">
+          {element}
+        </u>
+      );
     }
     if (text.annotations.code) {
       element = (
         <code
           key={index}
-          className="text-gray-900 bg-gray-100 px-2 py-1 rounded text-base font-mono"
+          className="bg-gray-100 text-gray-900 px-2 py-1 rounded text-sm font-mono"
         >
           {element}
         </code>
@@ -370,7 +452,7 @@ function RichText({ richText }) {
         <a
           key={index}
           href={text.href}
-          className="text-gray-900 underline decoration-gray-300 underline-offset-4 hover:decoration-gray-600 transition-colors"
+          className="text-indigo-600 underline decoration-indigo-300 underline-offset-2 hover:decoration-indigo-600 transition-colors"
           target={text.href.startsWith("http") ? "_blank" : "_self"}
           rel={text.href.startsWith("http") ? "noopener noreferrer" : ""}
         >
