@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Image from "next/image";
 
 export default function MDXContent({ source }) {
   // Simple markdown-to-HTML renderer that works with your existing content
@@ -170,10 +171,13 @@ export default function MDXContent({ source }) {
           const [, alt, src] = match;
           return (
             <div key={index} className="my-8">
-              <img
+              <Image
                 src={src}
                 alt={alt}
+                width={800}
+                height={600}
                 className="w-full rounded-xl shadow-lg"
+                style={{ objectFit: 'cover' }}
               />
               {alt && (
                 <p className="text-center text-gray-500 text-sm mt-2 italic">

@@ -3,6 +3,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import { motion, AnimatePresence } from "framer-motion";
 
 export function SafeImage({
   src,
@@ -19,7 +20,6 @@ export function SafeImage({
 
   // Check if src is valid
   if (!src || src.trim() === "" || imageError) {
-    console.log("❌ SafeImage: No src or error occurred:", { src, imageError });
 
     return (
       <div
@@ -83,12 +83,10 @@ export function SafeImage({
           fill
           className={className}
           onError={(e) => {
-            console.error("❌ Image failed to load:", src);
             setImageError(true);
             setImageLoading(false);
           }}
           onLoad={() => {
-            // console.log("✅ Image loaded successfully:", src);
             setImageLoading(false);
           }}
           {...props}
@@ -116,12 +114,10 @@ export function SafeImage({
           height={height || 300}
           className={className}
           onError={(e) => {
-            console.error("❌ Image failed to load:", src);
             setImageError(true);
             setImageLoading(false);
           }}
           onLoad={() => {
-            console.log("✅ Image loaded successfully:", src);
             setImageLoading(false);
           }}
           {...props}

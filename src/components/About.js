@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export default function About() {
   return (
-    <section className="py-24">
+    <section className="py-24 animate-fade-in-up">
       <div className="container mx-auto px-6">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-12">
           {/* Left Column - Label */}

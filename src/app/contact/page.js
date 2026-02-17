@@ -410,7 +410,7 @@ export default function ContactPage() {
                       name="company"
                       value={formData.company}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-colors"
+                      className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-4 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all duration-200"
                       placeholder="Your company name (optional)"
                     />
                   </div>
@@ -559,7 +559,7 @@ export default function ContactPage() {
           </p>
           <div className="flex flex-col sm:flex-row gap-6 justify-center">
             <a
-              href="mailto:hello@hasbihassadiqin.com"
+              href="mailto:hasbi.at.work@gmail.com"
               className="inline-flex items-center justify-center gap-3 bg-indigo-600 text-white hover:bg-indigo-700 px-8 py-4 rounded-xl font-medium transition-colors group"
             >
               <span>Send Email</span>
@@ -578,7 +578,7 @@ export default function ContactPage() {
               </svg>
             </a>
             <a
-              href="https://wa.me/6281234567890"
+              href="https://wa.me/6281932596925"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center gap-3 text-gray-600 hover:text-gray-900 px-8 py-4 font-medium transition-colors"

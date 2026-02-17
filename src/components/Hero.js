@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export default function Hero() {
   return (
-    <section id="hero-section" className="px-6 pt-6">
+    <section id="hero-section" className="px-6 pt-6 animate-fade-in">
       <div className="relative h-screen max-h-[900px] min-h-[600px] w-full overflow-hidden rounded-3xl">
         {/* Background Image */}
         <div className="absolute inset-0 z-0">
@@ -22,7 +22,7 @@ export default function Hero() {
 
         {/* Content */}
         <div className="container mx-auto px-8 py-12 relative z-10 h-full flex flex-col justify-end">
-          <div className="max-w-4xl mb-16">
+          <div className="max-w-4xl mb-16 animate-fade-in-up animate-delay-200">
             {/* Main Heading */}
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-light leading-tight mb-6 text-white">
               I Make Machines Do More
@@ -37,7 +37,7 @@ export default function Hero() {
             </p>
 
             {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4">
+            <div className="flex flex-col sm:flex-row gap-4 animate-fade-in-up animate-delay-500">
               <Link
                 href="/projects"
                 className="inline-flex items-center justify-center gap-3 bg-white text-gray-900 px-8 py-4 rounded-full font-medium hover:bg-gray-100 transition-all duration-300 group"

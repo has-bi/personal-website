@@ -17,17 +17,14 @@ export function getPlainText(richText) {
 // Helper to get property value based on type
 export function getPropertyValue(property) {
   if (!property) {
-    console.log("Property is null or undefined");
     return "";
   }
 
-  // console.log("Processing property:", property.type, property);
 
   switch (property.type) {
     case "title":
       const titleValue =
         property.title?.map((text) => text.plain_text).join("") || "";
-      // console.log("Title value extracted:", titleValue);
       return titleValue;
     case "rich_text":
       return property.rich_text?.map((text) => text.plain_text).join("") || "";
@@ -50,7 +47,6 @@ export function getPropertyValue(property) {
         ""
       );
     default:
-      console.log("Unknown property type:", property.type, property);
       return "";
   }
 }
@@ -80,9 +76,6 @@ export async function getBlogPostsFromNotion() {
       const defaultTitle = getPropertyValue(page.properties.Title);
       const finalTitle = contentTitle || defaultTitle || "Untitled Post";
 
-      console.log("Content Title:", contentTitle);
-      console.log("Default Title:", defaultTitle);
-      console.log("Final Title:", finalTitle);
 
       return {
         id: page.id,
@@ -286,7 +279,6 @@ export async function getPageContent(pageId) {
       nextCursor = response.next_cursor;
     }
 
-    console.log(`✅ Fetched ${allBlocks.length} blocks for page ${pageId}`);
     return allBlocks;
   } catch (error) {
     console.error("Error fetching page content:", error);

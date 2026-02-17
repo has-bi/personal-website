@@ -14,7 +14,6 @@ export default async function ProjectsPage() {
 
   try {
     projects = await getProjectsFromNotion();
-    console.log("✅ Projects fetched:", projects.length);
   } catch (error) {
     console.error("❌ Error fetching projects:", error);
     // Continue with empty array if fetch fails

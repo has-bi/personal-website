@@ -45,14 +45,12 @@ export default async function ProjectPage({ params }) {
   let project;
   try {
     project = await getProjectFromNotion(slug);
-    console.log("✅ Project fetched:", project?.title);
   } catch (error) {
     console.error("❌ Error fetching project:", error);
     notFound();
   }
 
   if (!project) {
-    console.log("❌ Project not found for slug:", slug);
     notFound();
   }
 
