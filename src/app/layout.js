@@ -1,20 +1,31 @@
 import "./globals.css";
 import ClientRuntimeGuards from "@/components/ClientRuntimeGuards";
+import { Manrope, Newsreader } from "next/font/google";
+
+const manrope = Manrope({
+  subsets: ["latin"],
+  variable: "--font-body",
+});
+
+const newsreader = Newsreader({
+  subsets: ["latin"],
+  variable: "--font-display",
+});
 
 export const metadata = {
   title: {
-    default: "Hasbi Hassadiqin | Pixel Dev GUI Landing Page",
+    default: "Hasbi Hassadiqin | Applied AI Engineer",
     template: "%s | Hasbi Hassadiqin",
   },
   description:
-    "Pixel-styled developer GUI landing page for Hasbi Hassadiqin, featuring projects, blog, and personal sections.",
+    "Minimal editorial portfolio for Hasbi Hassadiqin, an applied AI engineer building practical AI products, automation systems, and thoughtful interfaces.",
   keywords: [
     "AI Engineer",
-    "Automation Specialist",
-    "Pixel UI",
-    "Developer GUI",
-    "Process Automation",
-    "Workflow Automation",
+    "Applied AI",
+    "AI Product Engineer",
+    "Automation",
+    "LLM Systems",
+    "Portfolio",
   ],
   authors: [{ name: "Hasbi Hassadiqin", url: "https://www.hasbi.pro" }],
   creator: "Hasbi Hassadiqin",
@@ -23,25 +34,25 @@ export const metadata = {
     type: "website",
     locale: "en_US",
     url: "https://www.hasbi.pro",
-    title: "Hasbi Hassadiqin | Pixel Dev GUI Landing Page",
+    title: "Hasbi Hassadiqin | Applied AI Engineer",
     description:
-      "Pixel-styled developer GUI landing page focused on AI automation, projects, and writing.",
+      "Minimal editorial portfolio focused on applied AI, product thinking, and practical systems that ship.",
     siteName: "Hasbi Hassadiqin",
     images: [
       {
         url: "https://www.hasbi.pro/images/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: "Hasbi Hassadiqin - Pixel Dev GUI Landing Page",
+        alt: "Hasbi Hassadiqin - Applied AI Engineer",
       },
     ],
   },
 
   twitter: {
     card: "summary_large_image",
-    title: "Hasbi Hassadiqin | Pixel Dev GUI Landing Page",
+    title: "Hasbi Hassadiqin | Applied AI Engineer",
     description:
-      "Pixel-styled developer GUI landing page focused on AI automation, projects, and writing.",
+      "Minimal editorial portfolio focused on applied AI, automation, and writing.",
     creator: "@hssdqn",
     images: ["https://www.hasbi.pro/images/twitter-card.jpg"],
   },
@@ -87,7 +98,7 @@ export const metadata = {
 };
 
 export const viewport = {
-  themeColor: "#f3f4f6",
+  themeColor: "#f7f1e8",
   width: "device-width",
   initialScale: 1,
 };
@@ -95,7 +106,10 @@ export const viewport = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className="antialiased">
+      <body
+        className={`${manrope.variable} ${newsreader.variable} antialiased`}
+        style={{ fontFamily: "var(--font-body), sans-serif" }}
+      >
         <ClientRuntimeGuards />
         {children}
       </body>
