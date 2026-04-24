@@ -334,6 +334,21 @@ export default function HeroOrbit({ sections = [] }) {
     <section ref={heroRef} className="editorial-hero editorial-hero-stage">
       <div className="editorial-hero-sticky">
         <div className="editorial-orbit-shell">
+          {/* Background video — muted, looping, no controls */}
+          <div className="editorial-hero-video" aria-hidden="true">
+            <video
+              autoPlay
+              muted
+              loop
+              playsInline
+              disablePictureInPicture
+              preload="metadata"
+            >
+              <source src="/video/hero-bg.webm" type="video/webm" />
+              <source src="/video/hero-bg.mp4" type="video/mp4" />
+            </video>
+          </div>
+
           <div ref={centerCopyRef} className="editorial-orbit-center">
             <p className="editorial-orbit-copy">
               Applied AI engineer building practical systems, products, and
