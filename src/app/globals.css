@@ -116,7 +116,7 @@ a {
   position: relative;
   min-height: 100vh;
   padding: 1.5rem;
-  background: #ffffff;
+  background: transparent;
 }
 
 .editorial-page::before {
@@ -216,13 +216,9 @@ a {
 }
 
 .editorial-hero-video {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 100vw;
-  height: 100vh;
-  transform: translate(-50%, -50%);
-  z-index: 0;
+  position: fixed;
+  inset: 0;
+  z-index: -1;
   pointer-events: none;
 }
 
