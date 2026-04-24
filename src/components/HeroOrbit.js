@@ -1,12 +1,14 @@
 "use client";
 
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { flushSync } from "react-dom";
 import { useRouter } from "next/navigation";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { ScrollToPlugin } from "gsap/ScrollToPlugin";
+import { Flip } from "gsap/Flip";
+import { ExpoScaleEase } from "gsap/EasePack";
 
-gsap.registerPlugin(ScrollTrigger);
+gsap.registerPlugin(ScrollTrigger, ScrollToPlugin, Flip, ExpoScaleEase);
 
 function polarPosition(index, total, radiusX, radiusY, angleOffset = 0) {
   const angle = angleOffset + (index / total) * Math.PI * 2 - Math.PI / 2;
@@ -29,7 +31,7 @@ export default function HeroOrbit({ sections = [] }) {
   const overlayGlowRef = useRef(null);
   const nodeRefs = useRef([]);
   const labelRefs = useRef([]);
-  const transitionTimelineRef = useRef(null);
+  const transitionCtxRef = useRef(null);
   const prefersReducedMotionRef = useRef(false);
   const isTransitioningRef = useRef(false);
   const captionLabelRef = useRef(null);
@@ -37,7 +39,6 @@ export default function HeroOrbit({ sections = [] }) {
   const captionPreviewRef = useRef(null);
   const scrollActiveRef = useRef(0);
   const [activeIndex, setActiveIndex] = useState(0);
-  const [transitionSection, setTransitionSection] = useState(sections[0] ?? null);
 
   useEffect(() => {
     const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -49,13 +50,8 @@ export default function HeroOrbit({ sections = [] }) {
     mediaQuery.addEventListener?.("change", syncPreference);
 
     const prefetchedRoutes = new Set();
-
     sections.forEach((section) => {
-      if (
-        section.href &&
-        !section.href.startsWith("#") &&
-        !prefetchedRoutes.has(section.href)
-      ) {
+      if (section.href && !section.href.startsWith("#") && !prefetchedRoutes.has(section.href)) {
         prefetchedRoutes.add(section.href);
         router.prefetch(section.href);
       }
@@ -63,7 +59,6 @@ export default function HeroOrbit({ sections = [] }) {
 
     return () => {
       mediaQuery.removeEventListener?.("change", syncPreference);
-      transitionTimelineRef.current?.kill();
       document.body.style.overflow = "";
     };
   }, [router, sections]);
@@ -77,134 +72,122 @@ export default function HeroOrbit({ sections = [] }) {
 
     if (!hero || !stage || nodes.length === 0) return undefined;
 
-    const media = gsap.matchMedia();
+    const ctx = gsap.context(() => {
+      const media = gsap.matchMedia();
 
-    media.add("(min-width: 961px)", () => {
-      const orbitProxy = { angle: 0 };
-      let orbitRadiusX = 0;
-      let orbitRadiusY = 0;
+      media.add("(min-width: 961px)", () => {
+        const orbitProxy = { angle: 0 };
+        let orbitRadiusX = 0;
+        let orbitRadiusY = 0;
 
-      const applyOrbitPositions = () => {
-        let bottomY = -Infinity;
-        let bottomIndex = 0;
+        const applyOrbitPositions = () => {
+          let bottomY = -Infinity;
+          let bottomIndex = 0;
 
-        nodes.forEach((node, index) => {
-          const point = polarPosition(
-            index,
-            nodes.length,
-            orbitRadiusX,
-            orbitRadiusY,
-            orbitProxy.angle
-          );
+          nodes.forEach((node, index) => {
+            const point = polarPosition(index, nodes.length, orbitRadiusX, orbitRadiusY, orbitProxy.angle);
+            gsap.set(node, { x: point.x, y: point.y });
 
-          gsap.set(node, { x: point.x, y: point.y });
-
-          if (point.y > bottomY) {
-            bottomY = point.y;
-            bottomIndex = index;
-          }
-        });
-
-        if (scrollActiveRef.current !== bottomIndex) {
-          scrollActiveRef.current = bottomIndex;
-          const section = sections[bottomIndex];
-          if (section) {
-            if (captionLabelRef.current) captionLabelRef.current.textContent = section.label;
-            if (captionTitleRef.current) captionTitleRef.current.textContent = section.title;
-            if (captionPreviewRef.current) captionPreviewRef.current.textContent = section.preview;
-          }
-        }
-      };
-
-      const measure = () => {
-        const rect = stage.getBoundingClientRect();
-        orbitRadiusX = rect.width * 0.325;
-        orbitRadiusY = rect.height * 0.225;
-
-        nodes.forEach((node) => {
-          gsap.set(node, {
-            left: "50%",
-            top: "46%",
-            xPercent: -50,
-            yPercent: -50,
+            if (point.y > bottomY) {
+              bottomY = point.y;
+              bottomIndex = index;
+            }
           });
+
+          if (scrollActiveRef.current !== bottomIndex) {
+            scrollActiveRef.current = bottomIndex;
+            const section = sections[bottomIndex];
+            if (section) {
+              if (captionLabelRef.current) captionLabelRef.current.textContent = section.label;
+              if (captionTitleRef.current) captionTitleRef.current.textContent = section.title;
+              if (captionPreviewRef.current) captionPreviewRef.current.textContent = section.preview;
+            }
+          }
+        };
+
+        const measure = () => {
+          const rect = stage.getBoundingClientRect();
+          orbitRadiusX = rect.width * 0.325;
+          orbitRadiusY = rect.height * 0.225;
+
+          nodes.forEach((node) => {
+            gsap.set(node, { left: "50%", top: "46%", xPercent: -50, yPercent: -50 });
+          });
+
+          gsap.set(centerCopy, { opacity: 1, y: 0 });
+          gsap.set(caption, { opacity: 1, y: 0 });
+          applyOrbitPositions();
+        };
+
+        measure();
+
+        const st = ScrollTrigger.create({
+          id: "orbit-pin",
+          trigger: hero,
+          start: "top top",
+          end: "+=360%",
+          pin: true,
+          invalidateOnRefresh: true,
+          onLeave: () => {
+            orbitProxy.angle = 0;
+            applyOrbitPositions();
+            gsap.set(centerCopy, { opacity: 1, y: 0 });
+            gsap.set(stage, { scale: 1 });
+            introPlayed = false;
+            window.scrollTo({ top: st.start, behavior: "instant" });
+          },
         });
 
-        gsap.set(centerCopy, { opacity: 1, y: 0 });
-        gsap.set(caption, { opacity: 1, y: 0 });
-        applyOrbitPositions();
-      };
+        let introPlayed = false;
+        const playIntro = () => {
+          if (introPlayed) return;
+          introPlayed = true;
+          gsap.to(centerCopy, { opacity: 0.58, y: -16, duration: 0.5, ease: "power1.out" });
+          gsap.to(stage, { scale: 1.02, duration: 0.5, ease: "power1.out" });
+        };
 
-      measure();
+        const onScroll = () => {
+          const scrollY = window.scrollY;
+          const scrollRange = st.end - st.start;
+          if (scrollRange <= 0) return;
 
-      // Pin-only ScrollTrigger — no scrub, no animation state
-      const st = ScrollTrigger.create({
-        trigger: hero,
-        start: "top top",
-        end: "+=360%",
-        pin: true,
-        invalidateOnRefresh: true,
-        onLeave: () => {
-          // Reset orbit and intro, then seamlessly loop to start
-          orbitProxy.angle = 0;
+          const progress = Math.min(1, Math.max(0, (scrollY - st.start) / scrollRange));
+          orbitProxy.angle = progress * Math.PI * 2;
           applyOrbitPositions();
-          gsap.set(centerCopy, { opacity: 1, y: 0 });
-          gsap.set(stage, { scale: 1 });
-          introPlayed = false;
-          window.scrollTo({ top: st.start, behavior: "instant" });
-        },
+
+          if (scrollY > st.start + 10) playIntro();
+        };
+
+        window.addEventListener("scroll", onScroll, { passive: true });
+        ScrollTrigger.addEventListener("refreshInit", measure);
+
+        return () => {
+          window.removeEventListener("scroll", onScroll);
+          ScrollTrigger.removeEventListener("refreshInit", measure);
+          st.kill();
+        };
       });
+    }, hero);
 
-      // Play the center-copy fade once on first scroll
-      let introPlayed = false;
-      const playIntro = () => {
-        if (introPlayed) return;
-        introPlayed = true;
-        gsap.to(centerCopy, { opacity: 0.58, y: -16, duration: 0.5, ease: "power1.out" });
-        gsap.to(stage, { scale: 1.02, duration: 0.5, ease: "power1.out" });
-      };
-
-      // Direct scroll → orbit angle — no scrub lag, no tween state to fight
-      const onScroll = () => {
-        const scrollY = window.scrollY;
-        const scrollRange = st.end - st.start;
-        if (scrollRange <= 0) return;
-
-        const progress = Math.min(1, Math.max(0, (scrollY - st.start) / scrollRange));
-        orbitProxy.angle = progress * Math.PI * 2;
-        applyOrbitPositions();
-
-        if (scrollY > st.start + 10) playIntro();
-      };
-
-      window.addEventListener("scroll", onScroll, { passive: true });
-      ScrollTrigger.addEventListener("refreshInit", measure);
-
-      return () => {
-        window.removeEventListener("scroll", onScroll);
-        ScrollTrigger.removeEventListener("refreshInit", measure);
-        st.kill();
-      };
-    });
-
-    return () => {
-      media.revert();
-    };
+    return () => ctx.revert();
   }, [sections]);
 
   const selectedSection = sections[activeIndex] ?? sections[0];
 
-  const resetPortalState = (selectedNode, nodes, labels, centerCopy, caption, stage) => {
+  const resetTransitionState = () => {
+    const nodes = nodeRefs.current.filter(Boolean);
+    const labels = labelRefs.current.filter(Boolean);
+    const centerCopy = centerCopyRef.current;
+    const caption = captionRef.current;
+    const stage = stageRef.current;
+
     document.body.style.overflow = "";
     gsap.set(nodes, { clearProps: "opacity,scale" });
     gsap.set(labels, { clearProps: "opacity" });
-    gsap.set(selectedNode, { clearProps: "opacity" });
     gsap.set([centerCopy, caption, stage], { clearProps: "opacity,y,scale" });
     gsap.set(overlayRef.current, { clearProps: "opacity,visibility" });
     gsap.set(overlayWashRef.current, { clearProps: "opacity" });
-    gsap.set(overlayPortalRef.current, {
-      clearProps: "x,y,width,height,scale,opacity",
-    });
+    gsap.set(overlayPortalRef.current, { clearProps: "all" });
     gsap.set(overlayHoleRef.current, { clearProps: "scale,opacity" });
     gsap.set(overlayGlowRef.current, { clearProps: "scale,opacity" });
     isTransitioningRef.current = false;
@@ -228,9 +211,7 @@ export default function HeroOrbit({ sections = [] }) {
     event.preventDefault();
     setActiveIndex(index);
 
-    const isReducedMotion =
-      prefersReducedMotionRef.current || window.innerWidth < 961;
-
+    const isReducedMotion = prefersReducedMotionRef.current || window.innerWidth < 961;
     if (isReducedMotion) {
       router.push(section.href || "/");
       return;
@@ -249,169 +230,115 @@ export default function HeroOrbit({ sections = [] }) {
     const nodes = nodeRefs.current.filter(Boolean);
     const labels = labelRefs.current.filter(Boolean);
 
-    if (
-      !selectedNode ||
-      !disc ||
-      !overlay ||
-      !overlayWash ||
-      !overlayPortal ||
-      !overlayHole ||
-      !overlayGlow ||
-      !centerCopy ||
-      !caption ||
-      !stage
-    ) {
+    if (!selectedNode || !disc || !overlay || !overlayWash || !overlayPortal || !overlayHole || !overlayGlow || !centerCopy || !caption || !stage) {
       router.push(section.href || "/");
       return;
     }
 
+    // Kill any previous transition
+    transitionCtxRef.current?.revert();
     isTransitioningRef.current = true;
-    transitionTimelineRef.current?.kill();
-
-    flushSync(() => {
-      setTransitionSection(section);
-    });
-
-    const discRect = disc.getBoundingClientRect();
-    const size = Math.max(discRect.width, discRect.height);
-    const viewportWidth = window.innerWidth;
-    const viewportHeight = window.innerHeight;
-    const finalSize = Math.max(viewportWidth, viewportHeight) * 2.4;
-    const finalX = viewportWidth / 2 - finalSize / 2;
-    const finalY = viewportHeight / 2 - finalSize / 2;
-
     document.body.style.overflow = "hidden";
 
-    gsap.set(overlay, { autoAlpha: 1 });
-    gsap.set(overlayWash, { opacity: 0 });
-    gsap.set(overlayPortal, {
-      x: discRect.left,
-      y: discRect.top,
-      width: size,
-      height: size,
-      scale: 1,
-      opacity: 1,
+    const discRect = disc.getBoundingClientRect();
+    const discSize = Math.max(discRect.width, discRect.height);
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+    // Oversized circle covers entire viewport at any aspect ratio
+    const finalSize = Math.hypot(vw, vh) * 1.1;
+
+    // Set the portal image via CSS variable directly (no React re-render needed)
+    overlayPortal.style.setProperty("--transition-image", section.image || "none");
+
+    const ctx = gsap.context(() => {
+      // 1. Show overlay layer, position portal exactly on the disc
+      gsap.set(overlay, { autoAlpha: 1 });
+      gsap.set(overlayWash, { opacity: 0 });
+      gsap.set(overlayPortal, {
+        position: "fixed",
+        left: discRect.left + discRect.width / 2,
+        top: discRect.top + discRect.height / 2,
+        xPercent: -50,
+        yPercent: -50,
+        width: discSize,
+        height: discSize,
+        borderRadius: "50%",
+        opacity: 1,
+        clearProps: "scale,transform",
+      });
+      gsap.set(overlayHole, { scale: 0.08, opacity: 0.6 });
+      gsap.set(overlayGlow, { scale: 0.88, opacity: 0.18 });
+
+      // 2. Capture Flip state — portal is sitting on the disc
+      const flipState = Flip.getState(overlayPortal);
+
+      // 3. Set portal to its final fullscreen state
+      gsap.set(overlayPortal, {
+        left: vw / 2,
+        top: vh / 2,
+        width: finalSize,
+        height: finalSize,
+        borderRadius: "50%",
+      });
+
+      // 4. Fade out everything else immediately
+      gsap.to([centerCopy, caption], { autoAlpha: 0, y: 14, duration: 0.18, ease: "power1.in" });
+      gsap.to(labels, { opacity: 0, duration: 0.12, stagger: 0.01 });
+      gsap.to(nodes.filter((_, i) => i !== index), { opacity: 0, scale: 0.9, duration: 0.2, stagger: 0.012 });
+      gsap.to(selectedNode, { opacity: 0, duration: 0.1, delay: 0.04 });
+
+      // 5. Flip: animate from disc position → fullscreen
+      //    ExpoScaleEase is the mathematically correct ease for large scale jumps:
+      //    it maps equal visual progress to equal perceived scale change
+      const startScale = discSize / finalSize;
+
+      const flipAnim = Flip.from(flipState, {
+        targets: overlayPortal,
+        duration: 1.05,
+        ease: ExpoScaleEase.config(startScale, 1, "power2.inOut"),
+        scale: true,
+        absolute: true,
+        onStart: () => {
+          // Inner elements animate alongside the expanding portal
+          gsap.to(overlayHole, { scale: 1.08, opacity: 1, duration: 1.05, ease: "power2.in" });
+          gsap.to(overlayGlow, { scale: 1.5, opacity: 0.08, duration: 1.05, ease: "power2.in" });
+          gsap.to(overlayWash, { opacity: 1, duration: 0.55, delay: 0.38, ease: "power1.in" });
+        },
+        onComplete: () => {
+          router.push(section.href || "/");
+          resetTransitionState();
+          transitionCtxRef.current = null;
+        },
+      });
+
+      // 6. ScrollTrigger scrubs the Flip timeline — binds expansion progress
+      //    to scroll position so the reveal feels physically momentum-driven.
+      //    We start from the current scroll position and drive forward by 80vh.
+      const scrubStart = window.scrollY;
+      const scrubEnd = scrubStart + vh * 0.8;
+
+      const scrubST = ScrollTrigger.create({
+        animation: flipAnim,
+        start: scrubStart,
+        end: scrubEnd,
+        scrub: 0.6,
+        onLeaveBack: () => {
+          scrubST.kill();
+          resetTransitionState();
+          transitionCtxRef.current = null;
+        },
+      });
+
+      // Auto-scroll to drive the scrub forward, completing the expansion
+      gsap.to(window, {
+        scrollTo: { y: scrubEnd, autoKill: false },
+        duration: 1.1,
+        ease: "power3.inOut",
+      });
+
     });
-    gsap.set(overlayHole, { scale: 0.08, opacity: 0.6 });
-    gsap.set(overlayGlow, { scale: 0.88, opacity: 0.18 });
 
-    const timeline = gsap.timeline({
-      defaults: { ease: "power3.inOut" },
-      onComplete: () => {
-        resetPortalState(selectedNode, nodes, labels, centerCopy, caption, stage);
-      },
-    });
-
-    transitionTimelineRef.current = timeline;
-
-    timeline
-      .to(
-        [centerCopy, caption],
-        {
-          autoAlpha: 0,
-          y: 14,
-          duration: 0.2,
-        },
-        0
-      )
-      .to(
-        labels,
-        {
-          opacity: 0,
-          duration: 0.14,
-          stagger: 0.015,
-        },
-        0
-      )
-      .to(
-        nodes.filter((_, nodeIndex) => nodeIndex !== index),
-        {
-          opacity: 0.12,
-          scale: 0.84,
-          duration: 0.22,
-          stagger: 0.015,
-        },
-        0
-      )
-      .to(
-        selectedNode,
-        {
-          opacity: 0,
-          duration: 0.08,
-        },
-        0.06
-      )
-      .to(
-        overlayPortal,
-        {
-          scale: 1.2,
-          duration: 0.22,
-          ease: "power2.out",
-        },
-        0.05
-      )
-      .to(
-        overlayHole,
-        {
-          scale: 0.66,
-          opacity: 1,
-          duration: 0.24,
-          ease: "power2.out",
-        },
-        0.08
-      )
-      .to(
-        overlayGlow,
-        {
-          scale: 1.18,
-          opacity: 0.3,
-          duration: 0.24,
-          ease: "power2.out",
-        },
-        0.08
-      )
-      .to(
-        overlayWash,
-        {
-          opacity: 1,
-          duration: 0.28,
-        },
-        0.18
-      )
-      .to(
-        overlayPortal,
-        {
-          x: finalX,
-          y: finalY,
-          width: finalSize,
-          height: finalSize,
-          duration: 0.74,
-          ease: "power4.in",
-        },
-        0.2
-      )
-      .to(
-        overlayHole,
-        {
-          scale: 1.14,
-          duration: 0.74,
-          ease: "power4.in",
-        },
-        0.2
-      )
-      .to(
-        overlayGlow,
-        {
-          scale: 1.4,
-          opacity: 0.1,
-          duration: 0.74,
-          ease: "power4.in",
-        },
-        0.2
-      )
-      .add(() => {
-        router.push(section.href || "/");
-      }, 0.64);
+    transitionCtxRef.current = ctx;
   };
 
   return (
@@ -431,12 +358,8 @@ export default function HeroOrbit({ sections = [] }) {
                 <a
                   key={section.label}
                   href={section.href}
-                  className={`editorial-orbit-node${
-                    index === activeIndex ? " is-active" : ""
-                  }`}
-                  ref={(node) => {
-                    nodeRefs.current[index] = node;
-                  }}
+                  className={`editorial-orbit-node${index === activeIndex ? " is-active" : ""}`}
+                  ref={(node) => { nodeRefs.current[index] = node; }}
                   onMouseEnter={() => handlePreviewChange(index)}
                   onFocus={() => handlePreviewChange(index)}
                   onClick={(event) => handleNodeClick(event, index)}
@@ -449,9 +372,7 @@ export default function HeroOrbit({ sections = [] }) {
                     />
                     <span
                       className="editorial-orbit-label"
-                      ref={(label) => {
-                        labelRefs.current[index] = label;
-                      }}
+                      ref={(label) => { labelRefs.current[index] = label; }}
                     >
                       {section.label}
                     </span>
@@ -469,17 +390,9 @@ export default function HeroOrbit({ sections = [] }) {
             <p ref={captionPreviewRef}>{selectedSection?.preview}</p>
           </div>
 
-          <div
-            ref={overlayRef}
-            className="editorial-transition-layer"
-            aria-hidden="true"
-          >
+          <div ref={overlayRef} className="editorial-transition-layer" aria-hidden="true">
             <div ref={overlayWashRef} className="editorial-transition-wash" />
-            <div
-              ref={overlayPortalRef}
-              className="editorial-transition-portal"
-              style={{ "--transition-image": transitionSection?.image }}
-            >
+            <div ref={overlayPortalRef} className="editorial-transition-portal">
               <div className="editorial-transition-portal-surface" />
               <div ref={overlayGlowRef} className="editorial-transition-glow" />
               <div ref={overlayHoleRef} className="editorial-transition-hole" />
