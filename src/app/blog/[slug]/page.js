@@ -1,4 +1,4 @@
-import { notFound } from "next/navigation";
+import { notFound, unstable_rethrow } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import {
@@ -25,13 +25,13 @@ export async function generateMetadata({ params }) {
     const post = await getBlogPostSummaryFromNotion(slug);
     if (!post) {
       return {
-        title: "Blog Post Not Found - Hasbi Hassadiqin",
+        title: "Blog Post Not Found",
         description: "The requested blog post could not be found.",
       };
     }
 
     return {
-      title: `${post.title || "Blog Post"} - Hasbi Hassadiqin`,
+      title: post.title || "Blog Post",
       description: post.excerpt || "A blog post by Hasbi Hassadiqin",
       openGraph: {
         title: post.title || "Blog Post",
@@ -42,7 +42,7 @@ export async function generateMetadata({ params }) {
   } catch (error) {
     console.error("Error generating metadata:", error);
     return {
-      title: "Blog Post - Hasbi Hassadiqin",
+      title: "Blog Post",
       description: "A blog post by Hasbi Hassadiqin",
     };
   }
@@ -55,8 +55,8 @@ export default async function BlogPostPage({ params }) {
   try {
     post = await getBlogPostFromNotion(slug);
   } catch (error) {
+    unstable_rethrow(error);
     console.error("Error fetching blog post:", error);
-    notFound();
   }
 
   if (!post) {

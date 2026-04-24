@@ -1,5 +1,5 @@
 // src/app/projects/[slug]/page.js - Final Complete Version
-import { notFound } from "next/navigation";
+import { notFound, unstable_rethrow } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import {
@@ -26,13 +26,13 @@ export async function generateMetadata({ params }) {
 
     if (!project) {
       return {
-        title: "Project Not Found - Hasbi Hassadiqin",
+        title: "Project Not Found",
         description: "The requested project could not be found.",
       };
     }
 
     return {
-      title: `${project.title || "Project"} - Hasbi Hassadiqin`,
+      title: project.title || "Project",
       description: project.desc || "A project by Hasbi Hassadiqin",
       openGraph: {
         title: project.title || "Project",
@@ -43,7 +43,7 @@ export async function generateMetadata({ params }) {
   } catch (error) {
     console.error("Error generating project metadata:", error);
     return {
-      title: "Project - Hasbi Hassadiqin",
+      title: "Project",
       description: "A project by Hasbi Hassadiqin",
     };
   }
@@ -56,8 +56,8 @@ export default async function ProjectPage({ params }) {
   try {
     project = await getProjectFromNotion(slug);
   } catch (error) {
+    unstable_rethrow(error);
     console.error("❌ Error fetching project:", error);
-    notFound();
   }
 
   if (!project) {

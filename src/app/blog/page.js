@@ -3,7 +3,7 @@ import Image from "next/image";
 import { getBlogPostsFromNotion } from "@/utils/notion";
 
 export const metadata = {
-  title: "Blog - Hasbi Hassadiqin",
+  title: "Blog",
   description: "Thoughts on development, AI, and building digital experiences",
 };
 

@@ -4,7 +4,7 @@ import ProjectCard from "@/components/ProjectCard";
 export const revalidate = 86400;
 
 export const metadata = {
-  title: "Projects - Hasbi Hassadiqin",
+  title: "Projects",
   description:
     "A showcase of my work in AI, automation, and web development. Explore projects that demonstrate innovation and technical expertise.",
 };
