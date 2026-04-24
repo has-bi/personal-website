@@ -4,11 +4,10 @@ import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 import { Flip } from "gsap/Flip";
 import { ExpoScaleEase } from "gsap/EasePack";
 
-gsap.registerPlugin(ScrollTrigger, ScrollToPlugin, Flip, ExpoScaleEase);
+gsap.registerPlugin(ScrollTrigger, Flip, ExpoScaleEase);
 
 function polarPosition(index, total, radiusX, radiusY, angleOffset = 0) {
   const angle = angleOffset + (index / total) * Math.PI * 2 - Math.PI / 2;
@@ -129,6 +128,8 @@ export default function HeroOrbit({ sections = [] }) {
           pin: true,
           invalidateOnRefresh: true,
           onLeave: () => {
+            // Don't reset while a click transition is in progress
+            if (isTransitioningRef.current) return;
             orbitProxy.angle = 0;
             applyOrbitPositions();
             gsap.set(centerCopy, { opacity: 1, y: 0 });
@@ -147,6 +148,9 @@ export default function HeroOrbit({ sections = [] }) {
         };
 
         const onScroll = () => {
+          // Don't rotate orbit while a click transition is playing
+          if (isTransitioningRef.current) return;
+
           const scrollY = window.scrollY;
           const scrollRange = st.end - st.start;
           if (scrollRange <= 0) return;
@@ -180,17 +184,29 @@ export default function HeroOrbit({ sections = [] }) {
     const centerCopy = centerCopyRef.current;
     const caption = captionRef.current;
     const stage = stageRef.current;
+    const overlay = overlayRef.current;
+    const overlayWash = overlayWashRef.current;
+    const overlayPortal = overlayPortalRef.current;
+    const overlayHole = overlayHoleRef.current;
+    const overlayGlow = overlayGlowRef.current;
 
     document.body.style.overflow = "";
-    gsap.set(nodes, { clearProps: "opacity,scale" });
-    gsap.set(labels, { clearProps: "opacity" });
-    gsap.set([centerCopy, caption, stage], { clearProps: "opacity,y,scale" });
-    gsap.set(overlayRef.current, { clearProps: "opacity,visibility" });
-    gsap.set(overlayWashRef.current, { clearProps: "opacity" });
-    gsap.set(overlayPortalRef.current, { clearProps: "all" });
-    gsap.set(overlayHoleRef.current, { clearProps: "scale,opacity" });
-    gsap.set(overlayGlowRef.current, { clearProps: "scale,opacity" });
     isTransitioningRef.current = false;
+
+    if (overlay) gsap.set(overlay, { autoAlpha: 0 });
+    if (overlayWash) gsap.set(overlayWash, { opacity: 0 });
+    // Restore portal to CSS-default position: absolute with no inline styles
+    if (overlayPortal) {
+      gsap.set(overlayPortal, { clearProps: "all" });
+      overlayPortal.style.removeProperty("--transition-image");
+    }
+    if (overlayHole) gsap.set(overlayHole, { clearProps: "all" });
+    if (overlayGlow) gsap.set(overlayGlow, { clearProps: "all" });
+    if (nodes.length) gsap.set(nodes, { clearProps: "opacity,scale" });
+    if (labels.length) gsap.set(labels, { clearProps: "opacity" });
+    if (centerCopy) gsap.set(centerCopy, { clearProps: "opacity,y,autoAlpha" });
+    if (caption) gsap.set(caption, { clearProps: "opacity,y,autoAlpha" });
+    if (stage) gsap.set(stage, { clearProps: "scale" });
   };
 
   const handlePreviewChange = (index) => {
@@ -235,7 +251,7 @@ export default function HeroOrbit({ sections = [] }) {
       return;
     }
 
-    // Kill any previous transition
+    // Cancel any previous transition
     transitionCtxRef.current?.revert();
     isTransitioningRef.current = true;
     document.body.style.overflow = "hidden";
@@ -244,98 +260,71 @@ export default function HeroOrbit({ sections = [] }) {
     const discSize = Math.max(discRect.width, discRect.height);
     const vw = window.innerWidth;
     const vh = window.innerHeight;
-    // Oversized circle covers entire viewport at any aspect ratio
-    const finalSize = Math.hypot(vw, vh) * 1.1;
+    // Circle large enough to cover the entire viewport from any position
+    const finalSize = Math.hypot(vw, vh) * 1.15;
+    const startScale = discSize / finalSize;
 
-    // Set the portal image via CSS variable directly (no React re-render needed)
     overlayPortal.style.setProperty("--transition-image", section.image || "none");
 
     const ctx = gsap.context(() => {
-      // 1. Show overlay layer, position portal exactly on the disc
+      // Show overlay container
       gsap.set(overlay, { autoAlpha: 1 });
       gsap.set(overlayWash, { opacity: 0 });
+
+      // Step 1: clear any stale transforms from previous runs, separately from setting new props
+      gsap.set(overlayPortal, { clearProps: "transform,x,y,xPercent,yPercent,scale,rotate" });
+
+      // Step 2: position portal as position:absolute inside the fixed layer —
+      // left/top are viewport-relative. Place it exactly over the disc.
       gsap.set(overlayPortal, {
-        position: "fixed",
-        left: discRect.left + discRect.width / 2,
-        top: discRect.top + discRect.height / 2,
-        xPercent: -50,
-        yPercent: -50,
+        left: discRect.left,
+        top: discRect.top,
         width: discSize,
         height: discSize,
         borderRadius: "50%",
         opacity: 1,
-        clearProps: "scale,transform",
       });
       gsap.set(overlayHole, { scale: 0.08, opacity: 0.6 });
-      gsap.set(overlayGlow, { scale: 0.88, opacity: 0.18 });
+      gsap.set(overlayGlow, { scale: 0.9, opacity: 0.18 });
 
-      // 2. Capture Flip state — portal is sitting on the disc
+      // Step 3: capture Flip state — portal is visually on top of the disc
       const flipState = Flip.getState(overlayPortal);
 
-      // 3. Set portal to its final fullscreen state
+      // Step 4: set the target (fullscreen) state
       gsap.set(overlayPortal, {
-        left: vw / 2,
-        top: vh / 2,
+        left: (vw - finalSize) / 2,
+        top: (vh - finalSize) / 2,
         width: finalSize,
         height: finalSize,
-        borderRadius: "50%",
       });
 
-      // 4. Fade out everything else immediately
-      gsap.to([centerCopy, caption], { autoAlpha: 0, y: 14, duration: 0.18, ease: "power1.in" });
-      gsap.to(labels, { opacity: 0, duration: 0.12, stagger: 0.01 });
-      gsap.to(nodes.filter((_, i) => i !== index), { opacity: 0, scale: 0.9, duration: 0.2, stagger: 0.012 });
-      gsap.to(selectedNode, { opacity: 0, duration: 0.1, delay: 0.04 });
+      // Step 5: fade out everything except the clicked node (that one pops to overlay)
+      gsap.to([centerCopy, caption], { autoAlpha: 0, y: 12, duration: 0.2, ease: "power1.in" });
+      gsap.to(labels, { opacity: 0, duration: 0.15, stagger: 0.01 });
+      gsap.to(
+        nodes.filter((_, i) => i !== index),
+        { opacity: 0, scale: 0.9, duration: 0.22, stagger: 0.012, ease: "power1.in" }
+      );
+      gsap.to(selectedNode, { opacity: 0, duration: 0.12, delay: 0.05 });
 
-      // 5. Flip: animate from disc position → fullscreen
-      //    ExpoScaleEase is the mathematically correct ease for large scale jumps:
-      //    it maps equal visual progress to equal perceived scale change
-      const startScale = discSize / finalSize;
-
-      const flipAnim = Flip.from(flipState, {
+      // Step 6: Flip from disc position → fullscreen using ExpoScaleEase.
+      // ExpoScaleEase maps equal *perceived* scale progress across a huge ratio
+      // (disc ~80px → diagonal ~2200px = ~27× scale jump).
+      Flip.from(flipState, {
         targets: overlayPortal,
-        duration: 1.05,
+        duration: 1.0,
         ease: ExpoScaleEase.config(startScale, 1, "power2.inOut"),
         scale: true,
-        absolute: true,
         onStart: () => {
-          // Inner elements animate alongside the expanding portal
-          gsap.to(overlayHole, { scale: 1.08, opacity: 1, duration: 1.05, ease: "power2.in" });
-          gsap.to(overlayGlow, { scale: 1.5, opacity: 0.08, duration: 1.05, ease: "power2.in" });
-          gsap.to(overlayWash, { opacity: 1, duration: 0.55, delay: 0.38, ease: "power1.in" });
+          gsap.to(overlayHole, { scale: 1.06, opacity: 1, duration: 1.0, ease: "power2.in" });
+          gsap.to(overlayGlow, { scale: 1.5, opacity: 0.06, duration: 1.0, ease: "power2.in" });
+          gsap.to(overlayWash, { opacity: 1, duration: 0.5, delay: 0.4, ease: "power1.in" });
         },
         onComplete: () => {
           router.push(section.href || "/");
-          resetTransitionState();
-          transitionCtxRef.current = null;
+          // State cleanup happens after route change unmounts; keep overlay visible until then
         },
       });
-
-      // 6. ScrollTrigger scrubs the Flip timeline — binds expansion progress
-      //    to scroll position so the reveal feels physically momentum-driven.
-      //    We start from the current scroll position and drive forward by 80vh.
-      const scrubStart = window.scrollY;
-      const scrubEnd = scrubStart + vh * 0.8;
-
-      const scrubST = ScrollTrigger.create({
-        animation: flipAnim,
-        start: scrubStart,
-        end: scrubEnd,
-        scrub: 0.6,
-        onLeaveBack: () => {
-          scrubST.kill();
-          resetTransitionState();
-          transitionCtxRef.current = null;
-        },
-      });
-
-      // Auto-scroll to drive the scrub forward, completing the expansion
-      gsap.to(window, {
-        scrollTo: { y: scrubEnd, autoKill: false },
-        duration: 1.1,
-        ease: "power3.inOut",
-      });
-
     });
 
     transitionCtxRef.current = ctx;
