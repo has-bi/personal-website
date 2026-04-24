@@ -1,19 +1,19 @@
 import Link from "next/link";
+import Image from "next/image";
 import { getBlogPostsFromNotion } from "@/utils/notion";
-import { SafeBlogImage } from "@/components/SafeImage";
 
 export const metadata = {
   title: "Blog - Hasbi Hassadiqin",
   description: "Thoughts on development, AI, and building digital experiences",
 };
 
-export const dynamic = "force-dynamic";
+export const revalidate = 86400;
 
 export default async function BlogPage() {
   const posts = await getBlogPostsFromNotion();
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="route-shell route-shell-blog">
       {/* Hero Section */}
       <section className="pt-32 pb-24 px-6">
         <div className="container mx-auto max-w-6xl">
@@ -99,14 +99,15 @@ function FeaturedBlogCard({ post }) {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-0">
           {/* Image - FIXED: Proper aspect ratio container */}
           {post.coverImage && (
-            <div className="aspect-[16/10] lg:aspect-square overflow-hidden bg-gray-50">
-              <SafeBlogImage
+            <div className="aspect-16/10 lg:aspect-square overflow-hidden bg-gray-50">
+              <Image
                 src={post.coverImage}
                 alt={post.title || "Blog post"}
                 width={600}
                 height={600}
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                 sizes="(max-width: 1024px) 100vw, 50vw"
+                priority
               />
             </div>
           )}
@@ -175,8 +176,8 @@ function BlogCard({ post }) {
     <Link href={`/blog/${post.slug}`} className="block group">
       <article className="bg-white rounded-xl border border-gray-100 hover:border-indigo-200 transition-all duration-300 hover:shadow-sm overflow-hidden h-full flex flex-col">
         {post.coverImage && (
-          <div className="aspect-[16/10] overflow-hidden bg-gray-50">
-            <SafeBlogImage
+          <div className="aspect-16/10 overflow-hidden bg-gray-50">
+            <Image
               src={post.coverImage}
               alt={post.title || "Blog post"}
               width={400}
@@ -187,7 +188,7 @@ function BlogCard({ post }) {
           </div>
         )}
 
-        <div className="p-6 flex flex-col flex-grow">
+        <div className="p-6 flex flex-col grow">
           <div className="flex items-center gap-4 text-sm text-gray-500 mb-3">
             <time>{formatDate(post.date)}</time>
             {post.readTime && (
@@ -198,7 +199,7 @@ function BlogCard({ post }) {
             )}
           </div>
 
-          <h3 className="text-lg font-medium text-gray-900 mb-3 group-hover:text-gray-700 transition-colors duration-200 line-clamp-2 flex-grow">
+          <h3 className="text-lg font-medium text-gray-900 mb-3 group-hover:text-gray-700 transition-colors duration-200 line-clamp-2 grow">
             {post.title || "Untitled Post"}
           </h3>
 

@@ -1,18 +1,28 @@
 // src/app/projects/[slug]/page.js - Final Complete Version
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { getProjectFromNotion } from "@/utils/notion";
+import Image from "next/image";
+import {
+  getProjectFromNotion,
+  getProjectSummaryFromNotion,
+  getProjectsFromNotion,
+} from "@/utils/notion";
 import NotionRenderer from "@/components/NotionRenderer";
-import { SafeProjectImage } from "@/components/SafeImage";
 
-// Enable SSR for live updates
-export const dynamic = "force-dynamic";
+export const revalidate = 86400;
+
+export async function generateStaticParams() {
+  const projects = await getProjectsFromNotion();
+  return projects.map((project) => ({
+    slug: project.slug,
+  }));
+}
 
 export async function generateMetadata({ params }) {
   const { slug } = await params;
 
   try {
-    const project = await getProjectFromNotion(slug);
+    const project = await getProjectSummaryFromNotion(slug);
 
     if (!project) {
       return {
@@ -54,8 +64,30 @@ export default async function ProjectPage({ params }) {
     notFound();
   }
 
+  const creativeWorkSchema = {
+    "@context": "https://schema.org",
+    "@type": "CreativeWork",
+    name: project.title,
+    description: project.desc,
+    image: project.coverImage || undefined,
+    dateCreated: project.date,
+    creator: {
+      "@type": "Person",
+      name: "Hasbi Hassadiqin",
+      url: "https://www.hasbi.pro",
+    },
+    url: `https://www.hasbi.pro/projects/${slug}`,
+    keywords: Array.isArray(project.technologies)
+      ? project.technologies.join(", ")
+      : undefined,
+  };
+
   return (
     <div className="min-h-screen bg-white">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(creativeWorkSchema) }}
+      />
       {/* Header Section */}
       <section className="pt-32 pb-16 px-6">
         <div className="container mx-auto max-w-6xl">
@@ -236,10 +268,10 @@ export default async function ProjectPage({ params }) {
         <section className="px-6 mb-16">
           <div className="container mx-auto max-w-6xl">
             <div className="aspect-[16/9] relative overflow-hidden rounded-2xl bg-gray-100">
-              <SafeProjectImage
+              <Image
                 src={project.coverImage}
                 alt={project.title || "Project cover"}
-                fill={true}
+                fill
                 className="object-cover"
                 priority
                 sizes="(max-width: 1200px) 100vw, 1200px"

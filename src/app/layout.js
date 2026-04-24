@@ -103,6 +103,18 @@ export const viewport = {
   initialScale: 1,
 };
 
+const personSchema = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: "Hasbi Hassadiqin",
+  url: "https://www.hasbi.pro",
+  sameAs: ["https://twitter.com/hssdqn"],
+  jobTitle: "Applied AI Engineer",
+  description:
+    "Applied AI Engineer building practical AI products, automation systems, and thoughtful interfaces.",
+  image: "https://www.hasbi.pro/images/og-image.jpg",
+};
+
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
@@ -110,6 +122,10 @@ export default function RootLayout({ children }) {
         className={`${manrope.variable} ${newsreader.variable} antialiased`}
         style={{ fontFamily: "var(--font-body), sans-serif" }}
       >
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(personSchema) }}
+        />
         <ClientRuntimeGuards />
         {children}
       </body>

@@ -1,31 +1,25 @@
-// src/utils/notion.js - Final version
+import { cache } from "react";
+import { unstable_cache } from "next/cache";
 import { Client } from "@notionhq/client";
 
 const notion = new Client({
   auth: process.env.NOTION_API_KEY,
 });
 
-// Database IDs
 const BLOG_DATABASE_ID = process.env.NOTION_DATABASE_ID_BLOG;
 const PROJECTS_DATABASE_ID = process.env.NOTION_DATABASE_ID_PROJECTS;
+const NOTION_REVALIDATE_SECONDS = 60 * 60 * 24;
 
-// Helper to convert Notion rich text to plain text
 export function getPlainText(richText) {
   return richText?.map((text) => text.plain_text).join("") || "";
 }
 
-// Helper to get property value based on type
 export function getPropertyValue(property) {
-  if (!property) {
-    return "";
-  }
-
+  if (!property) return "";
 
   switch (property.type) {
     case "title":
-      const titleValue =
-        property.title?.map((text) => text.plain_text).join("") || "";
-      return titleValue;
+      return property.title?.map((text) => text.plain_text).join("") || "";
     case "rich_text":
       return property.rich_text?.map((text) => text.plain_text).join("") || "";
     case "select":
@@ -51,220 +45,107 @@ export function getPropertyValue(property) {
   }
 }
 
-// Get blog posts from Notion
-export async function getBlogPostsFromNotion() {
-  try {
+function mapBlogPage(page) {
+  const contentTitle = getPropertyValue(page.properties["Content Title"]);
+  const defaultTitle = getPropertyValue(page.properties.Title);
+  const finalTitle = contentTitle || defaultTitle || "Untitled Post";
+
+  return {
+    id: page.id,
+    slug: getPropertyValue(page.properties.Slug),
+    title: finalTitle,
+    excerpt: getPropertyValue(page.properties.Excerpt),
+    date: getPropertyValue(page.properties.Date),
+    tags: getPropertyValue(page.properties.Tags),
+    coverImage: getPropertyValue(page.properties["Cover Image"]),
+    author: getPropertyValue(page.properties.Author) || "Hasbi Hassadiqin",
+    readTime: getPropertyValue(page.properties["Read Time"]) || "5 min read",
+    featured: getPropertyValue(page.properties.Featured),
+    published: getPropertyValue(page.properties.Published),
+  };
+}
+
+function mapProjectPage(page) {
+  const contentTitle = getPropertyValue(page.properties["Content Title"]);
+  const defaultTitle = getPropertyValue(page.properties.Title);
+  const finalTitle = contentTitle || defaultTitle || "Untitled Project";
+
+  return {
+    id: page.id,
+    slug: getPropertyValue(page.properties.Slug),
+    title: finalTitle,
+    desc: getPropertyValue(page.properties.Description),
+    coverImage: getPropertyValue(page.properties["Cover Image"]),
+    date: getPropertyValue(page.properties.Date),
+    client: getPropertyValue(page.properties.Client),
+    category: getPropertyValue(page.properties.Category),
+    technologies: getPropertyValue(page.properties.Technologies),
+    featured: getPropertyValue(page.properties.Featured),
+    published: getPropertyValue(page.properties.Published),
+  };
+}
+
+async function queryAllDatabasePages({ databaseId, filter, sorts }) {
+  if (!databaseId) return [];
+
+  const results = [];
+  let nextCursor;
+
+  do {
     const response = await notion.databases.query({
-      database_id: BLOG_DATABASE_ID,
-      filter: {
-        property: "Published",
-        checkbox: {
-          equals: true,
-        },
-      },
-      sorts: [
+      database_id: databaseId,
+      filter,
+      sorts,
+      start_cursor: nextCursor,
+      page_size: 100,
+    });
+
+    results.push(...response.results);
+    nextCursor = response.has_more ? response.next_cursor : undefined;
+  } while (nextCursor);
+
+  return results;
+}
+
+async function queryPageBySlug(databaseId, slug) {
+  if (!databaseId || !slug) return null;
+
+  const response = await notion.databases.query({
+    database_id: databaseId,
+    filter: {
+      and: [
         {
-          property: "Date",
-          direction: "descending",
+          property: "Slug",
+          rich_text: {
+            equals: slug,
+          },
+        },
+        {
+          property: "Published",
+          checkbox: {
+            equals: true,
+          },
         },
       ],
-    });
+    },
+    page_size: 1,
+  });
 
-    return response.results.map((page) => {
-      // Try Content Title first, then fallback to Title, then fallback text
-      const contentTitle = getPropertyValue(page.properties["Content Title"]);
-      const defaultTitle = getPropertyValue(page.properties.Title);
-      const finalTitle = contentTitle || defaultTitle || "Untitled Post";
-
-
-      return {
-        id: page.id,
-        slug: getPropertyValue(page.properties.Slug),
-        title: finalTitle,
-        excerpt: getPropertyValue(page.properties.Excerpt),
-        date: getPropertyValue(page.properties.Date),
-        tags: getPropertyValue(page.properties.Tags),
-        coverImage: getPropertyValue(page.properties["Cover Image"]),
-        author: getPropertyValue(page.properties.Author) || "Hasbi Hassadiqin",
-        readTime:
-          getPropertyValue(page.properties["Read Time"]) || "5 min read",
-        featured: getPropertyValue(page.properties.Featured),
-        published: getPropertyValue(page.properties.Published),
-      };
-    });
-  } catch (error) {
-    console.error("Error fetching blog posts from Notion:", error);
-    return [];
-  }
+  return response.results[0] || null;
 }
 
-// Get single blog post from Notion
-export async function getBlogPostFromNotion(slug) {
+async function fetchPageContent(pageId) {
+  if (!pageId) return [];
+
   try {
-    const response = await notion.databases.query({
-      database_id: BLOG_DATABASE_ID,
-      filter: {
-        and: [
-          {
-            property: "Slug",
-            rich_text: {
-              equals: slug,
-            },
-          },
-          {
-            property: "Published",
-            checkbox: {
-              equals: true,
-            },
-          },
-        ],
-      },
-    });
+    const allBlocks = [];
+    let nextCursor;
 
-    if (response.results.length === 0) {
-      return null;
-    }
-
-    const page = response.results[0];
-    const content = await getPageContent(page.id);
-
-    // Try Content Title first, then fallback to Title
-    const contentTitle = getPropertyValue(page.properties["Content Title"]);
-    const defaultTitle = getPropertyValue(page.properties.Title);
-    const finalTitle = contentTitle || defaultTitle || "Untitled Post";
-
-    return {
-      id: page.id,
-      slug: getPropertyValue(page.properties.Slug),
-      title: finalTitle,
-      excerpt: getPropertyValue(page.properties.Excerpt),
-      date: getPropertyValue(page.properties.Date),
-      tags: getPropertyValue(page.properties.Tags),
-      coverImage: getPropertyValue(page.properties["Cover Image"]),
-      author: getPropertyValue(page.properties.Author) || "Hasbi Hassadiqin",
-      readTime: getPropertyValue(page.properties["Read Time"]) || "5 min read",
-      featured: getPropertyValue(page.properties.Featured),
-      published: getPropertyValue(page.properties.Published),
-      content,
-    };
-  } catch (error) {
-    console.error("Error fetching blog post from Notion:", error);
-    return null;
-  }
-}
-
-// Get projects from Notion
-export async function getProjectsFromNotion() {
-  try {
-    const response = await notion.databases.query({
-      database_id: PROJECTS_DATABASE_ID,
-      filter: {
-        property: "Published",
-        checkbox: {
-          equals: true,
-        },
-      },
-      sorts: [
-        {
-          property: "Date",
-          direction: "descending",
-        },
-      ],
-    });
-
-    return response.results.map((page) => {
-      // Try Content Title first, then fallback to Title
-      const contentTitle = getPropertyValue(page.properties["Content Title"]);
-      const defaultTitle = getPropertyValue(page.properties.Title);
-      const finalTitle = contentTitle || defaultTitle || "Untitled Project";
-
-      return {
-        id: page.id,
-        slug: getPropertyValue(page.properties.Slug),
-        title: finalTitle,
-        desc: getPropertyValue(page.properties.Description),
-        coverImage: getPropertyValue(page.properties["Cover Image"]),
-        date: getPropertyValue(page.properties.Date),
-        client: getPropertyValue(page.properties.Client),
-        category: getPropertyValue(page.properties.Category),
-        technologies: getPropertyValue(page.properties.Technologies),
-        featured: getPropertyValue(page.properties.Featured),
-        published: getPropertyValue(page.properties.Published),
-      };
-    });
-  } catch (error) {
-    console.error("Error fetching projects from Notion:", error);
-    return [];
-  }
-}
-
-// Get single project from Notion
-export async function getProjectFromNotion(slug) {
-  try {
-    const response = await notion.databases.query({
-      database_id: PROJECTS_DATABASE_ID,
-      filter: {
-        and: [
-          {
-            property: "Slug",
-            rich_text: {
-              equals: slug,
-            },
-          },
-          {
-            property: "Published",
-            checkbox: {
-              equals: true,
-            },
-          },
-        ],
-      },
-    });
-
-    if (response.results.length === 0) {
-      return null;
-    }
-
-    const page = response.results[0];
-    const content = await getPageContent(page.id);
-
-    // Try Content Title first, then fallback to Title
-    const contentTitle = getPropertyValue(page.properties["Content Title"]);
-    const defaultTitle = getPropertyValue(page.properties.Title);
-    const finalTitle = contentTitle || defaultTitle || "Untitled Project";
-
-    return {
-      id: page.id,
-      slug: getPropertyValue(page.properties.Slug),
-      title: finalTitle,
-      desc: getPropertyValue(page.properties.Description),
-      coverImage: getPropertyValue(page.properties["Cover Image"]),
-      date: getPropertyValue(page.properties.Date),
-      client: getPropertyValue(page.properties.Client),
-      category: getPropertyValue(page.properties.Category),
-      technologies: getPropertyValue(page.properties.Technologies),
-      featured: getPropertyValue(page.properties.Featured),
-      published: getPropertyValue(page.properties.Published),
-      content,
-    };
-  } catch (error) {
-    console.error("Error fetching project from Notion:", error);
-    return null;
-  }
-}
-
-// Get page content blocks
-export async function getPageContent(pageId) {
-  try {
-    let allBlocks = [];
-    let hasMore = true;
-    let nextCursor = undefined;
-
-    while (hasMore) {
+    do {
       const response = await notion.blocks.children.list({
         block_id: pageId,
         start_cursor: nextCursor,
-        page_size: 100, // Max allowed by Notion API
+        page_size: 100,
       });
 
       const blocks = response.results.map((block) => ({
@@ -273,11 +154,9 @@ export async function getPageContent(pageId) {
         [block.type]: block[block.type],
       }));
 
-      allBlocks = [...allBlocks, ...blocks];
-
-      hasMore = response.has_more;
-      nextCursor = response.next_cursor;
-    }
+      allBlocks.push(...blocks);
+      nextCursor = response.has_more ? response.next_cursor : undefined;
+    } while (nextCursor);
 
     return allBlocks;
   } catch (error) {
@@ -286,7 +165,163 @@ export async function getPageContent(pageId) {
   }
 }
 
-// Helper functions for homepage
+const getCachedPageContent = unstable_cache(fetchPageContent, ["notion-page-content"], {
+  revalidate: NOTION_REVALIDATE_SECONDS,
+  tags: ["notion"],
+});
+
+export const getPageContent = cache((pageId) => getCachedPageContent(pageId));
+
+async function fetchBlogPostsFromNotion() {
+  try {
+    const results = await queryAllDatabasePages({
+      databaseId: BLOG_DATABASE_ID,
+      filter: {
+        property: "Published",
+        checkbox: {
+          equals: true,
+        },
+      },
+      sorts: [
+        {
+          property: "Date",
+          direction: "descending",
+        },
+      ],
+    });
+
+    return results.map(mapBlogPage);
+  } catch (error) {
+    console.error("Error fetching blog posts from Notion:", error);
+    return [];
+  }
+}
+
+async function fetchBlogPostSummaryFromNotion(slug) {
+  try {
+    const page = await queryPageBySlug(BLOG_DATABASE_ID, slug);
+    return page ? mapBlogPage(page) : null;
+  } catch (error) {
+    console.error("Error fetching blog post summary from Notion:", error);
+    return null;
+  }
+}
+
+async function fetchBlogPostFromNotion(slug) {
+  try {
+    const page = await queryPageBySlug(BLOG_DATABASE_ID, slug);
+    if (!page) return null;
+
+    return {
+      ...mapBlogPage(page),
+      content: await getPageContent(page.id),
+    };
+  } catch (error) {
+    console.error("Error fetching blog post from Notion:", error);
+    return null;
+  }
+}
+
+async function fetchProjectsFromNotion() {
+  try {
+    const results = await queryAllDatabasePages({
+      databaseId: PROJECTS_DATABASE_ID,
+      filter: {
+        property: "Published",
+        checkbox: {
+          equals: true,
+        },
+      },
+      sorts: [
+        {
+          property: "Date",
+          direction: "descending",
+        },
+      ],
+    });
+
+    return results.map(mapProjectPage);
+  } catch (error) {
+    console.error("Error fetching projects from Notion:", error);
+    return [];
+  }
+}
+
+async function fetchProjectSummaryFromNotion(slug) {
+  try {
+    const page = await queryPageBySlug(PROJECTS_DATABASE_ID, slug);
+    return page ? mapProjectPage(page) : null;
+  } catch (error) {
+    console.error("Error fetching project summary from Notion:", error);
+    return null;
+  }
+}
+
+async function fetchProjectFromNotion(slug) {
+  try {
+    const page = await queryPageBySlug(PROJECTS_DATABASE_ID, slug);
+    if (!page) return null;
+
+    return {
+      ...mapProjectPage(page),
+      content: await getPageContent(page.id),
+    };
+  } catch (error) {
+    console.error("Error fetching project from Notion:", error);
+    return null;
+  }
+}
+
+const getCachedBlogPosts = unstable_cache(fetchBlogPostsFromNotion, ["notion-blog-posts"], {
+  revalidate: NOTION_REVALIDATE_SECONDS,
+  tags: ["notion", "blog"],
+});
+
+const getCachedBlogPostSummary = unstable_cache(
+  fetchBlogPostSummaryFromNotion,
+  ["notion-blog-post-summary"],
+  {
+    revalidate: NOTION_REVALIDATE_SECONDS,
+    tags: ["notion", "blog"],
+  }
+);
+
+const getCachedBlogPost = unstable_cache(fetchBlogPostFromNotion, ["notion-blog-post"], {
+  revalidate: NOTION_REVALIDATE_SECONDS,
+  tags: ["notion", "blog"],
+});
+
+const getCachedProjects = unstable_cache(fetchProjectsFromNotion, ["notion-projects"], {
+  revalidate: NOTION_REVALIDATE_SECONDS,
+  tags: ["notion", "projects"],
+});
+
+const getCachedProjectSummary = unstable_cache(
+  fetchProjectSummaryFromNotion,
+  ["notion-project-summary"],
+  {
+    revalidate: NOTION_REVALIDATE_SECONDS,
+    tags: ["notion", "projects"],
+  }
+);
+
+const getCachedProject = unstable_cache(fetchProjectFromNotion, ["notion-project"], {
+  revalidate: NOTION_REVALIDATE_SECONDS,
+  tags: ["notion", "projects"],
+});
+
+export const getBlogPostsFromNotion = cache(() => getCachedBlogPosts());
+export const getBlogPostSummaryFromNotion = cache((slug) =>
+  getCachedBlogPostSummary(slug)
+);
+export const getBlogPostFromNotion = cache((slug) => getCachedBlogPost(slug));
+
+export const getProjectsFromNotion = cache(() => getCachedProjects());
+export const getProjectSummaryFromNotion = cache((slug) =>
+  getCachedProjectSummary(slug)
+);
+export const getProjectFromNotion = cache((slug) => getCachedProject(slug));
+
 export async function getFeaturedBlogPosts(limit = 3) {
   try {
     const posts = await getBlogPostsFromNotion();

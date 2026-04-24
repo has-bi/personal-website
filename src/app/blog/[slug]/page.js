@@ -1,17 +1,28 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { getBlogPostFromNotion } from "@/utils/notion";
+import Image from "next/image";
+import {
+  getBlogPostFromNotion,
+  getBlogPostSummaryFromNotion,
+  getBlogPostsFromNotion,
+} from "@/utils/notion";
 import NotionRenderer from "@/components/NotionRenderer";
-import { SafeBlogImage } from "@/components/SafeImage";
 import ShareButton from "@/components/ShareButton";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 86400;
+
+export async function generateStaticParams() {
+  const posts = await getBlogPostsFromNotion();
+  return posts.map((post) => ({
+    slug: post.slug,
+  }));
+}
 
 export async function generateMetadata({ params }) {
   const { slug } = await params;
 
   try {
-    const post = await getBlogPostFromNotion(slug);
+    const post = await getBlogPostSummaryFromNotion(slug);
     if (!post) {
       return {
         title: "Blog Post Not Found - Hasbi Hassadiqin",
@@ -52,8 +63,34 @@ export default async function BlogPostPage({ params }) {
     notFound();
   }
 
+  const blogPostingSchema = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: post.title,
+    description: post.excerpt,
+    image: post.coverImage || undefined,
+    datePublished: post.date,
+    dateModified: post.date,
+    author: {
+      "@type": "Person",
+      name: post.author || "Hasbi Hassadiqin",
+      url: "https://www.hasbi.pro",
+    },
+    publisher: {
+      "@type": "Person",
+      name: "Hasbi Hassadiqin",
+      url: "https://www.hasbi.pro",
+    },
+    url: `https://www.hasbi.pro/blog/${slug}`,
+    mainEntityOfPage: `https://www.hasbi.pro/blog/${slug}`,
+  };
+
   return (
     <div className="min-h-screen bg-white">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(blogPostingSchema) }}
+      />
       {/* Header Section */}
       <section className="pt-32 pb-16 px-6">
         <div className="container mx-auto max-w-4xl">
@@ -129,7 +166,7 @@ export default async function BlogPostPage({ params }) {
           {/* Cover Image - FIXED: Use proper container with height */}
           {post.coverImage && (
             <div className="aspect-[16/9] relative overflow-hidden rounded-2xl mb-12 bg-gray-100">
-              <SafeBlogImage
+              <Image
                 src={post.coverImage}
                 alt={post.title || "Blog post cover"}
                 width={1024}

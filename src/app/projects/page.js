@@ -1,7 +1,7 @@
 import { getProjectsFromNotion } from "@/utils/notion";
 import ProjectCard from "@/components/ProjectCard";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 86400;
 
 export const metadata = {
   title: "Projects - Hasbi Hassadiqin",
@@ -20,7 +20,7 @@ export default async function ProjectsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="route-shell route-shell-projects">
       {/* Hero Section */}
       <section className="pt-40 pb-5 px-6">
         <div className="container mx-auto max-w-6xl">
@@ -60,8 +60,8 @@ export default async function ProjectsPage() {
             <EmptyState />
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {projects.map((project) => (
-                <ProjectCard key={project.slug} project={project} />
+              {projects.map((project, index) => (
+                <ProjectCard key={project.slug} project={project} priority={index === 0} />
               ))}
             </div>
           )}

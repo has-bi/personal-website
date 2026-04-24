@@ -1,60 +1,54 @@
 import Link from "next/link";
-import HeroOrbit from "@/components/HeroOrbit";
+import HomeHero from "@/components/HomeHero";
 
 const heroSections = [
   {
     label: "About",
-    href: "#about",
-    title: "About",
-    preview: "Background, approach, and how I think about building.",
+    href: "/about",
+    title: "Builder mode, always on.",
+    preview: "How I approach systems, products, and the work of making ideas real.",
     image:
-      "linear-gradient(135deg, rgba(24, 24, 24, 0.96), rgba(234, 234, 234, 0.84))",
-    orbit: { x: 38, y: 16, size: 0.82 },
+      "linear-gradient(135deg, rgba(17, 17, 17, 0.98), rgba(232, 226, 216, 0.86))",
   },
   {
     label: "Experience",
-    href: "#experience",
-    title: "Experience",
-    preview: "Roles, systems, and the work that shaped my practice.",
+    href: "/about",
+    title: "Operational thinking, shipped.",
+    preview: "Roles, systems, and commercial work that shaped my current practice.",
     image:
-      "linear-gradient(135deg, rgba(38, 38, 38, 0.96), rgba(244, 244, 244, 0.86))",
-    orbit: { x: 50, y: 14, size: 0.8 },
+      "linear-gradient(135deg, rgba(24, 24, 24, 0.98), rgba(215, 221, 226, 0.82))",
   },
   {
     label: "Work",
-    href: "#work",
-    title: "Selected Work",
-    preview: "Projects built for practical use, not just presentation.",
+    href: "/projects",
+    title: "Selected work with practical outcomes.",
+    preview: "Projects built to reduce manual work, sharpen decisions, and scale better.",
     image:
-      "linear-gradient(135deg, rgba(10, 10, 10, 0.98), rgba(196, 196, 196, 0.82))",
-    orbit: { x: 32, y: 37, size: 1.36 },
+      "linear-gradient(135deg, rgba(8, 8, 8, 0.99), rgba(214, 206, 196, 0.84))",
   },
   {
     label: "Writing",
-    href: "#writing",
-    title: "Writing",
-    preview: "Notes on AI systems, product thinking, and implementation.",
+    href: "/blog",
+    title: "Notes on systems and implementation.",
+    preview: "Writing about AI systems, product choices, and the details that matter.",
     image:
-      "linear-gradient(135deg, rgba(18, 18, 18, 0.94), rgba(224, 224, 224, 0.8))",
-    orbit: { x: 69, y: 30, size: 0.96 },
+      "linear-gradient(135deg, rgba(18, 18, 18, 0.97), rgba(229, 233, 238, 0.84))",
   },
   {
     label: "Contact",
-    href: "#contact",
-    title: "Contact",
-    preview: "Open to thoughtful product, automation, and AI work.",
+    href: "/contact",
+    title: "Open to thoughtful product and AI work.",
+    preview: "A straightforward way to reach out for product, automation, and AI builds.",
     image:
-      "linear-gradient(135deg, rgba(34, 34, 34, 0.96), rgba(248, 248, 248, 0.88))",
-    orbit: { x: 73, y: 60, size: 0.94 },
+      "linear-gradient(135deg, rgba(25, 25, 25, 0.97), rgba(240, 236, 229, 0.86))",
   },
   {
     label: "After Hours",
-    href: "#after-hours",
-    title: "After Hours",
-    preview: "The books, games, and references that shape my taste.",
+    href: "/about",
+    title: "Taste, references, and the off-clock side.",
+    preview: "Books, games, and the patterns that quietly inform how I build.",
     image:
-      "linear-gradient(135deg, rgba(28, 28, 28, 0.96), rgba(232, 232, 232, 0.84))",
-    orbit: { x: 38, y: 66, size: 0.82 },
+      "linear-gradient(135deg, rgba(22, 22, 22, 0.97), rgba(220, 227, 219, 0.82))",
   },
 ];
 
@@ -66,16 +60,15 @@ export default function Home() {
           Hasbi Hassadiqin
         </Link>
         <nav aria-label="Primary" className="editorial-nav-links">
-          <a href="#about">About</a>
-          <a href="#experience">Experience</a>
-          <a href="#work">Work</a>
-          <a href="#writing">Writing</a>
-          <a href="#contact">Contact</a>
+          <Link href="/about">About</Link>
+          <Link href="/projects">Work</Link>
+          <Link href="/blog">Writing</Link>
+          <Link href="/contact">Contact</Link>
         </nav>
       </header>
 
       <main className="editorial-main">
-        <HeroOrbit sections={heroSections} />
+        <HomeHero sections={heroSections} />
       </main>
     </div>
   );
