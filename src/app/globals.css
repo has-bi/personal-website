@@ -217,19 +217,29 @@ a {
 
 .editorial-hero-video {
   position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
+  top: 50%;
+  left: 50%;
+  width: 100vw;
+  height: 100vh;
+  transform: translate(-50%, -50%);
   z-index: 0;
   pointer-events: none;
+}
+
+@keyframes hero-video-zoom {
+  0%   { transform: scale(1.0); }
+  50%  { transform: scale(1.08); }
+  100% { transform: scale(1.0); }
 }
 
 .editorial-hero-video video {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  opacity: 0.18;
+  opacity: 0.22;
   filter: grayscale(1) contrast(1.1);
+  animation: hero-video-zoom 15s ease-in-out infinite;
+  transform-origin: center center;
 }
 
 .editorial-orbit-center {
