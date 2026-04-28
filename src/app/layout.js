@@ -1,5 +1,6 @@
 import "./globals.css";
 import ClientRuntimeGuards from "@/components/ClientRuntimeGuards";
+import CustomCursor from "@/components/CustomCursor";
 import { Manrope, Newsreader } from "next/font/google";
 
 const manrope = Manrope({
@@ -126,6 +127,7 @@ export default function RootLayout({ children }) {
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(personSchema) }}
         />
+        <CustomCursor />
         <ClientRuntimeGuards />
         {children}
       </body>

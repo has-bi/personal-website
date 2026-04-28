@@ -3,26 +3,53 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Flip } from "gsap/Flip";
 import { ExpoScaleEase } from "gsap/EasePack";
 
-gsap.registerPlugin(ScrollTrigger, Flip, ExpoScaleEase);
+gsap.registerPlugin(Flip, ExpoScaleEase);
+
+const orbitSampleImages = [
+  "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1800&q=80",
+  "https://images.unsplash.com/photo-1518005020951-eccb494ad742?auto=format&fit=crop&w=1800&q=80",
+  "https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&w=1800&q=80",
+  "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1800&q=80",
+  "https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=1800&q=80",
+  "https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&w=1800&q=80",
+  "https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=1800&q=80",
+];
+
+function orbitSampleImage(index = 0) {
+  return orbitSampleImages[index % orbitSampleImages.length];
+}
+
+const centerTextLines = [
+  "Applied AI engineer",
+  "building practical systems",
+  "You can see my work through",
+  "click the circle!",
+];
 
 function polarPosition(index, total, radiusX, radiusY, angleOffset = 0) {
   const angle = angleOffset + (index / total) * Math.PI * 2 - Math.PI / 2;
+
   return {
     x: Math.cos(angle) * radiusX,
     y: Math.sin(angle) * radiusY,
   };
 }
 
+function cssImageValue(image) {
+  if (!image) return "none";
+  if (image.startsWith("/") || image.startsWith("http")) return `url(${image})`;
+  return image;
+}
+
+
 export default function HeroOrbit({ sections = [] }) {
   const router = useRouter();
   const heroRef = useRef(null);
   const stageRef = useRef(null);
   const centerCopyRef = useRef(null);
-  const captionRef = useRef(null);
   const overlayRef = useRef(null);
   const overlayWashRef = useRef(null);
   const overlayPortalRef = useRef(null);
@@ -33,14 +60,21 @@ export default function HeroOrbit({ sections = [] }) {
   const transitionCtxRef = useRef(null);
   const prefersReducedMotionRef = useRef(false);
   const isTransitioningRef = useRef(false);
-  const captionLabelRef = useRef(null);
-  const captionTitleRef = useRef(null);
-  const captionPreviewRef = useRef(null);
   const scrollActiveRef = useRef(0);
+  const touchStartRef = useRef(null);
+  const textPhaseLockedRef = useRef(false);
+  const scrollAccumRef = useRef(0);
   const [activeIndex, setActiveIndex] = useState(0);
+  const [textPhase, setTextPhase] = useState(0);
 
   useEffect(() => {
     const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const previousBodyOverflow = document.body.style.overflow;
+    const previousHtmlOverflow = document.documentElement.style.overflow;
+
+    document.body.style.overflow = "hidden";
+    document.documentElement.style.overflow = "hidden";
+
     const syncPreference = () => {
       prefersReducedMotionRef.current = mediaQuery.matches;
     };
@@ -58,7 +92,8 @@ export default function HeroOrbit({ sections = [] }) {
 
     return () => {
       mediaQuery.removeEventListener?.("change", syncPreference);
-      document.body.style.overflow = "";
+      document.body.style.overflow = previousBodyOverflow;
+      document.documentElement.style.overflow = previousHtmlOverflow;
     };
   }, [router, sections]);
 
@@ -66,7 +101,6 @@ export default function HeroOrbit({ sections = [] }) {
     const hero = heroRef.current;
     const stage = stageRef.current;
     const centerCopy = centerCopyRef.current;
-    const caption = captionRef.current;
     const nodes = nodeRefs.current.filter(Boolean);
 
     if (!hero || !stage || nodes.length === 0) return undefined;
@@ -74,10 +108,19 @@ export default function HeroOrbit({ sections = [] }) {
     const ctx = gsap.context(() => {
       const media = gsap.matchMedia();
 
-      media.add("(min-width: 961px)", () => {
+      media.add("all", () => {
         const orbitProxy = { angle: 0 };
         let orbitRadiusX = 0;
         let orbitRadiusY = 0;
+        let targetAngle = 0;
+        let introPlayed = false;
+
+        const syncActiveSection = (index) => {
+          if (scrollActiveRef.current === index) return;
+
+          scrollActiveRef.current = index;
+          setActiveIndex(index);
+        };
 
         const applyOrbitPositions = () => {
           let bottomY = -Infinity;
@@ -93,53 +136,25 @@ export default function HeroOrbit({ sections = [] }) {
             }
           });
 
-          if (scrollActiveRef.current !== bottomIndex) {
-            scrollActiveRef.current = bottomIndex;
-            const section = sections[bottomIndex];
-            if (section) {
-              if (captionLabelRef.current) captionLabelRef.current.textContent = section.label;
-              if (captionTitleRef.current) captionTitleRef.current.textContent = section.title;
-              if (captionPreviewRef.current) captionPreviewRef.current.textContent = section.preview;
-            }
-          }
+          syncActiveSection(bottomIndex);
         };
 
         const measure = () => {
           const rect = stage.getBoundingClientRect();
-          orbitRadiusX = rect.width * 0.325;
-          orbitRadiusY = rect.height * 0.225;
+          orbitRadiusX = rect.width * 0.42;
+          orbitRadiusY = rect.height * 0.31;
 
           nodes.forEach((node) => {
             gsap.set(node, { left: "50%", top: "46%", xPercent: -50, yPercent: -50 });
           });
 
           gsap.set(centerCopy, { opacity: 1, y: 0 });
-          gsap.set(caption, { opacity: 1, y: 0 });
           applyOrbitPositions();
         };
 
         measure();
+        window.scrollTo({ top: 0, left: 0, behavior: "instant" });
 
-        const st = ScrollTrigger.create({
-          id: "orbit-pin",
-          trigger: hero,
-          start: "top top",
-          end: "+=360%",
-          pin: true,
-          invalidateOnRefresh: true,
-          onLeave: () => {
-            // Don't reset while a click transition is in progress
-            if (isTransitioningRef.current) return;
-            orbitProxy.angle = 0;
-            applyOrbitPositions();
-            gsap.set(centerCopy, { opacity: 1, y: 0 });
-            gsap.set(stage, { scale: 1 });
-            introPlayed = false;
-            window.scrollTo({ top: st.start, behavior: "instant" });
-          },
-        });
-
-        let introPlayed = false;
         const playIntro = () => {
           if (introPlayed) return;
           introPlayed = true;
@@ -147,28 +162,113 @@ export default function HeroOrbit({ sections = [] }) {
           gsap.to(stage, { scale: 1.02, duration: 0.5, ease: "power1.out" });
         };
 
-        const onScroll = () => {
-          // Don't rotate orbit while a click transition is playing
-          if (isTransitioningRef.current) return;
+        const SWAP_THRESHOLD = 500;
 
-          const scrollY = window.scrollY;
-          const scrollRange = st.end - st.start;
-          if (scrollRange <= 0) return;
+        const triggerTextSwap = () => {
+          if (textPhaseLockedRef.current) return;
+          textPhaseLockedRef.current = true;
 
-          const progress = Math.min(1, Math.max(0, (scrollY - st.start) / scrollRange));
-          orbitProxy.angle = progress * Math.PI * 2;
-          applyOrbitPositions();
+          const copy = centerCopyRef.current;
+          if (!copy) return;
 
-          if (scrollY > st.start + 10) playIntro();
+          gsap.killTweensOf(copy);
+          gsap.to(copy, {
+            opacity: 0,
+            y: 8,
+            duration: 0.22,
+            ease: "power2.in",
+            overwrite: true,
+            onComplete: () => {
+              setTextPhase(1);
+              gsap.fromTo(
+                copy,
+                { opacity: 0, y: -8 },
+                { opacity: 1, y: 0, duration: 0.3, ease: "power2.out", delay: 0.05 }
+              );
+            },
+          });
         };
 
-        window.addEventListener("scroll", onScroll, { passive: true });
-        ScrollTrigger.addEventListener("refreshInit", measure);
+        const rotateOrbit = (delta, multiplier = 0.0028) => {
+          // Don't rotate orbit while a click transition is playing
+          if (isTransitioningRef.current) return;
+          if (Math.abs(delta) < 1) return;
+
+          if (!textPhaseLockedRef.current) {
+            scrollAccumRef.current += Math.abs(delta);
+            if (scrollAccumRef.current >= SWAP_THRESHOLD) {
+              triggerTextSwap();
+            }
+          }
+
+          targetAngle += delta * multiplier;
+
+          gsap.to(orbitProxy, {
+            angle: targetAngle,
+            duration: 0.45,
+            ease: "power3.out",
+            overwrite: true,
+            onUpdate: applyOrbitPositions,
+          });
+
+          playIntro();
+        };
+
+        const onWheel = (event) => {
+          event.preventDefault();
+
+          const delta = Math.abs(event.deltaY) >= Math.abs(event.deltaX)
+            ? event.deltaY
+            : event.deltaX;
+
+          rotateOrbit(delta);
+        };
+
+        const onTouchStart = (event) => {
+          const touch = event.touches[0];
+          if (!touch) return;
+          touchStartRef.current = { x: touch.clientX, y: touch.clientY };
+        };
+
+        const onTouchMove = (event) => {
+          const touch = event.touches[0];
+          const start = touchStartRef.current;
+          if (!touch || !start) return;
+
+          event.preventDefault();
+
+          const deltaX = start.x - touch.clientX;
+          const deltaY = start.y - touch.clientY;
+          const delta = Math.abs(deltaY) >= Math.abs(deltaX) ? deltaY : deltaX;
+
+          touchStartRef.current = { x: touch.clientX, y: touch.clientY };
+          rotateOrbit(delta, 0.006);
+        };
+
+        const onKeyDown = (event) => {
+          if (event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
+          if (event.key !== "ArrowDown" && event.key !== "ArrowRight" && event.key !== "ArrowUp" && event.key !== "ArrowLeft") return;
+          if (event.target instanceof Element && event.target.closest(".editorial-menu")) return;
+
+          event.preventDefault();
+          const direction = event.key === "ArrowDown" || event.key === "ArrowRight" ? 1 : -1;
+          rotateOrbit(direction * 120);
+        };
+
+        const onResize = () => measure();
+
+        hero.addEventListener("wheel", onWheel, { passive: false });
+        hero.addEventListener("touchstart", onTouchStart, { passive: true });
+        hero.addEventListener("touchmove", onTouchMove, { passive: false });
+        window.addEventListener("keydown", onKeyDown);
+        window.addEventListener("resize", onResize);
 
         return () => {
-          window.removeEventListener("scroll", onScroll);
-          ScrollTrigger.removeEventListener("refreshInit", measure);
-          st.kill();
+          hero.removeEventListener("wheel", onWheel);
+          hero.removeEventListener("touchstart", onTouchStart);
+          hero.removeEventListener("touchmove", onTouchMove);
+          window.removeEventListener("keydown", onKeyDown);
+          window.removeEventListener("resize", onResize);
         };
       });
     }, hero);
@@ -176,13 +276,10 @@ export default function HeroOrbit({ sections = [] }) {
     return () => ctx.revert();
   }, [sections]);
 
-  const selectedSection = sections[activeIndex] ?? sections[0];
-
   const resetTransitionState = () => {
     const nodes = nodeRefs.current.filter(Boolean);
     const labels = labelRefs.current.filter(Boolean);
     const centerCopy = centerCopyRef.current;
-    const caption = captionRef.current;
     const stage = stageRef.current;
     const overlay = overlayRef.current;
     const overlayWash = overlayWashRef.current;
@@ -190,7 +287,8 @@ export default function HeroOrbit({ sections = [] }) {
     const overlayHole = overlayHoleRef.current;
     const overlayGlow = overlayGlowRef.current;
 
-    document.body.style.overflow = "";
+    document.body.style.overflow = "hidden";
+    document.documentElement.style.overflow = "hidden";
     isTransitioningRef.current = false;
 
     if (overlay) gsap.set(overlay, { autoAlpha: 0 });
@@ -205,19 +303,12 @@ export default function HeroOrbit({ sections = [] }) {
     if (nodes.length) gsap.set(nodes, { clearProps: "opacity,scale" });
     if (labels.length) gsap.set(labels, { clearProps: "opacity" });
     if (centerCopy) gsap.set(centerCopy, { clearProps: "opacity,y,autoAlpha" });
-    if (caption) gsap.set(caption, { clearProps: "opacity,y,autoAlpha" });
     if (stage) gsap.set(stage, { clearProps: "scale" });
   };
 
   const handlePreviewChange = (index) => {
     if (isTransitioningRef.current) return;
     setActiveIndex(index);
-    const section = sections[index];
-    if (section) {
-      if (captionLabelRef.current) captionLabelRef.current.textContent = section.label;
-      if (captionTitleRef.current) captionTitleRef.current.textContent = section.title;
-      if (captionPreviewRef.current) captionPreviewRef.current.textContent = section.preview;
-    }
   };
 
   const handleNodeClick = (event, index) => {
@@ -241,12 +332,11 @@ export default function HeroOrbit({ sections = [] }) {
     const overlayHole = overlayHoleRef.current;
     const overlayGlow = overlayGlowRef.current;
     const centerCopy = centerCopyRef.current;
-    const caption = captionRef.current;
     const stage = stageRef.current;
     const nodes = nodeRefs.current.filter(Boolean);
     const labels = labelRefs.current.filter(Boolean);
 
-    if (!selectedNode || !disc || !overlay || !overlayWash || !overlayPortal || !overlayHole || !overlayGlow || !centerCopy || !caption || !stage) {
+    if (!selectedNode || !disc || !overlay || !overlayWash || !overlayPortal || !overlayHole || !overlayGlow || !centerCopy || !stage) {
       router.push(section.href || "/");
       return;
     }
@@ -264,7 +354,7 @@ export default function HeroOrbit({ sections = [] }) {
     const finalSize = Math.hypot(vw, vh) * 1.15;
     const startScale = discSize / finalSize;
 
-    overlayPortal.style.setProperty("--transition-image", section.image || "none");
+    overlayPortal.style.setProperty("--transition-image", cssImageValue(section.image));
 
     const ctx = gsap.context(() => {
       // Show overlay container
@@ -299,7 +389,7 @@ export default function HeroOrbit({ sections = [] }) {
       });
 
       // Step 5: fade out everything except the clicked node (that one pops to overlay)
-      gsap.to([centerCopy, caption], { autoAlpha: 0, y: 12, duration: 0.2, ease: "power1.in" });
+      gsap.to(centerCopy, { autoAlpha: 0, y: 12, duration: 0.2, ease: "power1.in" });
       gsap.to(labels, { opacity: 0, duration: 0.15, stagger: 0.01 });
       gsap.to(
         nodes.filter((_, i) => i !== index),
@@ -334,25 +424,10 @@ export default function HeroOrbit({ sections = [] }) {
     <section ref={heroRef} className="editorial-hero editorial-hero-stage">
       <div className="editorial-hero-sticky">
         <div className="editorial-orbit-shell">
-          {/* Background video — muted, looping, no controls */}
-          <div className="editorial-hero-video" aria-hidden="true">
-            <video
-              autoPlay
-              muted
-              loop
-              playsInline
-              disablePictureInPicture
-              preload="metadata"
-            >
-              <source src="/video/hero-bg.webm" type="video/webm" />
-              <source src="/video/hero-bg.mp4" type="video/mp4" />
-            </video>
-          </div>
-
           <div ref={centerCopyRef} className="editorial-orbit-center">
-            <p className="editorial-orbit-copy">
-              Applied AI engineer building practical systems, products, and
-              interfaces with a minimal approach.
+            <p className="editorial-orbit-copy" aria-live="polite">
+              <span>{textPhase === 0 ? centerTextLines[0] : centerTextLines[2]}</span>
+              <span>{textPhase === 0 ? centerTextLines[1] : centerTextLines[3]}</span>
             </p>
           </div>
 
@@ -372,7 +447,7 @@ export default function HeroOrbit({ sections = [] }) {
                     <span
                       className="editorial-orbit-disc"
                       aria-hidden="true"
-                      style={{ "--node-image": section.image }}
+                      style={{ "--node-image": cssImageValue(orbitSampleImage(index)) }}
                     />
                     <span
                       className="editorial-orbit-label"
@@ -384,14 +459,6 @@ export default function HeroOrbit({ sections = [] }) {
                 </a>
               ))}
             </div>
-          </div>
-
-          <div ref={captionRef} className="editorial-orbit-caption">
-            <p ref={captionLabelRef} className="editorial-orbit-caption-label">
-              {selectedSection?.label}
-            </p>
-            <h2 ref={captionTitleRef}>{selectedSection?.title}</h2>
-            <p ref={captionPreviewRef}>{selectedSection?.preview}</p>
           </div>
 
           <div ref={overlayRef} className="editorial-transition-layer" aria-hidden="true">
