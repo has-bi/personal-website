@@ -1,71 +1,44 @@
-import Link from "next/link";
 import HomeHero from "@/components/HomeHero";
+import HomeMenu from "@/components/HomeMenu";
+import { getFeaturedProjects } from "@/utils/projects";
 
-const heroSections = [
+const projectPlaceholders = [
   {
-    label: "About",
-    href: "/about",
-    title: "Builder mode, always on.",
-    preview: "How I approach systems, products, and the work of making ideas real.",
-    image:
-      "linear-gradient(135deg, rgba(17, 17, 17, 0.98), rgba(232, 226, 216, 0.86))",
-  },
-  {
-    label: "Experience",
-    href: "/about",
-    title: "Operational thinking, shipped.",
-    preview: "Roles, systems, and commercial work that shaped my current practice.",
-    image:
-      "linear-gradient(135deg, rgba(24, 24, 24, 0.98), rgba(215, 221, 226, 0.82))",
-  },
-  {
-    label: "Work",
+    label: "Coming Soon",
     href: "/projects",
-    title: "Selected work with practical outcomes.",
-    preview: "Projects built to reduce manual work, sharpen decisions, and scale better.",
-    image:
-      "linear-gradient(135deg, rgba(8, 8, 8, 0.99), rgba(214, 206, 196, 0.84))",
+    title: "Workflow Intelligence Dashboard",
+    preview: "A project slot for upcoming work in analytics, operations, and AI-assisted decisions.",
+    image: "linear-gradient(135deg, rgba(92, 74, 160, 0.72), rgba(235, 237, 244, 0.94))",
   },
   {
-    label: "Writing",
-    href: "/blog",
-    title: "Notes on systems and implementation.",
-    preview: "Writing about AI systems, product choices, and the details that matter.",
-    image:
-      "linear-gradient(135deg, rgba(18, 18, 18, 0.97), rgba(229, 233, 238, 0.84))",
+    label: "Prototype",
+    href: "/projects",
+    title: "Internal Knowledge Copilot",
+    preview: "A placeholder highlight for retrieval, team knowledge, and practical AI support systems.",
+    image: "linear-gradient(135deg, rgba(104, 64, 200, 0.68), rgba(242, 237, 246, 0.94))",
   },
   {
-    label: "Contact",
-    href: "/contact",
-    title: "Open to thoughtful product and AI work.",
-    preview: "A straightforward way to reach out for product, automation, and AI builds.",
-    image:
-      "linear-gradient(135deg, rgba(25, 25, 25, 0.97), rgba(240, 236, 229, 0.86))",
-  },
-  {
-    label: "After Hours",
-    href: "/about",
-    title: "Taste, references, and the off-clock side.",
-    preview: "Books, games, and the patterns that quietly inform how I build.",
-    image:
-      "linear-gradient(135deg, rgba(22, 22, 22, 0.97), rgba(220, 227, 219, 0.82))",
+    label: "Exploration",
+    href: "/projects",
+    title: "Automation Control Center",
+    preview: "A future case study slot for monitoring automations and reducing operational drag.",
+    image: "linear-gradient(135deg, rgba(74, 86, 168, 0.66), rgba(232, 238, 240, 0.94))",
   },
 ];
 
 export default function Home() {
+  const projectHighlights = getFeaturedProjects().map((project) => ({
+    label: project.category,
+    href: `/projects/${project.slug}`,
+    title: project.title,
+    preview: project.desc,
+    image: project.coverImage,
+  }));
+  const heroSections = [...projectHighlights, ...projectPlaceholders].slice(0, 7);
+
   return (
     <div className="editorial-page">
-      <header className="editorial-nav">
-        <Link href="/" className="editorial-mark">
-          Hasbi Hassadiqin
-        </Link>
-        <nav aria-label="Primary" className="editorial-nav-links">
-          <Link href="/about">About</Link>
-          <Link href="/projects">Work</Link>
-          <Link href="/blog">Writing</Link>
-          <Link href="/contact">Contact</Link>
-        </nav>
-      </header>
+      <HomeMenu />
 
       <main className="editorial-main">
         <HomeHero sections={heroSections} />
