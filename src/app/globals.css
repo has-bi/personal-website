@@ -108,33 +108,37 @@ a {
 .route-shell-about {
   --route-shell-bg: linear-gradient(
     135deg,
-    rgba(17, 17, 17, 0.98),
-    rgba(232, 226, 216, 0.86)
+    rgba(243, 240, 255, 0.98),
+    rgba(232, 238, 246, 0.92)
   );
 }
 
 .route-shell-projects {
   --route-shell-bg: linear-gradient(
     135deg,
-    rgba(8, 8, 8, 0.99),
-    rgba(214, 206, 196, 0.84)
+    rgba(238, 242, 255, 0.98),
+    rgba(242, 237, 246, 0.92)
   );
 }
 
 .route-shell-blog {
   --route-shell-bg: linear-gradient(
     135deg,
-    rgba(18, 18, 18, 0.97),
-    rgba(229, 233, 238, 0.84)
+    rgba(240, 244, 246, 0.98),
+    rgba(243, 240, 255, 0.9)
   );
 }
 
 .route-shell-contact {
   --route-shell-bg: linear-gradient(
     135deg,
-    rgba(25, 25, 25, 0.97),
-    rgba(240, 236, 229, 0.86)
+    rgba(246, 248, 250, 0.98),
+    rgba(239, 242, 246, 0.92)
   );
+}
+
+.about-display-title {
+  text-wrap: balance;
 }
 
 .editorial-page {
@@ -998,26 +1002,10 @@ a {
   position: absolute;
   inset: 0;
   opacity: 0;
-  background: rgba(243, 240, 255, 0.92);
-  backdrop-filter: blur(5px);
-  will-change: transform, opacity;
-}
-
-.editorial-transition-portal {
-  position: absolute;
-  overflow: hidden;
-  border-radius: 50%;
-  box-shadow:
-    0 0 0 1px rgba(255, 255, 255, 0.18),
-    0 22px 70px rgba(32, 25, 54, 0.26);
-  will-change: transform;
-}
-
-.editorial-transition-portal-surface {
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
-  background: #f3f0ff;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(243, 240, 255, 0.96)),
+    #ffffff;
+  will-change: opacity;
 }
 
 @media (max-width: 960px) {

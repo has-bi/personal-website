@@ -40,6 +40,10 @@ function cssImageValue(image) {
   return image;
 }
 
+function isExternalHref(href = "") {
+  return /^https?:\/\//.test(href);
+}
+
 export default function HeroOrbit({ sections = [] }) {
   const router = useRouter();
   const heroRef = useRef(null);
@@ -47,7 +51,6 @@ export default function HeroOrbit({ sections = [] }) {
   const centerCopyRef = useRef(null);
   const overlayRef = useRef(null);
   const overlayWashRef = useRef(null);
-  const overlayPortalRef = useRef(null);
   const nodeRefs = useRef([]);
   const labelRefs = useRef([]);
   const transitionCtxRef = useRef(null);
@@ -77,7 +80,12 @@ export default function HeroOrbit({ sections = [] }) {
 
     const prefetchedRoutes = new Set();
     sections.forEach((section) => {
-      if (section.href && !section.href.startsWith("#") && !prefetchedRoutes.has(section.href)) {
+      if (
+        section.href &&
+        !section.href.startsWith("#") &&
+        !isExternalHref(section.href) &&
+        !prefetchedRoutes.has(section.href)
+      ) {
         prefetchedRoutes.add(section.href);
         router.prefetch(section.href);
       }
@@ -276,7 +284,6 @@ export default function HeroOrbit({ sections = [] }) {
     const stage = stageRef.current;
     const overlay = overlayRef.current;
     const overlayWash = overlayWashRef.current;
-    const overlayPortal = overlayPortalRef.current;
 
     document.body.style.overflow = "hidden";
     document.documentElement.style.overflow = "hidden";
@@ -284,14 +291,10 @@ export default function HeroOrbit({ sections = [] }) {
 
     if (overlay) gsap.set(overlay, { autoAlpha: 0 });
     if (overlayWash) gsap.set(overlayWash, { clearProps: "all" });
-    if (overlayPortal) {
-      gsap.set(overlayPortal, { clearProps: "all" });
-      overlayPortal.style.removeProperty("--transition-image");
-    }
-    if (nodes.length) gsap.set(nodes, { clearProps: "opacity,scale" });
+    if (nodes.length) gsap.set(nodes, { clearProps: "opacity,scale,y,filter" });
     if (labels.length) gsap.set(labels, { clearProps: "opacity" });
     if (centerCopy) gsap.set(centerCopy, { clearProps: "opacity,y,autoAlpha" });
-    if (stage) gsap.set(stage, { clearProps: "scale" });
+    if (stage) gsap.set(stage, { clearProps: "opacity,scale,y,autoAlpha,filter" });
   };
 
   const handlePreviewChange = (index) => {
@@ -305,25 +308,31 @@ export default function HeroOrbit({ sections = [] }) {
 
     event.preventDefault();
     setActiveIndex(index);
+    const navigate = () => {
+      if (isExternalHref(section.href)) {
+        window.location.assign(section.href);
+        return;
+      }
+
+      router.push(section.href || "/");
+    };
 
     const isReducedMotion = prefersReducedMotionRef.current || window.innerWidth < 961;
     if (isReducedMotion) {
-      router.push(section.href || "/");
+      navigate();
       return;
     }
 
     const selectedNode = nodeRefs.current[index];
-    const disc = selectedNode?.querySelector(".editorial-orbit-disc");
     const overlay = overlayRef.current;
     const overlayWash = overlayWashRef.current;
-    const overlayPortal = overlayPortalRef.current;
     const centerCopy = centerCopyRef.current;
     const stage = stageRef.current;
     const nodes = nodeRefs.current.filter(Boolean);
     const labels = labelRefs.current.filter(Boolean);
 
-    if (!selectedNode || !disc || !overlay || !overlayWash || !overlayPortal || !centerCopy || !stage) {
-      router.push(section.href || "/");
+    if (!selectedNode || !overlay || !overlayWash || !centerCopy || !stage) {
+      navigate();
       return;
     }
 
@@ -332,48 +341,28 @@ export default function HeroOrbit({ sections = [] }) {
     isTransitioningRef.current = true;
     document.body.style.overflow = "hidden";
 
-    const discRect = disc.getBoundingClientRect();
-    const discCenterX = discRect.left + discRect.width / 2;
-    const discCenterY = discRect.top + discRect.height / 2;
-
     const ctx = gsap.context(() => {
       gsap.set(overlay, { autoAlpha: 1, pointerEvents: "none" });
-      gsap.set(overlayWash, { opacity: 0, yPercent: 3 });
-      gsap.set(overlayPortal, {
-        left: discCenterX,
-        top: discCenterY,
-        width: discRect.width,
-        height: discRect.height,
-        xPercent: -50,
-        yPercent: -50,
-        scale: 1,
-        opacity: 1,
-        transformOrigin: "50% 50%",
-      });
+      gsap.set(overlayWash, { opacity: 0 });
 
       const timeline = gsap.timeline({
-        defaults: { ease: "power3.inOut" },
+        defaults: { ease: "power2.inOut" },
         onComplete: () => {
-          router.push(section.href || "/");
+          navigate();
         },
       });
 
       timeline
-        .to(selectedNode, { y: -10, scale: 0.98, opacity: 0, duration: 0.3, ease: "power2.inOut" }, 0)
-        .to(centerCopy, { autoAlpha: 0, y: -16, duration: 0.3, ease: "power2.inOut" }, 0)
-        .to(labels, { opacity: 0, duration: 0.18, stagger: 0.008 }, 0)
+        .to(stage, { filter: "brightness(1.28) contrast(1.16)", duration: 0.06, ease: "power1.out" }, 0)
+        .to(centerCopy, { autoAlpha: 0, y: -8, duration: 0.16 }, 0.03)
+        .to(labels, { opacity: 0, duration: 0.08, stagger: 0.004 }, 0.03)
         .to(
-          stage,
-          { y: -18, scale: 0.985, autoAlpha: 0, duration: 0.42, ease: "power2.inOut" },
-          0
+          nodes,
+          { opacity: 0, y: -8, scale: 0.99, duration: 0.14, stagger: 0.004 },
+          0.05
         )
-        .to(
-          nodes.filter((_, i) => i !== index),
-          { opacity: 0, y: -10, scale: 0.98, duration: 0.28, stagger: 0.008, ease: "power2.inOut" },
-          0
-        )
-        .to(overlayPortal, { autoAlpha: 0, scale: 0.92, duration: 0.2, ease: "power2.inOut" }, 0)
-        .to(overlayWash, { opacity: 1, yPercent: 0, duration: 0.38, ease: "power2.inOut" }, 0.08);
+        .to(stage, { autoAlpha: 0, scale: 0.995, duration: 0.16 }, 0.08)
+        .to(overlayWash, { opacity: 1, duration: 0.1, ease: "power1.out" }, 0.1);
     });
 
     transitionCtxRef.current = ctx;
@@ -422,9 +411,6 @@ export default function HeroOrbit({ sections = [] }) {
 
           <div ref={overlayRef} className="editorial-transition-layer" aria-hidden="true">
             <div ref={overlayWashRef} className="editorial-transition-wash" />
-            <div ref={overlayPortalRef} className="editorial-transition-portal">
-              <div className="editorial-transition-portal-surface" />
-            </div>
           </div>
         </div>
       </div>

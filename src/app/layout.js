@@ -1,6 +1,7 @@
 import "./globals.css";
 import ClientRuntimeGuards from "@/components/ClientRuntimeGuards";
 import CustomCursor from "@/components/CustomCursor";
+import HomeMenu from "@/components/HomeMenu";
 import { Manrope, Newsreader } from "next/font/google";
 
 const manrope = Manrope({
@@ -129,6 +130,7 @@ export default function RootLayout({ children }) {
         />
         <CustomCursor />
         <ClientRuntimeGuards />
+        <HomeMenu />
         {children}
       </body>
     </html>

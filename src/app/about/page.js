@@ -1,394 +1,316 @@
 import Link from "next/link";
-import AboutSidebar from "@/components/AboutSidebar";
-import AboutInteractiveSections from "@/components/AboutInteractiveSections";
+import AboutDistanceGreeting from "@/components/AboutDistanceGreeting";
+import AboutScrollReveals from "@/components/AboutScrollReveals";
+import FitText from "@/components/FitText";
 
-const skills = [
-  "Next.js & React",
-  "Tailwind CSS",
-  "TypeScript",
-  "Python",
-  "AI Integration",
-  "Google Cloud",
-  "n8n",
-];
-
-const funFacts = [
+const roles = [
   {
-    icon: "🎮",
-    title: "League of Legends Player",
-    description:
-      "When I'm not coding, you'll find me trying to destroy enemy bases in Summoners Rift. Yeah, I've been playing League of Legends for over 7 years now.",
+    period: "Dec 2025 - Present",
+    title: "AI Specialist",
+    company: "Akasha Wira International",
+    detail:
+      "Leading applied AI systems for order automation, OCR, RAG, ERP-connected workflows, and internal productivity.",
   },
   {
-    icon: "☕",
-    title: "Coffee Lover",
-    description:
-      "I believe the best code is written with the perfect cup of coffee. Currently obsessed with cold brew with floral and fruity notes (Halu Banana from West Java is my favorite).",
-  },
-  {
-    icon: "📚",
-    title: "Continuous Learner",
-    description:
-      "Always diving deep into new technologies. Currently exploring the intersection of AI and web development, and just finished Full Stack Developer Bootcamp by Devscale.",
-  },
-];
-
-const currentlyReading = [
-  {
-    title: "How Will You Measure Your Life?",
-    author: "Clayton M. Christensen",
-    cover:
-      "https://m.media-amazon.com/images/I/71+T2JA9QuL._AC_UF1000,1000_QL80_.jpg",
-    progress: 15,
-    status: "Currently Reading",
-    thoughts:
-      "It's too early to say, but I love the book so far. The way Christensen applies theories into practical life lessons, like the Bernoulli Principle, is fascinating.",
-    category: "Self-Improvement",
-    favoriteQuote:
-      "It's easier to hold your principles 100% of the time than it is to hold them 98% of the time.",
-  },
-  {
-    title: "Your Next Five Moves",
-    author: "Patrick Bet-David",
-    cover:
-      "https://m.media-amazon.com/images/I/71di3H8Co9L._AC_UF1000,1000_QL80_.jpg",
-    progress: 100,
-    status: "Recently Finished",
-    thoughts:
-      "Bet-David's emphasis on anticipating consequences and planning multiple scenarios ahead is incredibly practical. It's not about predicting the future perfectly, but about developing the mental framework to think strategically.",
-    category: "Self-Improvement",
-    favoriteQuote:
-      "The ability to think strategically is the ability to see the invisible - to see what others cannot see, to anticipate what others cannot anticipate.",
-  },
-];
-
-const career = [
-  {
-    year: "2024 - Present",
-    role: "AI Engineer",
+    period: "Nov 2023 - Dec 2025",
+    title: "AI & Data Specialist",
     company: "Youvit",
-    description:
-      "Building AI-powered solutions that reduce manual operations by 80% and scale customer service infinitely.",
+    detail:
+      "Built production-grade automation, data infrastructure, OCR pipelines, and conversational AI for operations and customer support.",
   },
   {
-    year: "2024 - Present",
-    role: "Data Analytics Consultant",
+    period: "2024 - Present",
+    title: "Data Analytics Consultant",
     company: "Altrabyte",
-    description:
-      "Handling full-stack analytics solutions for retail and e-commerce clients.",
+    detail:
+      "Designing practical analytics systems for retail and commerce teams, from data modeling to dashboards.",
+  },
+  {
+    period: "Freelance",
+    title: "AI & Data Analytics Instructor",
+    company: "RevoU",
+    detail:
+      "Teaching Gen AI, prompt engineering, RAG chatbot development, Document AI, and analytics workflows.",
   },
 ];
 
-const teachingExperience = [
-  {
-    year: "2024 - Present",
-    role: "AI & Data Analytics Mentor",
-    company: "RevoU",
-    description:
-      "Mentoring aspiring data professionals in AI implementation, data analytics fundamentals, and practical data visualizations. Helping students bridge the gap between theory and real-world applications.",
-    highlights: [
-      "AI Implementation",
-      "Career Guidance",
-      "Industry Best Practices",
-    ],
-  },
+const proofPoints = [
+  ["97%", "order processing time reduction"],
+  ["99.98%", "customer service response improvement"],
+  ["88%", "processing cost savings"],
+  ["5.5M IDR", "monthly operational savings"],
+];
+
+const capabilities = [
+  "OpenAI",
+  "LangChain",
+  "RAG",
+  "Document AI",
+  "Computer Vision",
+  "Vector Databases",
+  "Python",
+  "Google Cloud",
+  "Next.js",
+  "Flask",
+  "PostgreSQL",
+  "n8n",
 ];
 
 const education = [
   {
-    year: "2025",
-    title: "Fullstack JavaScript Bootcamp",
-    institution: "Devscale Indonesia",
-    description:
-      "Intensive 3-month bootcamp achieving excellent grade in modern web development. Mastered full-stack JavaScript development from dynamic frontend interfaces to scalable backend APIs. Built complete end-to-end applications using industry best practices, covering both relational and non-relational databases, responsive design, and seamless frontend-backend integration.",
-    image: "/images/about/devscale-certificate.jpg",
-    highlights: [
-      "React.js & State Management",
-      "Node.js & Express.js",
-      "RESTful API Development",
-      "Database Systems (PostgreSQL, MongoDB)",
-      "Full-Stack Application Development",
-      "Git Version Control",
-      "Responsive Web Design",
-    ],
+    period: "2025",
+    title: "Full Stack Developer Bootcamp",
+    place: "Devscale Indonesia",
   },
   {
-    year: "2023",
+    period: "2023",
     title: "Full Stack Data Analytics",
-    institution: "RevoU",
-    description:
-      "Comprehensive data analytics program covering the complete data pipeline from collection to visualization. Gained hands-on experience in data gathering, manipulation, and creating actionable business insights through modern analytics tools and methodologies.",
-    image: "/images/about/revou-certificate.jpg",
-    highlights: [
-      "Data Manipulation (SQL, Python)",
-      "Data Visualization (Tableau, Google Data Studio)",
-      "Spreadsheet Analytics",
-      "Business Intelligence",
-    ],
+    place: "RevoU",
   },
   {
-    year: "2018 - 2023",
-    title: "Computer Engineering",
-    institution: "Univeritas Brawijaya",
-    description:
-      "Computer Engineering degree with thesis focused on developing a classification system for plastic waste types based on Resin Identification Code using YOLOv5s on Raspberry Pi. This project enhanced plastic recycling efficiency and sustainability, demonstrating expertise in deep learning and embedded systems integration.",
-    image: "/images/about/data-science-study.jpg",
-    highlights: [
-      "Computer Engineering",
-      "Computer Vision",
-      "Machine Learning",
-      "Deep Learning",
-    ],
+    period: "2018 - 2023",
+    title: "Bachelor of Engineering, Computer Engineering",
+    place: "Universitas Brawijaya",
   },
 ];
 
+function BeatHeader({ index, label }) {
+  return (
+    <div data-about-reveal className="mb-14 flex items-center gap-4">
+      <span className="text-[0.65rem] font-semibold uppercase tracking-[0.28em] text-gray-300">
+        0{index}
+      </span>
+      <span className="h-px w-10 bg-gray-200" />
+      <span className="text-[0.65rem] font-semibold uppercase tracking-[0.28em] text-gray-400">
+        {label}
+      </span>
+    </div>
+  );
+}
+
+export const metadata = {
+  title: "About",
+  description:
+    "About Hasbi Hassadiqin, an AI Specialist building practical automation, RAG, OCR, analytics, and product systems.",
+};
+
 export default function AboutPage() {
   return (
-    <div className="route-shell route-shell-about">
-      <section className="pt-40 pb-32 px-6">
-        <div className="container mx-auto max-w-6xl">
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-12">
-            <div className="lg:col-span-1">
-              <div className="inline-flex items-center gap-3">
-                <div className="w-2 h-2 bg-indigo-500 rounded-full"></div>
-                <span className="text-sm font-medium text-gray-600 uppercase tracking-wider">
-                  About Me
-                </span>
+    <main className="route-shell route-shell-about about-editorial-shell min-h-screen text-gray-950">
+      <AboutScrollReveals>
+        <div className="px-5 sm:px-8">
+
+          {/* Nav header */}
+          <header
+            data-about-reveal
+            className="ml-16 flex max-w-[calc(100%-10rem)] flex-col gap-5 pt-5 text-gray-500 sm:flex-row sm:items-center"
+          >
+            <div className="text-xs font-semibold uppercase leading-5 tracking-[0.16em]">
+              <AboutDistanceGreeting />
+            </div>
+          </header>
+
+          {/* Title */}
+          <section data-about-title className="pb-16 pt-28 sm:pt-36">
+            <FitText
+              className="about-display-title font-black uppercase leading-[0.72] tracking-[0.04em] text-gray-950"
+              hoverImages={["/images/Me-1.png", "/images/Me-2.jpg"]}
+            >
+              About Hasbi
+            </FitText>
+          </section>
+
+          {/* Beat 1 — Who */}
+          <section className="flex min-h-screen flex-col justify-center py-28">
+            <div className="mx-auto w-full max-w-6xl">
+              <BeatHeader index={1} label="Who" />
+              <div className="grid gap-16 md:grid-cols-[1.6fr_1fr]">
+                <div>
+                  <h2
+                    data-clip-reveal
+                    className="text-[clamp(1.8rem,3.2vw,3.4rem)] font-black uppercase leading-[0.92] tracking-[-0.045em]"
+                  >
+                    AI Specialist building production systems for messy business
+                    workflows.
+                  </h2>
+                  <p data-about-reveal className="mt-10 max-w-xl text-base leading-7 text-gray-500">
+                    I work across RAG, OCR, automation, analytics, and full-stack
+                    tools. The goal is simple: reduce repeated work, make operations
+                    measurable, and ship systems that teams can keep using after the
+                    demo is over.
+                  </p>
+                </div>
+
+                <div data-about-reveal className="flex flex-col justify-between gap-12 md:pt-2">
+                  <div className="space-y-3">
+                    <p className="mb-5 text-[0.65rem] font-semibold uppercase tracking-[0.28em] text-gray-400">
+                      Find me
+                    </p>
+                    <Link
+                      href="/CV_Hasbi Hassadiqin.pdf"
+                      className="block text-xs font-semibold uppercase tracking-[0.18em] text-[#6840c8]"
+                    >
+                      Resume ↗
+                    </Link>
+                    <Link
+                      href="https://www.linkedin.com/in/hasbi-hassadiqin/"
+                      className="block text-xs font-semibold uppercase tracking-[0.18em] text-[#6840c8]"
+                    >
+                      LinkedIn ↗
+                    </Link>
+                  </div>
+                  <div className="space-y-3">
+                    <p className="mb-5 text-[0.65rem] font-semibold uppercase tracking-[0.28em] text-gray-400">
+                      Advocate of
+                    </p>
+                    <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#6840c8]">Practical AI</p>
+                    <p className="text-xs font-semibold uppercase tracking-[0.18em] text-gray-500">Automation</p>
+                    <p className="text-xs font-semibold uppercase tracking-[0.18em] text-gray-500">Clear Systems</p>
+                  </div>
+                </div>
               </div>
             </div>
+          </section>
 
-            <div className="lg:col-span-3">
-              <h1 className="text-4xl lg:text-5xl font-light mb-8 leading-tight text-gray-900">
-                From curiosity to code,
-                <br />
-                <span className="text-gray-500">
-                  building the future with AI
-                </span>
-              </h1>
-              <p className="text-xl text-gray-600 leading-relaxed max-w-3xl">
-                I&apos;m Hasbi Hassadiqin, an AI Engineer based in Jakarta who
-                transforms complex problems into elegant digital solutions. My
-                journey combines technical expertise with creative
-                problem-solving to build systems that truly make a difference.
-              </p>
+          {/* Beat 2 — Impact */}
+          <section className="flex min-h-screen flex-col justify-center py-28">
+            <div className="mx-auto w-full max-w-6xl">
+              <BeatHeader index={2} label="Impact" />
+              <div className="grid gap-0 sm:grid-cols-2">
+                {proofPoints.map(([value, label]) => (
+                  <div
+                    key={value}
+                    data-about-reveal
+                    className="border-t border-gray-200/80 py-10 pr-12"
+                  >
+                    <p
+                      data-clip-reveal
+                      className="whitespace-nowrap text-[clamp(3rem,6vw,7rem)] font-black uppercase leading-none tracking-[-0.07em]"
+                    >
+                      {value}
+                    </p>
+                    <p className="mt-4 text-[0.65rem] font-semibold uppercase leading-5 tracking-[0.22em] text-[#6840c8]">
+                      {label}
+                    </p>
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
-        </div>
-      </section>
+          </section>
 
-      <section className="pb-32 px-6">
-        <div className="container mx-auto max-w-7xl">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
-            <div className="lg:col-span-4">
-              <AboutSidebar skills={skills} />
+          {/* Beat 3 — Work */}
+          <section className="flex min-h-screen flex-col justify-center py-28">
+            <div className="mx-auto w-full max-w-6xl">
+              <BeatHeader index={3} label="Experience" />
+              <h2
+                data-clip-reveal
+                className="mb-14 text-[clamp(3.5rem,8vw,10rem)] font-black uppercase leading-[0.78] tracking-[-0.08em]"
+              >
+                Work so far
+              </h2>
+              <div className="divide-y divide-gray-200/80 border-y border-gray-200/80">
+                {roles.map((role, index) => (
+                  <article
+                    key={`${role.company}-${role.title}`}
+                    data-about-reveal
+                    className="grid gap-6 py-8 md:grid-cols-[3.5rem_10rem_1fr]"
+                  >
+                    <span className="text-xs font-semibold tracking-[0.12em] text-[#6840c8]">
+                      0{index + 1}
+                    </span>
+                    <time className="text-xs font-semibold uppercase tracking-[0.1em] text-gray-400 md:pt-1">
+                      {role.period}
+                    </time>
+                    <div>
+                      <h3 className="text-2xl font-black uppercase leading-none tracking-[-0.04em]">
+                        {role.title}
+                      </h3>
+                      <p className="mt-2 text-[0.65rem] font-semibold uppercase tracking-[0.22em] text-[#6840c8]">
+                        {role.company}
+                      </p>
+                      <p className="mt-5 max-w-2xl text-sm leading-6 text-gray-500">
+                        {role.detail}
+                      </p>
+                    </div>
+                  </article>
+                ))}
+              </div>
             </div>
+          </section>
 
-            <div className="lg:col-span-8 space-y-16">
-              <div>
-                <h2 className="text-3xl font-light text-gray-900 mb-8 leading-tight">
-                  The Professional Side
+          {/* Beat 4 — Background */}
+          <section className="flex min-h-screen flex-col justify-center py-28">
+            <div className="mx-auto w-full max-w-6xl">
+              <BeatHeader index={4} label="Background" />
+              <div className="grid gap-20 md:grid-cols-[1.2fr_1fr]">
+                <div data-about-reveal>
+                  <p className="mb-8 text-[0.65rem] font-semibold uppercase tracking-[0.28em] text-gray-400">
+                    Stack
+                  </p>
+                  <div className="flex flex-wrap gap-x-5 gap-y-3">
+                    {capabilities.map((item) => (
+                      <span
+                        key={item}
+                        className="border-b border-gray-200 pb-1 text-lg font-black uppercase leading-none tracking-[-0.03em] text-gray-800"
+                      >
+                        {item}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                <div data-about-reveal>
+                  <p className="mb-8 text-[0.65rem] font-semibold uppercase tracking-[0.28em] text-gray-400">
+                    Education
+                  </p>
+                  <div className="divide-y divide-gray-100 border-t border-gray-100">
+                    {education.map((item) => (
+                      <div
+                        key={`${item.period}-${item.title}`}
+                        className="grid grid-cols-[4.5rem_1fr] gap-4 py-5"
+                      >
+                        <span className="text-xs font-semibold text-[#6840c8]">
+                          {item.period}
+                        </span>
+                        <div>
+                          <p className="text-sm font-black uppercase leading-snug">
+                            {item.title}
+                          </p>
+                          <p className="mt-1 text-xs text-gray-400">{item.place}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* Beat 5 — CTA */}
+          <section className="flex min-h-screen flex-col justify-center pb-24 pt-28">
+            <div className="mx-auto w-full max-w-6xl">
+              <div className="border-t border-gray-200/80 pt-10">
+                <h2
+                  data-clip-reveal
+                  className="text-[clamp(4rem,9vw,11rem)] font-black uppercase leading-[0.78] tracking-[-0.08em]"
+                >
+                  Let&apos;s build
                 </h2>
-                <div className="space-y-6 text-gray-600 leading-relaxed text-lg">
-                  <p>
-                    My journey into AI and web development began with a
-                    fundamental question: &quot;How can technology make
-                    people&apos;s lives genuinely better?&quot; What started as a
-                    deliberate path toward data science, from analyst to
-                    engineer to scientist, took an unexpected turn when I
-                    discovered the emerging field of AI engineering.
-                  </p>
-                  <p>
-                    Rather than waiting until I felt expert enough, I chose to
-                    embrace this unanticipated opportunity. Sometimes the best
-                    career moves come from recognizing when to pivot from your
-                    original plan and lean into new possibilities that align
-                    with your core mission.
-                  </p>
-                  <p>
-                    At Youvit, this philosophy translates into building AI
-                    systems that transform customer service, automate complex
-                    document processing, and scale operations without losing the
-                    human touch. Every project I work on eliminates repetitive
-                    tasks so people can focus on what truly matters, whether
-                    that&apos;s delivering better customer experiences or solving
-                    complex business challenges.
-                  </p>
-                </div>
-              </div>
-
-              <div>
-                <h3 className="text-2xl font-medium text-gray-900 mb-8">
-                  Career Highlights
-                </h3>
-                <div className="space-y-8">
-                  {career.map((item) => (
-                    <div
-                      key={`${item.year}-${item.role}`}
-                      className="border-l-2 border-gray-200 pl-8 pb-8 last:pb-0"
-                    >
-                      <div className="flex items-center gap-4 mb-3">
-                        <time className="text-sm font-medium text-indigo-600">
-                          {item.year}
-                        </time>
-                      </div>
-                      <h4 className="text-xl font-medium text-gray-900 mb-2">
-                        {item.role}
-                      </h4>
-                      <p className="text-gray-600 font-medium mb-4 text-lg">
-                        {item.company}
-                      </p>
-                      <p className="text-gray-600 leading-relaxed">
-                        {item.description}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <div>
-                <h3 className="text-2xl font-medium text-gray-900 mb-8">
-                  Teaching & Mentoring
-                </h3>
-                <div className="space-y-8">
-                  {teachingExperience.map((item) => (
-                    <div
-                      key={`${item.year}-${item.role}`}
-                      className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-2xl p-8 border border-indigo-100"
-                    >
-                      <div className="flex items-center gap-4 mb-3">
-                        <time className="text-sm font-medium text-indigo-600">
-                          {item.year}
-                        </time>
-                        <div className="w-2 h-2 bg-indigo-500 rounded-full"></div>
-                      </div>
-                      <h4 className="text-xl font-medium text-gray-900 mb-2">
-                        {item.role}
-                      </h4>
-                      <p className="text-indigo-600 font-medium mb-4 text-lg">
-                        {item.company}
-                      </p>
-                      <p className="text-gray-700 leading-relaxed mb-6">
-                        {item.description}
-                      </p>
-
-                      <div className="flex flex-wrap gap-3">
-                        {item.highlights.map((highlight) => (
-                          <span
-                            key={highlight}
-                            className="px-3 py-1 bg-indigo-100 text-indigo-700 text-sm rounded-full font-medium"
-                          >
-                            {highlight}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-
-                <div className="mt-8 p-6 bg-gray-50 rounded-xl">
-                  <p className="text-gray-600 leading-relaxed">
-                    <span className="font-medium text-gray-900">
-                      💡 Why I teach:
-                    </span>{" "}
-                    Sharing knowledge isn&apos;t just about helping others
-                    grow. It&apos;s about continuously learning myself. Every
-                    question from students challenges me to think deeper and
-                    explain concepts more clearly.
-                  </p>
-                </div>
-              </div>
-
-              <AboutInteractiveSections
-                education={education}
-                currentlyReading={currentlyReading}
-              />
-
-              <div>
-                <h3 className="text-2xl font-medium text-gray-900 mb-8">
-                  Beyond the Code
-                </h3>
-                <div className="grid gap-6">
-                  {funFacts.map((fact) => (
-                    <div
-                      key={fact.title}
-                      className="flex gap-6 p-6 bg-white rounded-2xl hover:bg-gray-50 transition-colors duration-200 border border-gray-100"
-                    >
-                      <div className="text-3xl flex-shrink-0">{fact.icon}</div>
-                      <div>
-                        <h4 className="font-medium text-gray-900 mb-3 text-lg">
-                          {fact.title}
-                        </h4>
-                        <p className="text-gray-600 leading-relaxed">
-                          {fact.description}
-                        </p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <div className="bg-gradient-to-r from-gray-900 to-gray-800 rounded-3xl p-12 text-center">
-                <h3 className="text-3xl font-light text-white mb-6">
-                  Let&apos;s Build Something Amazing
-                </h3>
-                <p className="text-gray-300 mb-10 leading-relaxed text-lg max-w-2xl mx-auto">
-                  Whether you&apos;re looking to automate processes, integrate
-                  AI into your business, or build the next great web
-                  application, I&apos;d love to hear about your project.
-                </p>
-                <div className="flex flex-col sm:flex-row gap-6 justify-center">
+                <div data-about-reveal className="mt-10 flex items-center gap-6">
                   <Link
                     href="/contact"
-                    className="inline-flex items-center justify-center gap-3 bg-white text-gray-900 hover:bg-gray-100 px-8 py-4 rounded-xl font-medium transition-colors group text-lg"
+                    className="text-xs font-semibold uppercase tracking-[0.22em] text-[#6840c8]"
                   >
-                    <span>Start a Project</span>
-                    <svg
-                      className="w-5 h-5 group-hover:translate-x-1 transition-transform"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      strokeWidth={2}
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M17 8l4 4m0 0l-4 4m4-4H3"
-                      />
-                    </svg>
+                    Start a conversation
                   </Link>
-                  <Link
-                    href="/projects"
-                    className="inline-flex items-center justify-center gap-3 text-white hover:text-gray-200 px-8 py-4 font-medium transition-colors text-lg"
-                  >
-                    <span>View My Work</span>
-                  </Link>
+                  <span className="h-px w-16 bg-[#6840c8]/30" />
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-      </section>
+          </section>
 
-      <div className="relative">
-        <div className="w-full h-px bg-gray-200"></div>
-        <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2">
-          <div className="w-8 h-8 bg-white border border-gray-200 rounded-full flex items-center justify-center text-gray-400">
-            <svg
-              className="w-4 h-4"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth={2}
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-              />
-            </svg>
-          </div>
         </div>
-      </div>
-    </div>
+      </AboutScrollReveals>
+    </main>
   );
 }
