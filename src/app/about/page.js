@@ -2,6 +2,7 @@ import Link from "next/link";
 import AboutDistanceGreeting from "@/components/AboutDistanceGreeting";
 import AboutScrollReveals from "@/components/AboutScrollReveals";
 import FitText from "@/components/FitText";
+import ImpactCard from "@/components/ImpactCard";
 
 const roles = [
   {
@@ -35,21 +36,42 @@ const roles = [
 ];
 
 const proofPoints = [
-  ["97%", "order processing time reduction"],
-  ["99.98%", "customer service response improvement"],
-  ["88%", "processing cost savings"],
-  ["5.5M IDR", "monthly operational savings"],
+  {
+    value: "97%",
+    label: "order processing time reduction",
+    tooltip:
+      "OCR + Python automation at Youvit cut order-to-ERP data entry from hours of manual work down to minutes — end-to-end, no human in the loop.",
+  },
+  {
+    value: "99.98%",
+    label: "customer service response improvement",
+    tooltip:
+      "Nutritalk WhatsApp AI assistant (RAG-powered) reduced response time from 4–5 hours to 4 seconds, handling customer queries around the clock.",
+  },
+  {
+    value: "88%",
+    label: "processing cost savings",
+    tooltip:
+      "Eliminating manual document handling through OCR pipelines and automation slashed operational processing costs by nearly nine-tenths.",
+  },
+  {
+    value: "5.5M IDR",
+    label: "monthly operational savings",
+    tooltip:
+      "Combined impact of order automation and AI-powered customer service — 5.5M IDR saved every month in recurring operational overhead.",
+  },
 ];
 
 const capabilities = [
-  "OpenAI",
+  "Claude Code",
+  "LLM",
   "LangChain",
   "RAG",
   "Document AI",
   "Computer Vision",
   "Vector Databases",
   "Python",
-  "Google Cloud",
+  "Google Cloud Platform",
   "Next.js",
   "Flask",
   "PostgreSQL",
@@ -99,7 +121,6 @@ export default function AboutPage() {
     <main className="route-shell route-shell-about about-editorial-shell min-h-screen text-gray-950">
       <AboutScrollReveals>
         <div className="px-5 sm:px-8">
-
           {/* Nav header */}
           <header
             data-about-reveal
@@ -133,15 +154,21 @@ export default function AboutPage() {
                     AI Specialist building production systems for messy business
                     workflows.
                   </h2>
-                  <p data-about-reveal className="mt-10 max-w-xl text-base leading-7 text-gray-500">
-                    I work across RAG, OCR, automation, analytics, and full-stack
-                    tools. The goal is simple: reduce repeated work, make operations
-                    measurable, and ship systems that teams can keep using after the
-                    demo is over.
+                  <p
+                    data-about-reveal
+                    className="mt-10 max-w-xl text-base leading-7 text-gray-500"
+                  >
+                    I work across RAG, OCR, automation, analytics, and
+                    full-stack tools. The goal is simple: reduce repeated work,
+                    make operations measurable, and ship systems that teams can
+                    keep using after the demo is over.
                   </p>
                 </div>
 
-                <div data-about-reveal className="flex flex-col justify-between gap-12 md:pt-2">
+                <div
+                  data-about-reveal
+                  className="flex flex-col justify-between gap-12 md:pt-2"
+                >
                   <div className="space-y-3">
                     <p className="mb-5 text-[0.65rem] font-semibold uppercase tracking-[0.28em] text-gray-400">
                       Find me
@@ -161,11 +188,17 @@ export default function AboutPage() {
                   </div>
                   <div className="space-y-3">
                     <p className="mb-5 text-[0.65rem] font-semibold uppercase tracking-[0.28em] text-gray-400">
-                      Advocate of
+                      Working on
                     </p>
-                    <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#6840c8]">Practical AI</p>
-                    <p className="text-xs font-semibold uppercase tracking-[0.18em] text-gray-500">Automation</p>
-                    <p className="text-xs font-semibold uppercase tracking-[0.18em] text-gray-500">Clear Systems</p>
+                    <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#6840c8]">
+                      Practical AI
+                    </p>
+                    <p className="text-xs font-semibold uppercase tracking-[0.18em] text-gray-500">
+                      Automation
+                    </p>
+                    <p className="text-xs font-semibold uppercase tracking-[0.18em] text-gray-500">
+                      Clear Systems
+                    </p>
                   </div>
                 </div>
               </div>
@@ -177,21 +210,13 @@ export default function AboutPage() {
             <div className="mx-auto w-full max-w-6xl">
               <BeatHeader index={2} label="Impact" />
               <div className="grid gap-0 sm:grid-cols-2">
-                {proofPoints.map(([value, label]) => (
-                  <div
-                    key={value}
-                    data-about-reveal
-                    className="border-t border-gray-200/80 py-10 pr-12"
-                  >
-                    <p
-                      data-clip-reveal
-                      className="whitespace-nowrap text-[clamp(3rem,6vw,7rem)] font-black uppercase leading-none tracking-[-0.07em]"
-                    >
-                      {value}
-                    </p>
-                    <p className="mt-4 text-[0.65rem] font-semibold uppercase leading-5 tracking-[0.22em] text-[#6840c8]">
-                      {label}
-                    </p>
+                {proofPoints.map((point) => (
+                  <div key={point.value} data-about-reveal>
+                    <ImpactCard
+                      value={point.value}
+                      label={point.label}
+                      tooltip={point.tooltip}
+                    />
                   </div>
                 ))}
               </div>
@@ -276,7 +301,9 @@ export default function AboutPage() {
                           <p className="text-sm font-black uppercase leading-snug">
                             {item.title}
                           </p>
-                          <p className="mt-1 text-xs text-gray-400">{item.place}</p>
+                          <p className="mt-1 text-xs text-gray-400">
+                            {item.place}
+                          </p>
                         </div>
                       </div>
                     ))}
@@ -296,7 +323,10 @@ export default function AboutPage() {
                 >
                   Let&apos;s build
                 </h2>
-                <div data-about-reveal className="mt-10 flex items-center gap-6">
+                <div
+                  data-about-reveal
+                  className="mt-10 flex items-center gap-6"
+                >
                   <Link
                     href="/contact"
                     className="text-xs font-semibold uppercase tracking-[0.22em] text-[#6840c8]"
@@ -308,7 +338,6 @@ export default function AboutPage() {
               </div>
             </div>
           </section>
-
         </div>
       </AboutScrollReveals>
     </main>
