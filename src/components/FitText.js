@@ -2,8 +2,11 @@
 
 import { useEffect, useRef, useCallback } from "react";
 import { gsap } from "gsap";
+import { ScrambleTextPlugin } from "gsap/ScrambleTextPlugin";
 
-export default function FitText({ children, className, hoverImages }) {
+gsap.registerPlugin(ScrambleTextPlugin);
+
+export default function FitText({ children, className, hoverImages, scramble = false }) {
   const containerRef = useRef(null);
   const textRef = useRef(null);
   const wordRefs = useRef([]);
@@ -31,6 +34,31 @@ export default function FitText({ children, className, hoverImages }) {
     ro.observe(containerRef.current);
     return () => ro.disconnect();
   }, [fit]);
+
+  useEffect(() => {
+    if (!scramble) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    const tl = gsap.timeline({ delay: 0.1 });
+    wordRefs.current.forEach((el, i) => {
+      if (!el) return;
+      const originalText = el.textContent;
+      tl.to(
+        el,
+        {
+          duration: 0.85,
+          scrambleText: {
+            text: originalText,
+            chars: "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+            revealDelay: 0.2,
+            speed: 0.6,
+          },
+          ease: "none",
+        },
+        i === 0 ? 0 : "-=0.45"
+      );
+    });
+  }, [scramble]);
 
   useEffect(() => {
     if (!hasImages || !imageRef.current) return;

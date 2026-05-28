@@ -3,8 +3,9 @@
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { ScrambleTextPlugin } from "gsap/ScrambleTextPlugin";
 
-gsap.registerPlugin(ScrollTrigger);
+gsap.registerPlugin(ScrollTrigger, ScrambleTextPlugin);
 
 export default function AboutScrollReveals({ children }) {
   const rootRef = useRef(null);
@@ -18,7 +19,7 @@ export default function AboutScrollReveals({ children }) {
     ).matches;
 
     if (prefersReducedMotion) {
-      gsap.set(root.querySelectorAll("[data-about-reveal], [data-clip-reveal]"), {
+      gsap.set(root.querySelectorAll("[data-about-reveal], [data-clip-reveal], [data-scramble-reveal]"), {
         autoAlpha: 1,
         y: 0,
         clipPath: "none",
@@ -63,6 +64,30 @@ export default function AboutScrollReveals({ children }) {
               clipPath: "inset(0 0% 0 0)",
               duration: 1.1,
               ease: "power4.out",
+            });
+          },
+        });
+      });
+
+      // — Scramble reveal (display headings)
+      const scrambleItems = gsap.utils.toArray("[data-scramble-reveal]");
+      scrambleItems.forEach((el) => {
+        const originalText = el.textContent;
+        gsap.set(el, { autoAlpha: 1 });
+        ScrollTrigger.create({
+          trigger: el,
+          start: "top 88%",
+          once: true,
+          onEnter: () => {
+            gsap.to(el, {
+              duration: 1.1,
+              scrambleText: {
+                text: originalText,
+                chars: "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+                revealDelay: 0.25,
+                speed: 0.55,
+              },
+              ease: "none",
             });
           },
         });

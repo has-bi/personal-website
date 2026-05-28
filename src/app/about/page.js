@@ -136,6 +136,7 @@ export default function AboutPage() {
             <FitText
               className="about-display-title font-black uppercase leading-[0.72] tracking-[0.04em] text-gray-950"
               hoverImages={["/images/Me-1.png", "/images/Me-2.jpg"]}
+              scramble
             >
               About Hasbi
             </FitText>
@@ -148,7 +149,7 @@ export default function AboutPage() {
               <div className="grid gap-16 md:grid-cols-[1.6fr_1fr]">
                 <div>
                   <h2
-                    data-clip-reveal
+                    data-scramble-reveal
                     className="text-[clamp(1.8rem,3.2vw,3.4rem)] font-black uppercase leading-[0.92] tracking-[-0.045em]"
                   >
                     AI Specialist building production systems for messy business
@@ -228,7 +229,7 @@ export default function AboutPage() {
             <div className="mx-auto w-full max-w-6xl">
               <BeatHeader index={3} label="Experience" />
               <h2
-                data-clip-reveal
+                data-scramble-reveal
                 className="mb-14 text-[clamp(3.5rem,8vw,10rem)] font-black uppercase leading-[0.78] tracking-[-0.08em]"
               >
                 Work so far
@@ -318,7 +319,7 @@ export default function AboutPage() {
             <div className="mx-auto w-full max-w-6xl">
               <div className="border-t border-gray-200/80 pt-10">
                 <h2
-                  data-clip-reveal
+                  data-scramble-reveal
                   className="text-[clamp(4rem,9vw,11rem)] font-black uppercase leading-[0.78] tracking-[-0.08em]"
                 >
                   Let&apos;s build
