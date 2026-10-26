@@ -747,7 +747,49 @@ footer-band
 - **Images**: the author's own screenshots and diagrams only. The current Notion posts hot-link third-party images (game screenshots, other blogs); those are replaced before migration.
 - Mobile: meta moves above the title as a 2-column grid; the TOC collapses into an `ON THIS PAGE · 06 ↓` bar; cover and figures go full-bleed; the pager stacks (next-lesson card, then `ALL WRITING`).
 
-### Project Pages
+### Projects Index (`/projects`)
+
+```
+§ 02 · PROJECTS  /projects (display-xl) + dek | ABOUT THIS LIST: "Personal and bootcamp projects only. Client and employer work is under NDA and is not listed here."
+filter bar       TOPIC [ALL][AI][AUTOMATION][WEB]                                02 PROJECTS · NEWEST FIRST
+grid             project-cards, 2-up (3-up from 3+ projects), 1-up mobile
+footer-band
+```
+The NDA line is part of the page on purpose: it answers "where is your work?" before a visitor has to ask.
+
+### Project Page (`/projects/<slug>`)
+
+```
+breadcrumb       ← /projects / slug                                               live link ↗ (if one exists)
+header           § 02 · PROJECTS / TOPIC → title (display-lg) → the owner's description as dek
+meta strip       TOPIC · YEAR · ROLE · TEAM · LINK
+cover            16:9, the owner's own screenshot
+body             sticky TOC + LINKS (live app, source code if public) | 680 column:
+                   01 What it does · 02 What I built (numbered feature rows + screenshots)
+                   03 How it works (architecture spec table: FRONTEND / BACKEND / AUTH / DEPLOY)
+                   04 What was hard (PROBLEM / WHAT WORKED pairs) · 05 What I learned · 06 What I'd do next
+                   callout NOTE for caveats (e.g. "the live app may be unavailable")
+pager            BACK [ALL PROJECTS] | next project card (button-ghost OPEN PROJECT)
+footer-band
+```
+- This replaces the earlier seven-heading case-study order; "What was hard" carries the "wrong obvious fix" idea as PROBLEM / WHAT WORKED pairs, which matches how the owner already writes project notes.
+- `WHAT WORKED` labels use `{colors.accent}`; it is the one accent moment in the section.
+- Only links that exist are shown. "Source code" appears only for a public repo.
+- Mobile: meta becomes a 2-column grid above the title; the TOC collapses; feature rows and the architecture table stack key over value.
+
+### About (`/about`)
+
+```
+header (split)   § 03 · ABOUT /about + owner paragraph [YOUR WORDS] | about-photo 4:5
+§ 03.1 TEACHING  "What I teach": role card (REVOU · FREELANCE, AI & Data Analytics Instructor) | numbered topic rows with tags
+§ 03.2 LEARNING  "How I learned it": year · programme · institution, certificate thumbnails where they exist
+§ 03.3 TOOLS     "What I teach with": three columns AI / AUTOMATION / WEB & DATA, each with a topic dot
+footer-band
+```
+- About deliberately uses `{typography.title-lg}` sub-headings instead of slash-headings (RHYTHM 2 break for a personal page).
+- No employer history: the page is about teaching and learning. Day-job roles stay off the site (NDA and rebrand); the owner can link a CV later if needed.
+- Certificate thumbnails come from `public/images/about/` (Devscale, RevoU).
+- Topic rows are 44px minimum; they become links to `/writing?topic=…` only once posts exist for that topic.
 
 **`case-study-header`**: title in `{typography.display-lg}`, one-line outcome below in `{typography.display-md}` `{colors.muted}`, then `{component.project-meta}` as a key-value block.
 
@@ -887,7 +929,9 @@ Logged decisions:
 **Other:**
 - **Signature moment** (terminal hero vs. a small live widget vs. none) is undecided.
 - Tutorial fields still to be written by the owner for existing posts: `level`, `prerequisites`, `check`. The `learn` lines in the Figma mockup are drafted from the useState post's own headings; confirm or rewrite.
-- `/projects` index and project pages are not designed yet.
+- Project page content comes from the owner's Notion page for TheraMind. Two items still need the owner: "What I'd do next" and whether the source code is public. The Notion conclusion uses an em dash after "a bootcamp final project"; that sentence was left out of the mockup, and the owner decides how to rewrite it before migration (R-02).
+- About: the owner paragraph, the photo, and whether to add a CV link.
+- The Next.js mini project has no write-up yet; its card links to a page that must exist before launch, or the card waits.
 - The logo PNGs still use `#6A55F2`; re-export in `#6840C8`.
 - Form components (contact form, newsletter) are out of scope; contact is email-only for now.
 - Line-art illustration style is described but no assets exist yet.
