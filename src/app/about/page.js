@@ -140,12 +140,6 @@ export default function AboutPage() {
                       Find me
                     </p>
                     <Link
-                      href="/CV_Hasbi Hassadiqin.pdf"
-                      className="block text-xs font-semibold uppercase tracking-[0.18em] text-[#6840c8]"
-                    >
-                      Resume ↗
-                    </Link>
-                    <Link
                       href="https://www.linkedin.com/in/hasbi-hassadiqin/"
                       className="block text-xs font-semibold uppercase tracking-[0.18em] text-[#6840c8]"
                     >
