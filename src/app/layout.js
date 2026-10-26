@@ -14,49 +14,36 @@ const newsreader = Newsreader({
   variable: "--font-display",
 });
 
+const SITE_URL = "https://www.hasbi.pro";
+const SITE_TITLE = "Hasbi Hassadiqin | Tutorials on AI & Automation";
+const SITE_DESCRIPTION =
+  "Tutorials and notes on AI and automation by Hasbi Hassadiqin, plus a few personal projects.";
+
 export const metadata = {
+  metadataBase: new URL(SITE_URL),
   title: {
-    default: "Hasbi Hassadiqin | Applied AI Engineer",
+    default: SITE_TITLE,
     template: "%s | Hasbi Hassadiqin",
   },
-  description:
-    "Minimal editorial portfolio for Hasbi Hassadiqin, an applied AI engineer building practical AI products, automation systems, and thoughtful interfaces.",
-  keywords: [
-    "AI Engineer",
-    "Applied AI",
-    "AI Product Engineer",
-    "Automation",
-    "LLM Systems",
-    "Portfolio",
-  ],
-  authors: [{ name: "Hasbi Hassadiqin", url: "https://www.hasbi.pro" }],
+  description: SITE_DESCRIPTION,
+  keywords: ["AI tutorials", "LLM", "RAG", "Automation", "Hasbi Hassadiqin"],
+  authors: [{ name: "Hasbi Hassadiqin", url: SITE_URL }],
   creator: "Hasbi Hassadiqin",
   publisher: "Hasbi Hassadiqin",
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://www.hasbi.pro",
-    title: "Hasbi Hassadiqin | Applied AI Engineer",
-    description:
-      "Minimal editorial portfolio focused on applied AI, product thinking, and practical systems that ship.",
+    url: SITE_URL,
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
     siteName: "Hasbi Hassadiqin",
-    images: [
-      {
-        url: "https://www.hasbi.pro/images/og-image.jpg",
-        width: 1200,
-        height: 630,
-        alt: "Hasbi Hassadiqin - Applied AI Engineer",
-      },
-    ],
   },
 
   twitter: {
-    card: "summary_large_image",
-    title: "Hasbi Hassadiqin | Applied AI Engineer",
-    description:
-      "Minimal editorial portfolio focused on applied AI, automation, and writing.",
+    card: "summary",
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
     creator: "@hssdqn",
-    images: ["https://www.hasbi.pro/images/twitter-card.jpg"],
   },
 
   icons: {
@@ -100,7 +87,7 @@ export const metadata = {
 };
 
 export const viewport = {
-  themeColor: "#f7f1e8",
+  themeColor: "#ffffff",
   width: "device-width",
   initialScale: 1,
 };
@@ -109,12 +96,13 @@ const personSchema = {
   "@context": "https://schema.org",
   "@type": "Person",
   name: "Hasbi Hassadiqin",
-  url: "https://www.hasbi.pro",
-  sameAs: ["https://twitter.com/hssdqn"],
-  jobTitle: "Applied AI Engineer",
-  description:
-    "Applied AI Engineer building practical AI products, automation systems, and thoughtful interfaces.",
-  image: "https://www.hasbi.pro/images/og-image.jpg",
+  url: SITE_URL,
+  sameAs: [
+    "https://twitter.com/hssdqn",
+    "https://www.linkedin.com/in/hasbi-hassadiqin/",
+    "https://github.com/has-bi",
+  ],
+  description: "Writes tutorials and notes on AI and automation.",
 };
 
 export default function RootLayout({ children }) {

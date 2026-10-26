@@ -78,7 +78,7 @@ function BeatHeader({ index, label }) {
 export const metadata = {
   title: "About",
   description:
-    "About Hasbi Hassadiqin, an AI Specialist building practical automation, RAG, OCR, analytics, and product systems.",
+    "About Hasbi Hassadiqin, who writes tutorials and notes on AI and automation.",
 };
 
 export default function AboutPage() {

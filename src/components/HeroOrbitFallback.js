@@ -8,8 +8,8 @@ export default function HeroOrbitFallback({ sections = [] }) {
       <div className="min-h-[calc(100svh-7rem)] grid gap-8 content-center py-10">
         <div className="max-w-2xl mx-auto text-center px-4">
           <p className="editorial-orbit-copy">
-            Applied AI engineer building practical systems, products, and
-            interfaces with a minimal approach.
+            Tutorials and notes on AI and automation, plus a few personal
+            projects.
           </p>
         </div>
 

@@ -87,7 +87,7 @@ export default function HomeMenu() {
         >
           <div className="editorial-menu-note">
             <span>Navigation</span>
-            <p>Applied AI, product systems, and writing.</p>
+            <p>Tutorials and notes on AI and automation.</p>
           </div>
 
           <div className="editorial-menu-primary">

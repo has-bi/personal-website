@@ -4,7 +4,7 @@ import { getPosts } from "@/utils/content";
 
 export const metadata = {
   title: "Blog",
-  description: "Thoughts on development, AI, and building digital experiences",
+  description: "Tutorials and notes on AI and automation.",
 };
 
 export default async function BlogPage() {

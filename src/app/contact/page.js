@@ -22,7 +22,7 @@ const secondaryLinks = [
 export const metadata = {
   title: "Contact",
   description:
-    "Get in touch with Hasbi Hassadiqin for AI, automation, and web project inquiries.",
+    "Where to reach Hasbi Hassadiqin.",
 };
 
 export default function ContactPage() {

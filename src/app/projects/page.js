@@ -5,7 +5,7 @@ import ProjectCard from "@/components/ProjectCard";
 export const metadata = {
   title: "Projects",
   description:
-    "A showcase of my work in AI, automation, and web development. Explore projects that demonstrate innovation and technical expertise.",
+    "Personal projects in AI, automation, and web development.",
 };
 
 export default async function ProjectsPage() {

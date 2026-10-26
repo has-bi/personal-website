@@ -19,9 +19,9 @@ function orbitSampleImage(index = 0) {
 }
 
 const centerTextLines = [
-  "Applied AI engineer",
-  "building practical systems",
-  "You can see my work through",
+  "Tutorials and notes",
+  "on AI and automation",
+  "Start reading through",
   "click the circle!",
 ];
 
