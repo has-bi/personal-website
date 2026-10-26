@@ -1,7 +1,6 @@
-import { getProjectsFromNotion } from "@/utils/notion";
+import { getProjects } from "@/utils/content";
 import ProjectCard from "@/components/ProjectCard";
 
-export const revalidate = 86400;
 
 export const metadata = {
   title: "Projects",
@@ -13,7 +12,7 @@ export default async function ProjectsPage() {
   let projects = [];
 
   try {
-    projects = await getProjectsFromNotion();
+    projects = await getProjects();
   } catch (error) {
     console.error("❌ Error fetching projects:", error);
     // Continue with empty array if fetch fails

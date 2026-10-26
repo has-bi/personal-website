@@ -1,11 +1,11 @@
-import { getBlogPostsFromNotion, getProjectsFromNotion } from "@/utils/notion";
+import { getPosts, getProjects } from "@/utils/content";
 
 const BASE_URL = "https://www.hasbi.pro";
 
 export default async function sitemap() {
   const [posts, projects] = await Promise.all([
-    getBlogPostsFromNotion().catch(() => []),
-    getProjectsFromNotion().catch(() => []),
+    getPosts().catch(() => []),
+    getProjects().catch(() => []),
   ]);
 
   const staticRoutes = [

@@ -2,17 +2,12 @@
 import { notFound, unstable_rethrow } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-import {
-  getProjectFromNotion,
-  getProjectSummaryFromNotion,
-  getProjectsFromNotion,
-} from "@/utils/notion";
-import NotionRenderer from "@/components/NotionRenderer";
+import { getProject, getProjects } from "@/utils/content";
 
-export const revalidate = 86400;
+export const dynamicParams = false;
 
 export async function generateStaticParams() {
-  const projects = await getProjectsFromNotion();
+  const projects = await getProjects();
   return projects.map((project) => ({
     slug: project.slug,
   }));
@@ -22,7 +17,7 @@ export async function generateMetadata({ params }) {
   const { slug } = await params;
 
   try {
-    const project = await getProjectSummaryFromNotion(slug);
+    const project = await getProject(slug);
 
     if (!project) {
       return {
@@ -54,7 +49,7 @@ export default async function ProjectPage({ params }) {
 
   let project;
   try {
-    project = await getProjectFromNotion(slug);
+    project = await getProject(slug);
   } catch (error) {
     unstable_rethrow(error);
     console.error("❌ Error fetching project:", error);
@@ -291,14 +286,10 @@ export default async function ProjectPage({ params }) {
         </section>
       )}
 
-      {/* Content - Use Notion Renderer */}
+      {/* Content */}
       <main className="px-6 pb-24">
         <div className="container mx-auto max-w-4xl">
-          <NotionRenderer
-            blocks={project.content}
-            title={project.title}
-            showTitle={false}
-          />
+          <article>{project.content}</article>
         </div>
       </main>
 

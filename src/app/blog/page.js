@@ -1,16 +1,14 @@
 import Link from "next/link";
 import Image from "next/image";
-import { getBlogPostsFromNotion } from "@/utils/notion";
+import { getPosts } from "@/utils/content";
 
 export const metadata = {
   title: "Blog",
   description: "Thoughts on development, AI, and building digital experiences",
 };
 
-export const revalidate = 86400;
-
 export default async function BlogPage() {
-  const posts = await getBlogPostsFromNotion();
+  const posts = await getPosts();
 
   return (
     <div className="route-shell route-shell-blog">

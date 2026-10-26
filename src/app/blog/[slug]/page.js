@@ -1,18 +1,13 @@
 import { notFound, unstable_rethrow } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-import {
-  getBlogPostFromNotion,
-  getBlogPostSummaryFromNotion,
-  getBlogPostsFromNotion,
-} from "@/utils/notion";
-import NotionRenderer from "@/components/NotionRenderer";
+import { getPost, getPosts } from "@/utils/content";
 import ShareButton from "@/components/ShareButton";
 
-export const revalidate = 86400;
+export const dynamicParams = false;
 
 export async function generateStaticParams() {
-  const posts = await getBlogPostsFromNotion();
+  const posts = await getPosts();
   return posts.map((post) => ({
     slug: post.slug,
   }));
@@ -22,7 +17,7 @@ export async function generateMetadata({ params }) {
   const { slug } = await params;
 
   try {
-    const post = await getBlogPostSummaryFromNotion(slug);
+    const post = await getPost(slug);
     if (!post) {
       return {
         title: "Blog Post Not Found",
@@ -53,7 +48,7 @@ export default async function BlogPostPage({ params }) {
 
   let post;
   try {
-    post = await getBlogPostFromNotion(slug);
+    post = await getPost(slug);
   } catch (error) {
     unstable_rethrow(error);
     console.error("Error fetching blog post:", error);
@@ -183,11 +178,7 @@ export default async function BlogPostPage({ params }) {
       {/* Article Content */}
       <main className="px-6 pb-24">
         <div className="container mx-auto max-w-4xl">
-          <NotionRenderer
-            blocks={post.content}
-            title={post.title}
-            showTitle={false}
-          />
+          <article>{post.content}</article>
         </div>
       </main>
 

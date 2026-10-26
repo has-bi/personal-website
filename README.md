@@ -1,36 +1,44 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# hasbi.pro
 
-## Getting Started
+Personal site of Hasbi Hassadiqin: bilingual tutorials and notes on AI and automation, plus personal projects. Next.js 15 (App Router) + Tailwind + MDX, deployed on Vercel. Design direction lives in [`DESIGN.md`](DESIGN.md).
 
-First, run the development server:
+## Run it
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev        # http://localhost:3000
+npm run lint
+npm run build
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+No environment variables are needed. Content is read from the repository at build time.
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+## Content
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+content/
+  writing/<slug>.<lang>.mdx    # posts, e.g. understanding-usestate-react.en.mdx
+  projects/<slug>.mdx          # personal projects only (client and employer work is under NDA)
+```
 
-## Learn More
+Post front matter:
 
-To learn more about Next.js, take a look at the following resources:
+```yaml
+title: "Understanding useState in React"
+date: "2025-06-15"
+type: tutorial          # tutorial | note
+topic: ai               # ai | automation | web
+lang: en                # en | id (must match the file name)
+readTime: 4             # optional; estimated from word count if missing
+excerpt: "One or two sentences."
+tags: [React, Hooks]
+cover: "/images/writing/<slug>/cover.png"   # optional
+draft: true             # drafts never reach the live site
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Project front matter: `title`, `year`, `topic`, `client`, `category`, `stack`, `description`, `cover`, `liveUrl`, `featured`, `draft`.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Drafts are hidden in every build. Preview them locally with `SHOW_DRAFTS=1 npm run dev`.
+- Images go in `public/images/...` and are referenced with an absolute path. Use your own screenshots and diagrams.
+- MDX components available in content: `<YouTube id="..." title="..." />` and `<Callout kind="Tip">...</Callout>`.
+- Publishing = commit the file and push; Vercel rebuilds the site.
