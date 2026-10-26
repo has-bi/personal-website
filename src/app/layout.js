@@ -1,20 +1,22 @@
 import "./globals.css";
+import { JetBrains_Mono, Space_Grotesk } from "next/font/google";
 import ClientRuntimeGuards from "@/components/ClientRuntimeGuards";
-import CustomCursor from "@/components/CustomCursor";
-import HomeMenu from "@/components/HomeMenu";
-import { Manrope, Newsreader } from "next/font/google";
+import SiteFooter from "@/components/site/SiteFooter";
+import SiteNav from "@/components/site/SiteNav";
+import { SITE_URL } from "@/lib/site";
 
-const manrope = Manrope({
+const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
-  variable: "--font-body",
+  weight: ["400", "500"],
+  variable: "--font-space-grotesk",
 });
 
-const newsreader = Newsreader({
+const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
-  variable: "--font-display",
+  weight: ["400", "500"],
+  variable: "--font-jetbrains-mono",
 });
 
-const SITE_URL = "https://www.hasbi.pro";
 const SITE_TITLE = "Hasbi Hassadiqin | Tutorials on AI & Automation";
 const SITE_DESCRIPTION =
   "Tutorials and notes on AI and automation by Hasbi Hassadiqin, plus a few personal projects.";
@@ -26,6 +28,9 @@ export const metadata = {
     template: "%s | Hasbi Hassadiqin",
   },
   description: SITE_DESCRIPTION,
+  alternates: {
+    types: { "application/rss+xml": [{ url: "/feed.xml", title: "Hasbi Hassadiqin: writing" }] },
+  },
   keywords: ["AI tutorials", "LLM", "RAG", "Automation", "Hasbi Hassadiqin"],
   authors: [{ name: "Hasbi Hassadiqin", url: SITE_URL }],
   creator: "Hasbi Hassadiqin",
@@ -107,19 +112,22 @@ const personSchema = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <body
-        className={`${manrope.variable} ${newsreader.variable} antialiased`}
-        style={{ fontFamily: "var(--font-body), sans-serif" }}
-      >
+    <html lang="en" className={`${spaceGrotesk.variable} ${jetbrainsMono.variable}`}>
+      <body id="top">
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(personSchema) }}
         />
-        <CustomCursor />
+        <a
+          href="#main"
+          className="t-mono-nav sr-only bg-primary px-md py-sm text-on-primary focus:not-sr-only focus:fixed focus:left-md focus:top-md focus:z-50"
+        >
+          Skip to content
+        </a>
         <ClientRuntimeGuards />
-        <HomeMenu />
-        {children}
+        <SiteNav />
+        <main id="main">{children}</main>
+        <SiteFooter />
       </body>
     </html>
   );
