@@ -1,0 +1,70 @@
+---
+title: "TheraMind, a mental wellness companion"
+year: "2025"
+topic: ai
+client: "Devscale"
+category: "AI"
+role: "Project lead · AI + frontend"
+team: "4 people"
+stack: [Next.js, OpenAI, Prisma, Tailwind]
+description: "TheraMind is a mental wellness companion web app built with Next.js that was created as our final project for the DevScale Full Stack Developer Bootcamp."
+outcome: "Bootcamp final project. Led a team of four and owned the AI integration end to end."
+cover: "/images/projects/theramind-cover.jpg"
+gallery:
+  - "/images/projects/theramind/ui-1.png"
+  - "/images/projects/theramind/ui-2.png"
+  - "/images/projects/theramind/ui-4.png"
+liveUrl: "https://theramind.app/"
+featured: true
+draft: false
+---
+
+## What it does
+
+The application helps users track their daily moods, interact with an AI-powered chatbot that responds based on their emotional state, and provides personalized mental wellness content. Built with a mobile-first approach.
+
+## What I built
+
+<Features>
+<Feature name="Mood tracking">Multi-step form with state persistence across pages using React Context API. Mood data is stored with timestamps for pattern analysis.</Feature>
+<Feature name="AI chatbot">OpenAI API with system prompts that adjust to the mood the user entered.</Feature>
+<Feature name="Authentication and privacy">Arctic Auth; mood data and journal entries are private and linked to user accounts.</Feature>
+<Feature name="Multi-page form">Mood input, journaling and recap are kept in one state and sent as a single POST request.</Feature>
+</Features>
+
+<Screenshots>
+<Shot src="/images/projects/theramind/ui-1.png" alt="TheraMind mood check-in screen" />
+<Shot src="/images/projects/theramind/ui-2.png" alt="TheraMind screen 2" />
+<Shot src="/images/projects/theramind/ui-3.png" alt="TheraMind screen 3" />
+<Shot src="/images/projects/theramind/ui-4.png" alt="TheraMind screen 4" />
+<Shot src="/images/projects/theramind/ui-5.png" alt="TheraMind screen 5" />
+<Shot src="/images/projects/theramind/ui-6.png" alt="TheraMind screen 6" />
+</Screenshots>
+
+## How it works
+
+<Spec>
+<SpecRow label="Frontend">Next.js 14 App Router · Tailwind CSS · Context API · MDX</SpecRow>
+<SpecRow label="Backend">Next.js API routes · PostgreSQL · Prisma · OpenAI API</SpecRow>
+<SpecRow label="Auth">Arctic Auth · JWT · role-based access</SpecRow>
+<SpecRow label="Deploy">Vercel · environment variables · CI/CD</SpecRow>
+</Spec>
+
+## What was hard
+
+<Problems>
+<Problem problem="Keeping form state across pages and posting only at the end.">React Context stores every step; one final function combines it into a single POST.</Problem>
+<Problem problem="A chatbot that remembers the mood the user entered.">Dynamic system prompts that include the mood data in every API call.</Problem>
+<Problem problem="Slow AI responses, especially on mobile.">Streaming responses, typing indicators, and server components where they help.</Problem>
+<Problem problem="A team of four with full-time jobs and little time.">MoSCoW prioritisation, a sprint plan with clear owners, async daily standups.</Problem>
+</Problems>
+
+## What I learned
+
+<Learned label="Technical">Next.js App Router, React Context and API integration; managing state across multi-page forms.</Learned>
+
+<Learned label="Project management">Leading a remote team with limited availability: communication, documentation, prioritisation.</Learned>
+
+<Learned label="Problem-solving">Research, experimentation and reading documentation, by necessity.</Learned>
+
+<Callout kind="Note">The live app may be unavailable at times: it runs on limited database and API quotas.</Callout>

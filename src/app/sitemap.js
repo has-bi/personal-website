@@ -1,38 +1,33 @@
-import { getBlogPostsFromNotion, getProjectsFromNotion } from "@/utils/notion";
-
-const BASE_URL = "https://www.hasbi.pro";
+import { getAllPosts, getProjects } from "@/utils/content";
+import { SITE_URL } from "@/lib/site";
 
 export default async function sitemap() {
-  const [posts, projects] = await Promise.all([
-    getBlogPostsFromNotion().catch(() => []),
-    getProjectsFromNotion().catch(() => []),
-  ]);
+  const [posts, projects] = await Promise.all([getAllPosts(), getProjects()]);
+  const latest = posts[0]?.date ? new Date(posts[0].date) : new Date();
 
   const staticRoutes = [
-    { url: BASE_URL, lastModified: new Date(), changeFrequency: "monthly", priority: 1 },
-    { url: `${BASE_URL}/about`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.8 },
-    { url: `${BASE_URL}/blog`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.9 },
-    { url: `${BASE_URL}/projects`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.9 },
-    { url: `${BASE_URL}/contact`, lastModified: new Date(), changeFrequency: "yearly", priority: 0.5 },
+    { url: SITE_URL, lastModified: latest, changeFrequency: "weekly", priority: 1 },
+    { url: `${SITE_URL}/writing`, lastModified: latest, changeFrequency: "weekly", priority: 0.9 },
+    { url: `${SITE_URL}/projects`, changeFrequency: "monthly", priority: 0.8 },
+    { url: `${SITE_URL}/about`, changeFrequency: "monthly", priority: 0.7 },
   ];
 
-  const blogRoutes = posts
-    .filter((post) => post.slug)
+  const postRoutes = posts
+    .filter((post) => post.published && post.lang === "en")
     .map((post) => ({
-      url: `${BASE_URL}/blog/${post.slug}`,
-      lastModified: post.date ? new Date(post.date) : new Date(),
+      url: `${SITE_URL}/writing/${post.slug}`,
+      lastModified: post.date ? new Date(post.date) : undefined,
       changeFrequency: "monthly",
       priority: 0.7,
     }));
 
   const projectRoutes = projects
-    .filter((project) => project.slug)
+    .filter((project) => project.published)
     .map((project) => ({
-      url: `${BASE_URL}/projects/${project.slug}`,
-      lastModified: project.date ? new Date(project.date) : new Date(),
-      changeFrequency: "monthly",
-      priority: 0.7,
+      url: `${SITE_URL}/projects/${project.slug}`,
+      changeFrequency: "yearly",
+      priority: 0.6,
     }));
 
-  return [...staticRoutes, ...blogRoutes, ...projectRoutes];
+  return [...staticRoutes, ...postRoutes, ...projectRoutes];
 }

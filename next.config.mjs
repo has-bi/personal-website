@@ -1,73 +1,26 @@
-// next.config.js
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "m.media-amazon.com",
-      },
-      {
-        protocol: "https",
-        hostname: "secure.notion-static.com",
-      },
-      {
-        protocol: "https",
-        hostname: "prod-files-secure.s3.us-west-2.amazonaws.com",
-      },
-      {
-        protocol: "https",
-        hostname: "images.unsplash.com",
-      },
-    ],
-    formats: ["image/webp", "image/avif"],
-    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
-    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
+    formats: ["image/avif", "image/webp"],
   },
 
-  // External packages for server components
-  serverExternalPackages: ["@notionhq/client"],
-
-  // Enable experimental features if needed
-  experimental: {
-    // Enable if you want to use app directory features
-  },
-
-  // Environment variables
-  env: {
-    CUSTOM_KEY: process.env.CUSTOM_KEY,
-  },
-
-  // Redirects (jika butuh)
+  // The blog became /writing; /contact was folded into the footer and /about.
   async redirects() {
     return [
-      // Example redirect
-      // {
-      //   source: '/old-blog/:slug',
-      //   destination: '/blog/:slug',
-      //   permanent: true,
-      // },
+      { source: "/blog", destination: "/writing", permanent: true },
+      { source: "/blog/:slug", destination: "/writing/:slug", permanent: true },
+      { source: "/contact", destination: "/about", permanent: true },
     ];
   },
 
-  // Headers untuk security
   async headers() {
     return [
       {
         source: "/(.*)",
         headers: [
-          {
-            key: "X-Frame-Options",
-            value: "DENY",
-          },
-          {
-            key: "X-Content-Type-Options",
-            value: "nosniff",
-          },
-          {
-            key: "Referrer-Policy",
-            value: "origin-when-cross-origin",
-          },
+          { key: "X-Frame-Options", value: "DENY" },
+          { key: "X-Content-Type-Options", value: "nosniff" },
+          { key: "Referrer-Policy", value: "origin-when-cross-origin" },
         ],
       },
     ];

@@ -1,25 +1,20 @@
 "use client";
 
-export default function Error({ error, reset }) {
+import { SectionLabel } from "@/components/ui/primitives";
+
+export default function Error({ reset }) {
   return (
-    <div className="min-h-screen flex items-center justify-center px-6">
-      <div className="text-center max-w-md">
-        <p className="text-sm font-medium text-gray-500 uppercase tracking-wider mb-4">
-          Something went wrong
-        </p>
-        <h1 className="text-3xl font-light text-gray-900 mb-4">
-          Unexpected error
-        </h1>
-        <p className="text-gray-600 mb-8">
-          {error?.message || "An error occurred. Please try again."}
-        </p>
-        <button
-          onClick={reset}
-          className="inline-flex items-center gap-2 px-6 py-3 bg-gray-900 text-white rounded-lg hover:bg-gray-700 transition-colors font-medium"
-        >
-          Try again
-        </button>
-      </div>
-    </div>
+    <section className="band flex flex-col items-start gap-lg border-b border-hairline py-xxxl lg:py-section">
+      <SectionLabel>§ 500 · Error</SectionLabel>
+      <h1 className="t-display-lg text-ink">Something went wrong.</h1>
+      <p className="t-body-md text-body">The page failed to load. Try again, or come back in a minute.</p>
+      <button
+        type="button"
+        onClick={reset}
+        className="t-button inline-flex h-12 items-center border border-hairline-strong bg-canvas px-lg text-ink hover:bg-surface"
+      >
+        Try again
+      </button>
+    </section>
   );
 }
