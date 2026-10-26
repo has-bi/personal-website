@@ -343,6 +343,44 @@ components:
     typography: "{typography.quote}"
     rounded: "{rounded.none}"
     padding: 32px
+  filter-chip:
+    backgroundColor: "{colors.canvas}"
+    textColor: "{colors.ink}"
+    typography: "{typography.tag}"
+    rounded: "{rounded.none}"
+    padding: 0 12px
+    height: 32px
+    hitArea: "{sizing.tap-target}"
+  filter-chip-active:
+    backgroundColor: "{colors.primary}"
+    textColor: "{colors.on-primary}"
+    typography: "{typography.tag}"
+    rounded: "{rounded.none}"
+    padding: 0 12px
+    height: 32px
+  year-group:
+    backgroundColor: "{colors.canvas}"
+    textColor: "{colors.ink}"
+    typography: "{typography.title-lg}"
+    padding: 12px 0
+  lesson-brief:
+    backgroundColor: "{colors.surface}"
+    textColor: "{colors.ink}"
+    typography: "{typography.body-md}"
+    rounded: "{rounded.none}"
+    padding: 16px 24px
+  callout:
+    backgroundColor: "{colors.surface}"
+    textColor: "{colors.ink}"
+    typography: "{typography.body-md}"
+    rounded: "{rounded.none}"
+    padding: 16px 24px
+  next-lesson:
+    backgroundColor: "{colors.surface}"
+    textColor: "{colors.ink}"
+    typography: "{typography.title-lg}"
+    rounded: "{rounded.none}"
+    padding: 24px
   empty-state:
     backgroundColor: "{colors.surface}"
     textColor: "{colors.body}"
@@ -433,7 +471,7 @@ Content lives in the repository, not in Notion. The site is **read-only by desig
 - **Topics:** `ai` (LLMs, RAG, agents, prompting) and `automation` (n8n, workflow automation, APIs). Older off-topic posts keep `web` and the neutral tag.
 - **Languages:** each post exists in `en`, `id`, or both. Files share a slug: `rag-mental-models.en.mdx` and `rag-mental-models.id.mdx`. The list shows `EN`, `ID` or `EN · ID`. Indonesian pages live under `/id/...`.
 - **Projects** (`content/projects/<slug>.mdx`): personal projects only.
-- Front matter: `title`, `date`, `type` (`tutorial` | `note`), `topic` (`ai` | `automation` | `web`), `lang`, `readTime`, `excerpt`, `cover`, `draft`. Projects add `stack` and `year`.
+- Front matter: `title`, `date`, `type` (`tutorial` | `note`), `topic` (`ai` | `automation` | `web`), `lang`, `readTime`, `excerpt`, `cover`, `draft`, `tags`. Tutorials add `level` (`beginner` | `intermediate`), `learn` (3 to 5 lines, taken from the post's own headings), `prerequisites` and `check` (one task that proves it works), all written or approved by the owner. Projects add `stack` and `year`.
 - Authoring flow: the owner uploads a piece of writing; the agent converts it to MDX and maps it onto the components in this file (`CodeBlock`, `Figure`, `Quote`, `Callout`, headings, lists), without rewriting the owner's voice. A translation is a separate file, never machine-filled without the owner's review.
 - RSS: `/feed.xml` (and `/id/feed.xml`), generated from the MDX at build time.
 - Stack: Next.js 15 (App Router) + Tailwind + MDX, deployed on Vercel.
@@ -674,7 +712,42 @@ The third row is written in Indonesian on purpose: it addresses Indonesian reade
 
 **`post-row`**: `DATE · TOPIC · TYPE · TITLE · LANG · READ` on one line (`2025 · 06 · 15 · [WEB] · TUTORIAL · Understanding useState… · EN · 4 MIN`), hairline between rows, title in `{typography.title-md}`. No arrow. Drafts never appear on the live site.
 
-### Article and Project Pages
+### Writing Index (`/writing`)
+
+```
+§ 01 · WRITING   /writing (display-xl) + dek | TWO KINDS OF POSTS: TUTORIAL / NOTE + "Subscribe via RSS ↗"
+filter bar       TYPE [ALL][TUTORIAL][NOTE] · TOPIC [ALL][AI][AUTOMATION][WEB] · LANGUAGE [ALL][EN][ID]   03 ENTRIES · NEWEST FIRST
+list             column header → year-group "2025 · 3 ENTRIES" → post-rows (excerpt shown)
+footer-band
+```
+- **`filter-chip`** / **`filter-chip-active`**: 32px visual box inside a 44px hit area. Neutral on purpose: topic colour lives on tags, not on controls. Filters are real query params (`?type=tutorial&topic=ai&lang=id`), combinable, and shareable.
+- **`year-group`**: the year in `{typography.title-lg}` with an entry count in `{typography.mono-label}`; a strong rule under it. Groups appear only when there is more than one year.
+- A filter with zero results shows `{component.empty-state}` ("NO AUTOMATION POSTS YET" + `SEE ALL WRITING`).
+- Mobile: filters stack as three rows (TYPE / TOPIC / LANG), each scrollable sideways if it overflows; rows stack (meta line, title, language · read).
+
+### Article (`/writing/<slug>`)
+
+```
+breadcrumb       ← /writing / slug                                         AVAILABLE IN · EN (· ID)
+header           § 01 · WRITING / TUTORIAL → title (display-lg) → excerpt as dek (muted)
+meta strip       PUBLISHED · READ TIME · TOPIC · TYPE · LEVEL · LANGUAGE
+cover            16:9, the author's own screenshot or diagram
+body             sticky TOC + share (240) | 680 column:
+                   lesson-brief (tutorials only) → content → callouts → check your work → feedback line → tags
+pager            BACK [ALL WRITING] | next-lesson (same topic, button-primary NEXT TUTORIAL)
+footer-band
+```
+- **Dek** is the post's own `excerpt`, never agent-written.
+- **`lesson-brief`** opens every TUTORIAL: `WHAT YOU'LL LEARN` (numbered, from the post's headings) and `BEFORE YOU START` (prerequisites). NOTEs skip it.
+- **`callout`**: kinds `NOTE`, `TIP`, `RULES`, `WARNING`, `CHECK YOUR WORK`. A full hairline box with a mono label; no coloured left stripe, no icon.
+- **Check your work**: every tutorial ends with one small task that proves the reader got it working.
+- **Feedback line**: "Stuck, or found a mistake? Email …" with a real `mailto:`. This is the only contact prompt inside an article.
+- **`next-lesson`**: the next post in the same topic and language. If none exists, the pager shows only `ALL WRITING`. Prev/next arrows are allowed here because they carry direction.
+- **Language**: `AVAILABLE IN · EN · ID` links to the other version when it exists; with one language it is plain text. `<link rel="alternate" hreflang>` connects the pair.
+- **Images**: the author's own screenshots and diagrams only. The current Notion posts hot-link third-party images (game screenshots, other blogs); those are replaced before migration.
+- Mobile: meta moves above the title as a 2-column grid; the TOC collapses into an `ON THIS PAGE · 06 ↓` bar; cover and figures go full-bleed; the pager stacks (next-lesson card, then `ALL WRITING`).
+
+### Project Pages
 
 **`case-study-header`**: title in `{typography.display-lg}`, one-line outcome below in `{typography.display-md}` `{colors.muted}`, then `{component.project-meta}` as a key-value block.
 
@@ -783,6 +856,7 @@ Logged decisions:
 - 2026-10-26, rebrand: the site moves from AI-engineer portfolio to teaching (tutorials, notes, personal projects). Day-job work is under NDA: the stat strip, the two day-job project cards and `/work/order-to-erp` are removed. `/work` becomes `/projects`.
 - 2026-10-26, rebrand: bilingual EN / ID; one `/writing` section with `TUTORIAL` / `NOTE` types; read-only (no CTA beyond `START READING`); topics AI and automation. Domain colours data, build and teach removed; `web` is neutral.
 - 2026-10-26: Design Read and dials set (ENERGY 2 / RHYTHM 2 / MOTION 1). Closes audit #20 and #21.
+- 2026-10-26, writing pass: the "Featured" block is **dropped** (not in the spec; with one published post it would duplicate the list). Article dek uses the real excerpt instead of agent copy. Component defaults scrubbed of NDA content.
 
 ## Iteration Guide
 
@@ -812,7 +886,8 @@ Logged decisions:
 
 **Other:**
 - **Signature moment** (terminal hero vs. a small live widget vs. none) is undecided.
-- Blog index and post frames in Figma still show the old filter chips (DATA / BUILD / TEACH) and column headers; they get updated in the blog design pass.
+- Tutorial fields still to be written by the owner for existing posts: `level`, `prerequisites`, `check`. The `learn` lines in the Figma mockup are drafted from the useState post's own headings; confirm or rewrite.
+- `/projects` index and project pages are not designed yet.
 - The logo PNGs still use `#6A55F2`; re-export in `#6840C8`.
 - Form components (contact form, newsletter) are out of scope; contact is email-only for now.
 - Line-art illustration style is described but no assets exist yet.
