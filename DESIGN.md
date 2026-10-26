@@ -1,7 +1,7 @@
 ---
-version: alpha.2
+version: alpha.3
 name: Hasbi-personal-site
-description: A builder's spec sheet on a white page. Near-violet ink, one purple accent carried over from the old site and the logo, hairline rules and zero radius, where a monospace label system does most of the talking and a large Space Grotesk headline carries the hierarchy. Brand voltage comes from four domain colours (AI purple, data green, build amber, teach rose) used only on tags, stat numbers and card header strips. Everything is light; the only dark surface is a code block. Structure borrowed from itsua.com, storytelling from jithinrp.com, grid restraint from boostlab.
+description: A teacher's lab notebook on a white page. Bilingual (EN / ID) tutorials and notes on AI and automation, plus personal projects. Near-violet ink, one purple accent carried over from the old site and the logo, hairline rules and zero radius, where a monospace label system does most of the talking and a large Space Grotesk headline carries the hierarchy. Two topic colours (AI purple, automation green) appear only on tags and card header strips. Everything is light; the only dark surface is a code block. Structure borrowed from itsua.com, storytelling from jithinrp.com, grid restraint from boostlab.
 
 colors:
   primary: "#201936"
@@ -23,13 +23,9 @@ colors:
   on-dark: "#f3f0ff"
   on-dark-muted: "#a39eb3"
   domain-ai: "#6840c8"
-  domain-data: "#047857"
-  domain-build: "#b45309"
-  domain-teach: "#be185d"
+  domain-automation: "#047857"
   tint-ai: "#e7e0fa"
-  tint-data: "#e6f7f1"
-  tint-build: "#fff2e5"
-  tint-teach: "#fde8f1"
+  tint-automation: "#e6f7f1"
   focus-ring: "#6840c8"
 
 typography:
@@ -178,11 +174,13 @@ components:
     textColor: "{colors.ink}"
     typography: "{typography.mono-nav}"
     padding: 0 16px
-  nav-location:
+  language-toggle:
     backgroundColor: "{colors.canvas}"
-    textColor: "{colors.muted}"
-    typography: "{typography.mono-label}"
+    textColor: "{colors.faint}"
+    textColorActive: "{colors.ink}"
+    typography: "{typography.mono-nav}"
     padding: 0 16px
+    minHeight: "{sizing.tap-target}"
   nav-menu-button:
     backgroundColor: "{colors.canvas}"
     textColor: "{colors.ink}"
@@ -257,24 +255,22 @@ components:
     typography: "{typography.tag}"
     rounded: "{rounded.none}"
     padding: 4px 8px
-  tag-data:
-    backgroundColor: "{colors.tint-data}"
-    textColor: "{colors.domain-data}"
+  tag-automation:
+    backgroundColor: "{colors.tint-automation}"
+    textColor: "{colors.domain-automation}"
     typography: "{typography.tag}"
     rounded: "{rounded.none}"
     padding: 4px 8px
-  tag-build:
-    backgroundColor: "{colors.tint-build}"
-    textColor: "{colors.domain-build}"
+  tag-web:
+    backgroundColor: "{colors.surface-sunken}"
+    textColor: "{colors.muted}"
     typography: "{typography.tag}"
     rounded: "{rounded.none}"
     padding: 4px 8px
-  tag-teach:
-    backgroundColor: "{colors.tint-teach}"
-    textColor: "{colors.domain-teach}"
-    typography: "{typography.tag}"
-    rounded: "{rounded.none}"
-    padding: 4px 8px
+  type-label:
+    backgroundColor: "{colors.canvas}"
+    textColor: "{colors.muted}"
+    typography: "{typography.mono-label}"
   stat-strip:
     backgroundColor: "{colors.surface}"
     textColor: "{colors.ink}"
@@ -306,18 +302,13 @@ components:
     textColor: "{colors.ink}"
     typography: "{typography.mono-label}"
     padding: 8px 16px
-  project-card-header-data:
-    backgroundColor: "{colors.tint-data}"
+  project-card-header-automation:
+    backgroundColor: "{colors.tint-automation}"
     textColor: "{colors.ink}"
     typography: "{typography.mono-label}"
     padding: 8px 16px
-  project-card-header-build:
-    backgroundColor: "{colors.tint-build}"
-    textColor: "{colors.ink}"
-    typography: "{typography.mono-label}"
-    padding: 8px 16px
-  project-card-header-teach:
-    backgroundColor: "{colors.tint-teach}"
+  project-card-header-web:
+    backgroundColor: "{colors.surface-sunken}"
     textColor: "{colors.ink}"
     typography: "{typography.mono-label}"
     padding: 8px 16px
@@ -369,12 +360,12 @@ components:
   about-photo:
     backgroundColor: "{colors.surface-sunken}"
     rounded: "{rounded.none}"
-  cta-band:
+  footer-band:
     backgroundColor: "{colors.surface}"
     textColor: "{colors.ink}"
-    typography: "{typography.display-lg}"
+    typography: "{typography.mono-label}"
     rounded: "{rounded.none}"
-    padding: 96px 32px
+    padding: 64px 96px 32px
   contact-spec-row:
     backgroundColor: "{colors.surface}"
     textColor: "{colors.muted}"
@@ -399,21 +390,23 @@ components:
 
 ## Overview
 
-This site reads like a **specification document for a person**. The page is `{colors.canvas}` (white), type is `{colors.ink}` (a near-black violet), with 1px `{colors.hairline}` rules and zero border radius anywhere except the brand mark, dots and avatars. Every section opens with a monospace label (`§ 02 · SELECTED BUILDS`) and a slash-heading (`/work`), the nav is numbered like a table of contents (`[ 01 ] WORK`), and contact details sit in a key-value table. The metaphor is deliberate: the owner is a Solutions Architect who writes specs for a living, and the site should feel like one of his docs: precise, scannable, a little dry.
+This site reads like a **teacher's lab notebook**: numbered sections, plain labels, nothing hidden. It exists to teach AI and automation through bilingual (English / Bahasa Indonesia) tutorials and notes, plus a few personal projects. It is not a portfolio of client work: that work is under NDA and never appears here. The page is `{colors.canvas}` (white), type is `{colors.ink}` (a near-black violet), with 1px `{colors.hairline}` rules and zero border radius anywhere except the brand mark and avatars. Every section opens with a monospace label (`§ 01 · WRITING`) and a slash-heading (`/writing`), the nav is numbered like a table of contents (`[ 01 ] WRITING`), and the footer lists where else to find the owner in a key-value table. The metaphor is deliberate: a course syllabus is precise and scannable, and so is this site.
+
+**Design Read:** a bilingual teaching site for beginner-to-intermediate learners of AI and automation, in a lab-notebook / spec-sheet language. **Dials: ENERGY 2 / RHYTHM 2 / MOTION 1.** RHYTHM 2 means the label + slash-heading pattern repeats, with at least one deliberate break (on Home, `/about` is a split layout without a slash-heading).
 
 Two type voices split the work. **Space Grotesk** carries hierarchy at large sizes (a 120px hero, 72px slash-headings) with tight negative tracking. **JetBrains Mono** carries everything small: nav, labels, tags, meta, buttons. A third voice, **Instrument Serif** italic, appears at most twice per page as a moment of warmth. (The font pairing is under review, see Known Gaps.)
 
-Colour comes from the owner's existing identity: the purple `{colors.accent}` (`#6840C8`) from the previous site, now also the colour of the logo. Brand voltage does not come from big colour fields. It comes from **four domain colours** (`{colors.domain-ai}`, `{colors.domain-data}`, `{colors.domain-build}`, `{colors.domain-teach}`) that tag every piece of work and colour the stat numbers. They appear small and often, never large. There is no dark band: the whole page stays light, and the only dark surface is `{component.code-block}`.
+Colour comes from the owner's existing identity: the purple `{colors.accent}` (`#6840C8`) from the previous site, now also the colour of the logo. Brand voltage does not come from big colour fields. It comes from **two topic colours** (`{colors.domain-ai}`, `{colors.domain-automation}`) that tag every post and project. They appear small and often, never large. Anything outside the two teaching topics (older React posts, web projects) gets the neutral `{component.tag-web}`: no hue. There is no dark band: the whole page stays light, and the only dark surface is `{component.code-block}`.
 
-The proof on this site is **things built, not things claimed**. Side builds (Raspberry Pi devices, IoT, automations, AI tools) are the case studies, each written as a short story: a real problem, the wrong obvious fix, the small thing that worked, and what changed.
+The proof on this site is **lessons that work, not claims**. A tutorial earns its place when a beginner can follow it to a working result. Personal projects are written as short stories: a real problem, the wrong obvious fix, the small thing that worked, and what changed.
 
 **Key Characteristics:**
-- Canvas is white `{colors.canvas}`; cards, stat strip and the closing band sit on `{colors.surface}` (a very light lavender, the old site's `--bg-soft`) so they separate from the page without shadows.
+- Canvas is white `{colors.canvas}`; cards, the router table and the footer band sit on `{colors.surface}` (a very light lavender, the old site's `--bg-soft`) so they separate from the page without shadows.
 - `{rounded.none}` everywhere. Corners are a signal of "engineered", and the system has no medium radius. Exceptions: `{component.brand-mark}` (the logo's own rounded squares), status-free dots, and avatars.
 - Primary CTA is `{component.button-primary}`: ink block, white mono label, preceded by a square `{component.button-primary-arrow}` in `{colors.accent}` holding a `→`. One per viewport. This square is the only decorative arrow in the system.
 - Hero headline is two lines; the second line switches to `{colors.accent}` (`{component.hero-accent-line}`).
-- Domain colours appear on `{component.tag-ai}` / `-data` / `-build` / `-teach`, on stat numbers, and on project-card header strips. Nowhere else.
-- Section rhythm: hero → stat strip → `/start` → `/work` → `/writing` → `/about` → `/stack` → light closing band (CTA + contact + footer).
+- Topic colours appear on `{component.tag-ai}` / `{component.tag-automation}` and on project-card header strips. Nowhere else.
+- Section rhythm on Home: hero → `/start` → `/writing` → `/projects` → about (split) → footer band ("Elsewhere").
 - `{spacing.section}` (96px) between every major band, and a hairline at every band edge.
 
 ## Content Rules (from antislop audit 001)
@@ -421,20 +414,28 @@ The proof on this site is **things built, not things claimed**. Side builds (Ras
 These rules apply to every page and every piece of copy, written by the owner or by an agent.
 
 - **No em dash** (`—`) in any visible text. Use a comma, period, colon or parentheses. Inside mono strings, the separator is ` · `. Year ranges use an en dash: `2023–25`, `2025–NOW`.
-- **Only real numbers.** Every stat comes from a source the owner can point to (a case study, the CV). If a number is missing, drop the cell; never pad.
+- **Only real numbers.** Every number comes from a source the owner can point to. If a number is missing, drop the cell; never pad.
 - **No testimonials until one is real and permitted.** No placeholder quote cards on a live page.
 - **No unverifiable status claims.** No `(running)`, `live`, `in production` or "building in public" unless it is true today and linked to evidence. Default project meta is the year only.
 - **The owner's voice is written by the owner.** An agent may draft structure, but personal statements (about paragraph, hero headline, footer line) ship only in the owner's words. Until then, mark them `[YOUR WORDS]`.
 - **Placeholders are visible.** `[YOUR WORDS]`, `[REAL DATA]`, labeled image boxes. Never disguised as final.
-- **Every link has a destination that exists.** No nav item, router row or button may point to an empty page or filter.
+- **Every link has a destination that exists.** No nav item, router row or button may point to an empty page or filter. A router row ships only when its destination has at least one published post.
+- **No client or employer work.** Day-job projects, their screenshots and their numbers are under NDA. They do not appear anywhere: not as projects, not as stats, not as anonymised case studies.
+- **Descriptive beats personal in the hero.** The hero says what the site is ("Notes on AI & automation."); personal statements live in `/about` and are written by the owner.
 
-## Content Source
+## Content Model
 
-Content lives in the repository, not in Notion.
+Content lives in the repository, not in Notion. The site is **read-only by design**: no newsletter, no sales CTA. Contact is the footer band.
 
-- Posts: `content/posts/<slug>.mdx`. Projects / case studies: `content/projects/<slug>.mdx`.
-- Front matter holds the metadata the UI needs: `title`, `date`, `domain` (`ai` | `data` | `build` | `teach`), `readTime`, `excerpt`, `stack`, `cover`.
-- Authoring flow: the owner uploads a piece of writing; the agent converts it to MDX and maps it onto the components in this file (`CodeBlock`, `Figure`, `Quote`, `Callout`, headings, lists), without rewriting the owner's voice.
+- **Writing** (`content/writing/<slug>.<lang>.mdx`): one section, two types.
+  - `TUTORIAL`: step-by-step, ends with a working result.
+  - `NOTE`: a mental model, opinion or explainer.
+- **Topics:** `ai` (LLMs, RAG, agents, prompting) and `automation` (n8n, workflow automation, APIs). Older off-topic posts keep `web` and the neutral tag.
+- **Languages:** each post exists in `en`, `id`, or both. Files share a slug: `rag-mental-models.en.mdx` and `rag-mental-models.id.mdx`. The list shows `EN`, `ID` or `EN · ID`. Indonesian pages live under `/id/...`.
+- **Projects** (`content/projects/<slug>.mdx`): personal projects only.
+- Front matter: `title`, `date`, `type` (`tutorial` | `note`), `topic` (`ai` | `automation` | `web`), `lang`, `readTime`, `excerpt`, `cover`, `draft`. Projects add `stack` and `year`.
+- Authoring flow: the owner uploads a piece of writing; the agent converts it to MDX and maps it onto the components in this file (`CodeBlock`, `Figure`, `Quote`, `Callout`, headings, lists), without rewriting the owner's voice. A translation is a separate file, never machine-filled without the owner's review.
+- RSS: `/feed.xml` (and `/id/feed.xml`), generated from the MDX at build time.
 - Stack: Next.js 15 (App Router) + Tailwind + MDX, deployed on Vercel.
 
 ## Colors
@@ -447,7 +448,7 @@ Content lives in the repository, not in Notion.
 
 ### Surface
 - **Canvas** (`{colors.canvas}`, #FFFFFF): The page floor.
-- **Surface** (`{colors.surface}`, #F8F6FF): Project cards, stat strip, router table, quote cards, empty states, closing band.
+- **Surface** (`{colors.surface}`, #F8F6FF): Project cards, router table, quote cards, empty states, footer band.
 - **Surface Sunken** (`{colors.surface-sunken}`, #E6E3F3): Active/pressed rows, ghost-button press, image placeholders.
 - **Surface Dark Elevated** (`{colors.surface-dark-elevated}`, #2D2642): Code blocks only. The one dark surface on the site.
 - **Hairline** (`{colors.hairline}`, #DDD8ED): Every 1px rule: card borders, table dividers, nav bottom edge, stat-cell separators.
@@ -455,20 +456,19 @@ Content lives in the repository, not in Notion.
 - **Grid Line** (`{colors.grid-line}`, #EFECF9): Decorative vertical lines behind the hero. Never used elsewhere. (Under review, see Known Gaps.)
 
 ### Text
-- **Ink** (`{colors.ink}`, #201936): Headlines, card titles, active nav, stat numbers in neutral cells. 16.75:1 on white.
-- **Body** (`{colors.body}`, #403954): Running text in case studies and the hero abstract. 10.87:1.
+- **Ink** (`{colors.ink}`, #201936): Headlines, card titles, active nav. 16.75:1 on white.
+- **Body** (`{colors.body}`, #403954): Running text in articles and the hero abstract. 10.87:1.
 - **Muted** (`{colors.muted}`, #5F5A72): Project meta, captions, secondary copy, placeholder labels. 6.58:1 on white, 5.22:1 on surface-sunken. Replaces the old site's 56% ink, which failed AA at 3.8:1.
 - **Faint** (`{colors.faint}`, #6C667E): Section labels and inactive nav. Only uppercase mono at 12px or larger, and never on `{colors.surface-sunken}` (4.34:1, fails).
 - **On Primary** (`{colors.on-primary}`, #FFFFFF), **On Dark** (`{colors.on-dark}`, #F3F0FF), **On Dark Muted** (`{colors.on-dark-muted}`, #A39EB3): Text on the primary button and inside code blocks.
 
-### Domain Colours
-They identify *what kind of work* something is, and they are only ever used small. Every pair passes 4.5:1.
-- **AI** (`{colors.domain-ai}`, #6840C8) on `{colors.tint-ai}` (#E7E0FA): agents, LLM tools, computer vision. 5.21:1.
-- **Data** (`{colors.domain-data}`, #047857) on `{colors.tint-data}` (#E6F7F1): analytics, pipelines, reporting automation. 4.95:1.
-- **Build** (`{colors.domain-build}`, #B45309) on `{colors.tint-build}` (#FFF2E5): hardware, Raspberry Pi, IoT, physical objects. 4.56:1.
-- **Teach** (`{colors.domain-teach}`, #BE185D) on `{colors.tint-teach}` (#FDE8F1): tutorials, mentoring, writing. 5.17:1. Rose, not magenta, so it does not compete with the purple accent.
+### Topic Colours
+They identify *what a post or project is about*, and they are only ever used small. Every pair passes 4.5:1.
+- **AI** (`{colors.domain-ai}`, #6840C8) on `{colors.tint-ai}` (#E7E0FA): LLMs, RAG, agents, prompting. 5.21:1.
+- **Automation** (`{colors.domain-automation}`, #047857) on `{colors.tint-automation}` (#E6F7F1): n8n, workflow automation, APIs. 4.95:1.
+- **Web** (neutral, `{colors.muted}` on `{colors.surface-sunken}`): off-topic archive. 5.22:1. No hue on purpose, so it reads as secondary.
 
-AI shares its hex with `{colors.accent}` on purpose: AI is the primary domain, and the system stays at five hues total (accent/AI, data, build, teach, ink).
+AI shares its hex with `{colors.accent}` on purpose: AI is the primary topic, and the system stays at three hues total (accent/AI, automation green, ink).
 
 ### Semantic
 - **Focus Ring** (`{colors.focus-ring}`, #6840C8): 2px outline, 2px offset, on every focusable element.
@@ -490,7 +490,7 @@ All three are self-hosted, subset to Latin, `font-display: swap`. Paid fonts see
 | Token | Size | Weight | Line Height | Letter Spacing | Use |
 |---|---|---|---|---|---|
 | `{typography.display-xl}` | 120px | 500 | 0.95 | −4.8px (−0.04em) | Hero headline only. Fluid: `clamp(52px, 9vw, 120px)` |
-| `{typography.display-lg}` | 72px | 500 | 1.0 | −2.16px (−0.03em) | Slash-headings (`/work`), case-study title, CTA band. Fluid: `clamp(40px, 6vw, 72px)` |
+| `{typography.display-lg}` | 72px | 500 | 1.0 | −2.16px (−0.03em) | Slash-headings (`/writing`), article and project titles. Fluid: `clamp(40px, 6vw, 72px)` |
 | `{typography.display-md}` | 48px | 400 | 1.1 | −0.96px | Light-weight statements inside sections |
 | `{typography.accent-serif}` | 52px | 400 italic | 1.05 | −0.5px | Max two per page |
 | `{typography.stat}` | 72px | 500 | 1.0 | −2.16px | Stat numbers, `font-variant-numeric: tabular-nums` |
@@ -529,29 +529,28 @@ All three are self-hosted, subset to Latin, `font-display: swap`. Paid fonts see
 - 12-column grid, max content width 1280px, centred.
 - **Hero:** headline spans columns 1–8; `{component.hero-abstract}` spans 10–12, separated by a 1px vertical `{colors.hairline}` rule.
 - **Stat strip:** full width, equal cells divided by 1px vertical hairlines.
-- **Project grid:** 3-up desktop, 2-up tablet, 1-up mobile. Cards are equal height on purpose: this is a spec sheet, and uniformity is the point.
+- **Project grid:** 2-up desktop and tablet (3-up once there are 3+ projects), 1-up mobile. Cards are equal height on purpose: this is a spec sheet, and uniformity is the point.
 - **Case study:** single centred column at `{component.case-study-body}` width, with a sticky meta column on the left at desktop.
 
 ### Page Composition (Home)
 ```
-[logo] HASBI HASSADIQIN  [ 00 ] INDEX  [ 01 ] WORK  [ 02 ] WRITING  [ 03 ] ABOUT  [ 04 ] CONTACT     JAKARTA · UTC+7
+[logo] HASBI HASSADIQIN  [ 00 ] INDEX  [ 01 ] WRITING  [ 02 ] PROJECTS  [ 03 ] ABOUT            EN / ID
 
-§ 00 · PROFILE               hero-band (headline + accent line | abstract + button-primary)
-                             stat-strip (real numbers only)
-§ 01 · START HERE  /start    router table: YOU ARE · START WITH · LEADS TO (3 rows)
-§ 02 · SELECTED BUILDS /work project-card grid → case-study pages
-§ 03 · WRITING  /writing     post-rows (band hidden until ≥ 2 posts are published)
-§ 04 · PROFILE  /about       about-photo + owner's paragraph + career line (no quote cards yet)
-§ 05 · RUNTIME  /stack       stack-lists
-§ 06 · CONTACT               cta-band (light) + contact-spec-rows + footer
+§ 00 · INDEX                 hero-band ("Notes on AI / & automation." | abstract + START READING)
+§ 00.1 · START HERE  /start  router table: YOU ARE · START WITH · LEADS TO (3 rows)
+§ 01 · WRITING  /writing     latest post-rows (band hidden until ≥ 2 posts are published)
+§ 02 · PROJECTS  /projects   project-card grid (personal projects only)
+§ 03 · ABOUT                 split: about-photo | owner's paragraph + teaching & learning line
+§ 04 · ELSEWHERE             footer-band: EMAIL · LINKEDIN · GITHUB · RSS, © + back to top
 ```
+Section numbers match the nav numbers. There is no stat strip: the only numbers available came from NDA work. `{component.stat-strip}` stays in the system for real teaching numbers later (e.g. published tutorials, learners taught, with a source).
 
 ### Routes that must exist when Home ships
-Every destination on Home must be a real page: `/about`, `/work`, `/work/order-to-erp`, `/writing`, the CV PDF, `mailto:` and the external profiles. A row or link whose page does not exist yet is removed, not left dead.
+Every destination on Home must be a real page: `/writing`, `/writing?topic=ai`, `/writing?topic=automation`, `/projects`, `/about`, `/id`, `/feed.xml`, `mailto:` and the external profiles. A row or link whose page is empty is removed, not left dead.
 
-### Case-Study Composition
-Every `/work/<slug>` page follows the same seven headings (adapted from jithinrp.com's Parcel Sorter story):
-1. **Meta** (`{component.project-meta}`): domain · stack · year · time spent (status only if verifiable)
+### Project Write-up Composition
+Every `/projects/<slug>` page follows the same seven headings (adapted from jithinrp.com's Parcel Sorter story):
+1. **Meta** (`{component.project-meta}`): topic · stack · year · time spent (status only if verifiable)
 2. **The problem**: one concrete scene: who, when, what hurt
 3. **Why the obvious fix wasn't it**
 4. **What I built**: the smallest thing that worked, with one real photo or diagram
@@ -559,7 +558,7 @@ Every `/work/<slug>` page follows the same seven headings (adapted from jithinrp
 6. **What changed**: a number, or an honest before/after
 7. **What I'd do next**
 
-400–800 words. Real photos of hardware beat mockups.
+400–800 words. Real screenshots and photos beat mockups.
 
 ### Whitespace Philosophy
 Whitespace is structured, not airy: it is bounded by hairlines. Every band has a top rule, every cell has a side rule. The hero gets the most air (`{spacing.section}` above and below), and density increases as the visitor scrolls into evidence.
@@ -571,14 +570,14 @@ Whitespace is structured, not airy: it is bounded by hairlines. Every band has a
 | Flat | No border, no shadow | Canvas sections, nav, section labels |
 | Hairline | 1px `{colors.hairline}` | Cards, table rows, stat cells, nav bottom edge |
 | Lifted | 1px `{colors.hairline-strong}` border | Card hover/focus, ghost button outline |
-| Surface step | `{colors.surface}` on `{colors.canvas}` | Cards, stat strip and closing band read as separate through tone alone |
+| Surface step | `{colors.surface}` on `{colors.canvas}` | Cards, router table and footer band read as separate through tone alone |
 
 There are **no box-shadows** in the system. Depth comes from tone steps and border weight.
 
 ### Decorative Depth
 - **Hero grid lines:** vertical 1px lines in `{colors.grid-line}` at every other column, hero only. (Under review, see Known Gaps.)
 - **Line-art illustrations** (optional, boostlab pattern): isometric single-weight strokes in a domain colour, used as section art instead of stock imagery. Never filled.
-- **Real photography** of hardware builds is the main depth source on case-study pages.
+- **Real screenshots and photos** of the owner's own builds are the main depth source on article and project pages.
 
 ## Shapes
 
@@ -605,29 +604,29 @@ There are **no box-shadows** in the system. Depth comes from tone steps and bord
 
 ### Navigation
 
-**`top-nav`**: 56px sticky bar on `{colors.canvas}` with a 1px bottom hairline. Brand mark + name at left, numbered items in `{typography.mono-nav}`, `{component.nav-location}` at right. Each item is separated by a 1px vertical hairline (itsua pattern).
+**`top-nav`**: 56px sticky bar on `{colors.canvas}` with a 1px bottom hairline. Brand mark + name at left, numbered items in `{typography.mono-nav}` (`[ 00 ] INDEX`, `[ 01 ] WRITING`, `[ 02 ] PROJECTS`, `[ 03 ] ABOUT`), `{component.language-toggle}` at right. Each item is separated by a 1px vertical hairline (itsua pattern). No contact item: contact lives in the footer.
 
-**`nav-item`** / **`nav-item-active`**: `[ 01 ] WORK` format. Inactive in `{colors.faint}`, active in `{colors.ink}`. Active state follows the current page (and scroll position on Home).
+**`nav-item`** / **`nav-item-active`**: inactive in `{colors.faint}`, active in `{colors.ink}`. Active state follows the current page (and scroll position on Home).
 
-**`nav-location`**: `JAKARTA · UTC+7` in `{typography.mono-label}`, `{colors.muted}`. A fact, not a status: no dot, no pulse. If an "open to roles" message is ever needed, it replaces this text only while true.
+**`language-toggle`**: `EN / ID`, current language in `{colors.ink}`, the other in `{colors.faint}`. Switching goes to the translation of the current page if it exists, otherwise to the index of the other language. Never a dead switch.
 
-**`nav-menu-button`** (mobile): `[ MENU ]` in a 44px-tall box with a 1px `{colors.hairline-strong}` border, opening a full-screen numbered list.
+**`nav-menu-button`** (mobile): `[ MENU ]` in a 44px-tall box with a 1px `{colors.hairline-strong}` border, opening a full-screen numbered list. The language toggle stays visible next to it.
 
 ### Section Furniture
 
 **`section-label`**: `§ 0N · TITLE`, `{typography.mono-label}`, `{colors.faint}`, uppercase. Always `{spacing.lg}` above the slash-heading.
 
-**Slash-heading**: `/work`, `/start`, `/stack` in `{typography.display-lg}`. A "more" link (`SHOW ALL`, `{component.button-ghost}` styling without border, no arrow) aligns right on the same baseline.
+**Slash-heading**: `/writing`, `/projects`, `/start` in `{typography.display-lg}`. A "more" link (`SHOW ALL`, `{component.button-ghost}` styling without border, no arrow) aligns right on the same baseline.
 
 ### Hero
 
 **`hero-band`**: `{colors.canvas}` with grid lines, headline in `{typography.display-xl}`. The second line uses `{component.hero-accent-line}` (`{colors.accent}`).
 
-**`hero-abstract`**: right column: an `ABSTRACT` `{component.section-label}`, 2–3 sentences in `{typography.body-md}` (role, what gets built, Jakarta · UTC+7), then one `{component.button-primary}` labelled `SEE THE BUILDS`.
+**`hero-abstract`**: right column: an `ABSTRACT` `{component.section-label}`, 2–3 sentences in `{typography.body-md}` (what is taught, by whom). Mention both languages only once at least one Indonesian post is published, then one `{component.button-primary}` labelled `START READING`.
 
 ### Buttons
 
-**`button-primary`**: `{colors.primary}` block, `{colors.on-primary}` label in `{typography.button}`, `{rounded.none}`, 48px tall. Preceded by **`button-primary-arrow`**: a 48px `{colors.accent}` square holding `→`. On hover the label shifts 4px right; on press it becomes `{component.button-primary-active}`. Used for the hero CTA and the closing CTA.
+**`button-primary`**: `{colors.primary}` block, `{colors.on-primary}` label in `{typography.button}`, `{rounded.none}`, 48px tall. Preceded by **`button-primary-arrow`**: a 48px `{colors.accent}` square holding `→`. On hover the label shifts 4px right; on press it becomes `{component.button-primary-active}`. Used for the hero CTA (`START READING`) and at the end of a tutorial (next lesson).
 
 **`button-ghost`**: `{colors.canvas}` with 1px `{colors.hairline-strong}` outline, `{colors.ink}` label, no arrow. Press: `{component.button-ghost-active}`.
 
@@ -639,16 +638,17 @@ There are **no box-shadows** in the system. Depth comes from tone steps and bord
 
 **Tap targets**: every control is at least `{sizing.tap-target}` (44px) tall on touch screens, using padding or a larger hit box when the visual is smaller (menu button, contact rows, back-to-top).
 
-**`empty-state`**: `{colors.surface}` box, 1px hairline, `{spacing.xl}` padding. A mono-label title in `{colors.muted}` (`NO POSTS YET`), one plain sentence of fact, and one real next action as `{component.button-ghost}` (`SEE THE BUILDS`, `DOWNLOAD THE CV ↓`). No illustration, no promise of future content.
+**`empty-state`**: `{colors.surface}` box, 1px hairline, `{spacing.xl}` padding. A mono-label title in `{colors.muted}` (`NO POSTS YET`), one plain sentence of fact, and one real next action as `{component.button-ghost}` (`SEE THE PROJECTS`, `READ THE TUTORIALS`). No illustration, no promise of future content.
 - `/writing` with fewer than 2 published posts: the band is not rendered on Home; `/writing` itself shows the empty state.
-- `/work` with no published case studies: the empty state replaces the grid on Home and on `/work`.
+- `/writing?topic=…` or `/id` with no posts: the empty state, and the matching router row is hidden on Home.
+- `/projects` with nothing published: the empty state replaces the grid on Home and on `/projects`.
 - Content is static MDX, so loading and error states are not needed; any future client-side fetch must add them.
 
 ### Data Display
 
-**`stat-strip`** / **`stat-cell`**: each cell: label (`{typography.mono-label}`) on top, number (`{typography.stat}`) in the centre, caption (`{typography.mono-label}`, `{colors.muted}`) below. Number colour rotates through the domain colours, with the last cell in `{colors.ink}`. Suffixes (`%`, `s`, `M`) render at 50% size. Only real numbers; drop a cell before padding one.
+**`stat-strip`** / **`stat-cell`** (reserved, not on Home today): each cell: label (`{typography.mono-label}`) on top, number (`{typography.stat}`) in the centre, caption (`{typography.mono-label}`, `{colors.muted}`) below. Suffixes render at 50% size. Only real numbers with a source; drop a cell before padding one. Never numbers from NDA work.
 
-**`stack-list`**: column header in `{typography.mono-label}`, items in `{typography.mono-meta}` each ending with `●` in the domain colour of that column.
+**`stack-list`** (reserved): column header in `{typography.mono-label}`, items in `{typography.mono-meta}`.
 
 ### Router (`/start`)
 
@@ -656,23 +656,25 @@ There are **no box-shadows** in the system. Depth comes from tone steps and bord
 
 | You are | Start with | Leads to |
 |---|---|---|
-| Hiring for AI, data or solutions work | The 3-minute overview + CV | `/about` |
-| Learning AI, data or automation | The beginner tutorial series | `/writing` |
-| Sitting on a workflow worth automating | A real automation build | `/work/order-to-erp` |
+| New to AI and LLMs | Mental models before code | `/writing?topic=ai` |
+| Want to automate a real workflow | Step-by-step automation tutorials | `/writing?topic=automation` |
+| Lebih nyaman baca Bahasa Indonesia | Semua tulisan versi Indonesia | `/id` |
 
-A fourth row ("Just curious → side builds") returns only when at least one BUILD case study exists.
+The third row is written in Indonesian on purpose: it addresses Indonesian readers on the English page. On `/id`, it flips to "Prefer reading in English → `/`". A row is hidden while its destination has no published post.
 
 ### Cards & Containers
 
-**`project-card`**: `{colors.surface}`, 1px hairline, `{rounded.none}`. Top: a header strip (`{component.project-card-header-ai}` / `-data` / `-build` / `-teach`) with `§ 00N` and the year. Then 3 thumbnails, title in `{typography.title-md}`, one-line outcome in `{typography.body-sm}`, domain tag, and stack line in `{component.project-meta}` (`PYTHON · RASPBERRY PI · FASTAPI`). Hover: border becomes `{colors.hairline-strong}`. No shadow, no scale.
+**`project-card`**: `{colors.surface}`, 1px hairline, `{rounded.none}`. Top: a header strip (`{component.project-card-header-ai}` / `-automation` / `-web`) with `§ 00N` and the year. Then 3 thumbnails, title in `{typography.title-md}`, one-line outcome in `{typography.body-sm}`, topic tag, and stack line in `{component.project-meta}` (`NEXT.JS · OPENAI · PRISMA`). Hover: border becomes `{colors.hairline-strong}`. No shadow, no scale.
 
-**`tag-ai` / `tag-data` / `tag-build` / `tag-teach`**: `{typography.tag}`, uppercase, tint background with domain-colour text, 4px × 8px padding.
+**`tag-ai` / `tag-automation` / `tag-web`**: `{typography.tag}`, uppercase, 4px × 8px padding. AI and automation use their tint + topic colour; web is neutral.
+
+**`type-label`**: `TUTORIAL` or `NOTE` in `{typography.mono-label}`, `{colors.muted}`, no box. Type is furniture, not a colour.
 
 **`quote-card`**: quote in `{typography.quote}`, then `{component.avatar}` + name (`{typography.body-sm}`, 500) + role and relationship in `{typography.mono-label}`. Used inside articles for quotes that are part of the story. On Home, only once a real testimonial exists and the person has given permission.
 
-**`post-row`**: `DATE · TAG · TITLE · READ TIME` on one line, hairline between rows, title in `{typography.title-md}`. No arrow.
+**`post-row`**: `DATE · TOPIC · TYPE · TITLE · LANG · READ` on one line (`2025 · 06 · 15 · [WEB] · TUTORIAL · Understanding useState… · EN · 4 MIN`), hairline between rows, title in `{typography.title-md}`. No arrow. Drafts never appear on the live site.
 
-### Case Study
+### Article and Project Pages
 
 **`case-study-header`**: title in `{typography.display-lg}`, one-line outcome below in `{typography.display-md}` `{colors.muted}`, then `{component.project-meta}` as a key-value block.
 
@@ -680,13 +682,13 @@ A fourth row ("Just curious → side builds") returns only when at least one BUI
 
 **`code-block`**: `{colors.surface-dark-elevated}`, `{typography.code}`, `{rounded.none}`, filename label on top in `{typography.mono-label}`.
 
-### Closing
+### Footer ("Elsewhere")
 
-**`cta-band`**: full-bleed `{colors.surface}` with a top hairline. Headline in `{typography.display-lg}` `{colors.ink}` ("Have something worth building?"), with `{component.button-primary}` (`START A CONVERSATION`).
+**`footer-band`**: full-bleed `{colors.surface}` with a top hairline, opened by `§ 04 · ELSEWHERE`. No headline and no sales CTA: the site is for reading.
 
-**`contact-spec-row`**: key-value rows in `{typography.mono-meta}`, min height 44px: `EMAIL · LINKEDIN · GITHUB · TIMEZONE WIB / UTC+7 · RESPONSE < 24H · CV ↓ PDF`. Keys in `{colors.muted}`, values in `{colors.ink}`.
+**`contact-spec-row`**: key-value rows in `{typography.mono-meta}`, min height 44px: `EMAIL · LINKEDIN ↗ · GITHUB ↗ · RSS /feed.xml ↗`. Keys in `{colors.muted}`, values in `{colors.ink}`.
 
-**`footer`**: same surface. `© YEAR NAME` left, an optional one-line personal note centre (owner's own words only), `BACK TO TOP ↑` right in a 44px hit area, all in `{typography.mono-label}`.
+**`footer`**: last row of the band. `© YEAR NAME` left, an optional one-line personal note centre (owner's own words only), `BACK TO TOP ↑` right in a 44px hit area, all in `{typography.mono-label}`.
 
 ## Motion
 
@@ -695,12 +697,12 @@ Motion is light, boostlab-level. Every rule below is disabled under `prefers-red
 | Pattern | Spec |
 |---|---|
 | Reveal on scroll | Opacity 0 → 1, translateY 12px → 0, 400ms, `cubic-bezier(.2,.7,.2,1)`, stagger 60ms, once only |
-| Stat count-up | 0 → value over 800ms on first view |
+| Stat count-up | 0 → value over 800ms on first view (only if a stat strip returns) |
 | Link underline | Width 0 → 100%, 200ms |
 | Button arrow nudge | Label translateX 4px, 150ms |
 | Card lift | Border colour change only, 150ms |
 | Smooth scroll | Lenis, optional |
-| Signature moment | **One** allowed: terminal-style typing on the hero headline, *or* a small live widget (e.g. now-playing from the LED display build). Loads after content, never blocks it |
+| Signature moment | **One** allowed, still undecided (see Known Gaps). Loads after content, never blocks it |
 
 Not allowed: intro loaders, WebGL backgrounds, sound, scroll-hijacking, "best viewed on desktop" gates, pulsing status dots.
 
@@ -710,10 +712,11 @@ Not allowed: intro loaders, WebGL backgrounds, sound, scroll-hijacking, "best vi
 - Keep `{component.button-primary}` ink with the `{colors.accent}` arrow square. One per viewport.
 - Open every section with `{component.section-label}` + slash-heading.
 - Put anything that is data (dates, stacks, numbers) in mono; put anything that is a sentence in Space Grotesk.
-- Use domain colours small and often: tags, stat numbers, header strips.
-- Write every case study with the seven-heading story structure.
-- Lead with an outcome sentence, not a job title.
-- Use real photos of real hardware.
+- Use topic colours small and often: tags and header strips.
+- End every tutorial with a working result the reader can check.
+- Write every project page with the seven-heading story structure.
+- Show the language of every post (`EN`, `ID`, `EN · ID`).
+- Use real screenshots and photos of your own builds.
 - Keep `{spacing.section}` between bands and a hairline at every band edge.
 - Give every interactive element a visible focus ring and a 44px touch target.
 
@@ -723,10 +726,11 @@ Not allowed: intro loaders, WebGL backgrounds, sound, scroll-hijacking, "best vi
 - Don't add box-shadows. Use `{colors.hairline-strong}` or a tone step.
 - Don't bold past 500.
 - Don't fill large areas with colour. No dark bands; the page stays light.
-- Don't introduce a sixth hue, or a second purple.
+- Don't introduce a fourth hue, or a second purple. A new topic gets a colour only if it becomes a main teaching topic; otherwise it uses the neutral tag.
 - Don't put arrows on ghost links, rows or cards.
 - Don't add decorative stripes, edge markers or status dots that mark no real state.
-- Don't show client names or client screenshots. Describe the role, not the clients.
+- Don't show client or employer work in any form (NDA): no names, screenshots, numbers or anonymised case studies.
+- Don't add a newsletter box, pricing, or "hire me" CTA. The site is for reading.
 - Don't invent or pad stats, statuses or testimonials.
 - Don't use `{colors.faint}` for sentences, below 12px, or on `{colors.surface-sunken}`.
 - Don't link to a page or filter that has no content.
@@ -738,14 +742,14 @@ Not allowed: intro loaders, WebGL backgrounds, sound, scroll-hijacking, "best vi
 
 | Name | Width | Key Changes |
 |---|---|---|
-| Mobile | < 768px | Nav collapses to the `[ MENU ]` button opening a full-screen numbered list; hero stacks (headline, then abstract); stat strip becomes 2-col grid; router rows stack as cards; project grid 1-up; case-study meta moves above the title |
-| Tablet | 768–1024px | Nav stays horizontal with labels shortened to `[ 01 ]`; project grid 2-up; stat strip 3 + 2 |
+| Mobile | < 768px | Nav collapses to `EN / ID` + the `[ MENU ]` button opening a full-screen numbered list; hero stacks (headline, then abstract); router rows stack as cards; post rows stack (meta line, title, language · read); project grid 1-up; article meta moves above the title |
+| Tablet | 768–1024px | Nav stays horizontal with labels shortened to `[ 01 ]`; project grid 2-up |
 | Desktop | 1024–1440px | Full layout as specified |
 | Wide | > 1440px | Content caps at 1280px; outer margin grows, type does not |
 
 ### Touch Targets
 - Buttons are 48px tall. Router rows, nav items, the menu button, contact rows and back-to-top are 44px or more.
-- Tags are not interactive on Home; on `/work` filter chips they grow to 32px visual height inside a 44px hit area.
+- Tags are not interactive on Home; on `/writing` and `/projects` filter chips they grow to 32px visual height inside a 44px hit area.
 
 ### Collapsing Strategy
 - Reduce columns, never scale cards down.
@@ -761,9 +765,10 @@ Not allowed: intro loaders, WebGL backgrounds, sound, scroll-hijacking, "best vi
 - Body text ≥ 4.5:1 contrast on its surface; every token pair in this file is listed with its ratio.
 - 2px `{colors.focus-ring}` outline with 2px offset on every focusable element (`:focus-visible`).
 - Full keyboard navigation; skip-to-content link.
-- Alt text on every build photo describing what the hardware does.
+- Alt text on every screenshot and photo describing what it shows.
 - LCP < 2.0s on mobile 4G; home page JS < 50KB; fonts self-hosted and subset.
 - OG images generated per page in this style (title in Space Grotesk, meta in mono, on `{colors.canvas}`).
+- `<html lang>` matches the page language; EN and ID versions of a post link each other with `hreflang`.
 
 ## Quality Filter (antislop)
 
@@ -775,11 +780,14 @@ Logged decisions:
 - 2026-10-26, audit 001: left-edge domain markers → **dropped**.
 - 2026-10-26, audit 001: dark closing band → **dropped** (owner: keep the page light).
 - 2026-10-26, audit 001: logo and accent unified to `#6840C8`.
+- 2026-10-26, rebrand: the site moves from AI-engineer portfolio to teaching (tutorials, notes, personal projects). Day-job work is under NDA: the stat strip, the two day-job project cards and `/work/order-to-erp` are removed. `/work` becomes `/projects`.
+- 2026-10-26, rebrand: bilingual EN / ID; one `/writing` section with `TUTORIAL` / `NOTE` types; read-only (no CTA beyond `START READING`); topics AI and automation. Domain colours data, build and teach removed; `web` is neutral.
+- 2026-10-26: Design Read and dials set (ENERGY 2 / RHYTHM 2 / MOTION 1). Closes audit #20 and #21.
 
 ## Iteration Guide
 
 1. Work on ONE component at a time and reference its YAML key (`{component.project-card}`, `{component.stat-cell}`).
-2. New component? Decide first whether it is **furniture** (labels, nav, tables: mono, faint/muted) or **content** (cards, case studies: grotesk, ink/body). Mixing the two voices inside one element breaks the system.
+2. New component? Decide first whether it is **furniture** (labels, nav, tables: mono, faint/muted) or **content** (cards, articles: grotesk, ink/body). Mixing the two voices inside one element breaks the system.
 3. Variants (`-active`, domain variants like `-ai`) live as separate entries in `components:`, never as nested objects.
 4. Use `{token.refs}` in prose; write a hex at most once next to its reference.
 5. When in doubt about emphasis: bigger before bolder, mono label before colour, hairline before shadow.
@@ -793,16 +801,18 @@ Logged decisions:
 
 **Open audit items (not yet approved):**
 - #18 Interactive containers (cards, router rows) separate from white by a 1.39:1 hairline; non-text contrast for clickable boundaries should reach 3:1.
-- #19 Stat strip directly under the hero follows the "hero + stats" template; consider moving the proof next to the related cards.
-- #20, #21 No Design Read or dials yet. Proposal: "Reading this as: personal portfolio for hiring managers and learners, spec-sheet language, ENERGY 2 / RHYTHM 2 / MOTION 1." With RHYTHM 2, at least one section should break the label + slash-heading pattern.
-- #22 Hero headline "Practical AI, built to ship." is a placeholder and fails the swap test.
-- #24 `/stack` "TEACHING" column repeats `/start` and the career line.
-- #26 The accent-serif "Selected builds" and the stat suffix sizing need a one-line reason or removal.
+- Resolved by the rebrand: #19 (stat strip removed), #20 and #21 (dials set), #22 (descriptive hero), #24 (`/stack` removed), #26 (accent-serif "Selected builds" and stat suffix removed with their sections).
 
-**Content not yet decided:** final hero headline, the about paragraph (`[YOUR WORDS]`), which 4–6 builds go in `/work` (side builds vs day-job work, and whether photos exist), the about photo, testimonial permissions.
+**Content (the real bottleneck):**
+- Published posts today: **1** (useState, a React tutorial, topic `web`). In the two teaching topics (AI, automation): **0 published**, 1 draft ("Understanding RAG Mental Models"). No Indonesian posts yet. Home's `/writing` band, the router rows and `/id` all stay hidden until their content exists, so the first launch needs at least 2 published posts, ideally one per topic.
+- The two React posts are off-topic: keep them as a `web` archive, or unpublish. Owner decides.
+- Personal projects: TheraMind (bootcamp team project) and a Next.js mini project. Thumbnails and screenshots needed.
+- The about paragraph (`[YOUR WORDS]`) and the about photo.
+- Indonesian UI strings for nav, labels and empty states.
 
 **Other:**
-- **Signature moment** (terminal hero vs. live widget vs. none) is undecided.
+- **Signature moment** (terminal hero vs. a small live widget vs. none) is undecided.
+- Blog index and post frames in Figma still show the old filter chips (DATA / BUILD / TEACH) and column headers; they get updated in the blog design pass.
 - The logo PNGs still use `#6A55F2`; re-export in `#6840C8`.
 - Form components (contact form, newsletter) are out of scope; contact is email-only for now.
 - Line-art illustration style is described but no assets exist yet.
