@@ -2,7 +2,6 @@ import Link from "next/link";
 import AboutDistanceGreeting from "@/components/AboutDistanceGreeting";
 import AboutScrollReveals from "@/components/AboutScrollReveals";
 import FitText from "@/components/FitText";
-import ImpactCard from "@/components/ImpactCard";
 
 const roles = [
   {
@@ -11,13 +10,6 @@ const roles = [
     company: "Akasha Wira International",
     detail:
       "Leading applied AI systems for order automation, OCR, RAG, ERP-connected workflows, and internal productivity.",
-  },
-  {
-    period: "Nov 2023 - Dec 2025",
-    title: "AI & Data Specialist",
-    company: "Youvit",
-    detail:
-      "Built production-grade automation, data infrastructure, OCR pipelines, and conversational AI for operations and customer support.",
   },
   {
     period: "2024 - Present",
@@ -32,33 +24,6 @@ const roles = [
     company: "RevoU",
     detail:
       "Teaching Gen AI, prompt engineering, RAG chatbot development, Document AI, and analytics workflows.",
-  },
-];
-
-const proofPoints = [
-  {
-    value: "97%",
-    label: "order processing time reduction",
-    tooltip:
-      "OCR + Python automation at Youvit cut order-to-ERP data entry from hours of manual work down to minutes — end-to-end, no human in the loop.",
-  },
-  {
-    value: "99.98%",
-    label: "customer service response improvement",
-    tooltip:
-      "Nutritalk WhatsApp AI assistant (RAG-powered) reduced response time from 4–5 hours to 4 seconds, handling customer queries around the clock.",
-  },
-  {
-    value: "88%",
-    label: "processing cost savings",
-    tooltip:
-      "Eliminating manual document handling through OCR pipelines and automation slashed operational processing costs by nearly nine-tenths.",
-  },
-  {
-    value: "5.5M IDR",
-    label: "monthly operational savings",
-    tooltip:
-      "Combined impact of order automation and AI-powered customer service — 5.5M IDR saved every month in recurring operational overhead.",
   },
 ];
 
@@ -206,28 +171,10 @@ export default function AboutPage() {
             </div>
           </section>
 
-          {/* Beat 2 — Impact */}
+          {/* Beat 2 — Work */}
           <section className="flex min-h-screen flex-col justify-center py-28">
             <div className="mx-auto w-full max-w-6xl">
-              <BeatHeader index={2} label="Impact" />
-              <div className="grid gap-0 sm:grid-cols-2">
-                {proofPoints.map((point) => (
-                  <div key={point.value} data-about-reveal>
-                    <ImpactCard
-                      value={point.value}
-                      label={point.label}
-                      tooltip={point.tooltip}
-                    />
-                  </div>
-                ))}
-              </div>
-            </div>
-          </section>
-
-          {/* Beat 3 — Work */}
-          <section className="flex min-h-screen flex-col justify-center py-28">
-            <div className="mx-auto w-full max-w-6xl">
-              <BeatHeader index={3} label="Experience" />
+              <BeatHeader index={2} label="Experience" />
               <h2
                 data-scramble-reveal
                 className="mb-14 text-[clamp(3.5rem,8vw,10rem)] font-black uppercase leading-[0.78] tracking-[-0.08em]"
@@ -264,10 +211,10 @@ export default function AboutPage() {
             </div>
           </section>
 
-          {/* Beat 4 — Background */}
+          {/* Beat 3 — Background */}
           <section className="flex min-h-screen flex-col justify-center py-28">
             <div className="mx-auto w-full max-w-6xl">
-              <BeatHeader index={4} label="Background" />
+              <BeatHeader index={3} label="Background" />
               <div className="grid gap-20 md:grid-cols-[1.2fr_1fr]">
                 <div data-about-reveal>
                   <p className="mb-8 text-[0.65rem] font-semibold uppercase tracking-[0.28em] text-gray-400">
@@ -314,7 +261,7 @@ export default function AboutPage() {
             </div>
           </section>
 
-          {/* Beat 5 — CTA */}
+          {/* Beat 4 — CTA */}
           <section className="flex min-h-screen flex-col justify-center pb-24 pt-28">
             <div className="mx-auto w-full max-w-6xl">
               <div className="border-t border-gray-200/80 pt-10">
