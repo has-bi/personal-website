@@ -614,7 +614,7 @@ There are **no box-shadows** in the system. Depth comes from tone steps and bord
 
 ### Decorative Depth
 - **Hero grid lines:** vertical 1px lines in `{colors.grid-line}` at every other column, hero only. (Under review, see Known Gaps.)
-- **Line-art illustrations** (optional, boostlab pattern): isometric single-weight strokes in a domain colour, used as section art instead of stock imagery. Never filled.
+- **Line-art illustrations** (optional, Loop/boostlab pattern): isometric flat vector, thick uniform `{colors.ink}` outlines, white objects, flat solid `{colors.accent}` fills on key surfaces, hard-edged solid `{colors.ink}` shadows, thin wireframe guide lines. No gradients, no text inside the image. Used as section art instead of stock imagery.
 - **Real screenshots and photos** of the owner's own builds are the main depth source on article and project pages.
 
 ## Shapes
@@ -899,6 +899,8 @@ Logged decisions:
 - 2026-10-26, rebrand: bilingual EN / ID; one `/writing` section with `TUTORIAL` / `NOTE` types; read-only (no CTA beyond `START READING`); topics AI and automation. Domain colours data, build and teach removed; `web` is neutral.
 - 2026-10-26: Design Read and dials set (ENERGY 2 / RHYTHM 2 / MOTION 1). Closes audit #20 and #21.
 - 2026-10-26, writing pass: the "Featured" block is **dropped** (not in the spec; with one published post it would duplicate the list). Article dek uses the real excerpt instead of agent copy. Component defaults scrubbed of NDA content.
+- 2026-10-27, first AI note: owner approves agent-drafted copy (body and excerpt) for "Where Should You Start Learning AI?", built from the owner's interview answers; owner re-reads after publish.
+- 2026-10-27: line-art illustrations switch from "never filled" to the Loop reference style (solid accent fills, ink shadows); first set generated for the AI note.
 
 ## Iteration Guide
 
@@ -934,6 +936,5 @@ Logged decisions:
 - The Next.js mini project has no write-up yet; its card links to a page that must exist before launch, or the card waits.
 - The logo PNGs still use `#6A55F2`; re-export in `#6840C8`.
 - Form components (contact form, newsletter) are out of scope; contact is email-only for now.
-- Line-art illustration style is described but no assets exist yet.
 - Fluid type values (`clamp()`) are documented in prose because the token format holds fixed sizes only.
 - Link and focus-ring components declare `{colors.canvas}` as background for contrast linting; in practice they inherit whatever surface they sit on (accent passes AA on canvas, surface and surface-sunken).
