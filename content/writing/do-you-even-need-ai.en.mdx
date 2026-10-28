@@ -4,7 +4,7 @@ date: "2026-10-28"
 type: note
 topic: ai
 lang: en
-excerpt: "Four questions to ask before you build anything, walked through with a real membership program for a coffee shop. Sometimes the answer isn't AI at all."
+excerpt: "Five questions to ask before you build anything, walked through with a real membership program for a coffee shop. Sometimes the answer isn't AI at all."
 tags: [AI, Automation, Problem Solving]
 cover: "/images/writing/do-you-even-need-ai/cover.webp"
 draft: false
@@ -14,13 +14,15 @@ In [the last post](/writing/where-to-start-learning-ai), we used AI to find the 
 
 Most people jump straight to "let's build an AI for it." I get it. Building is the fun part. But in my experience, a lot of problems don't need AI at all. Sometimes the fix is a better SOP. Sometimes it's a simple form. And sometimes you really do need to build something.
 
-So how do you decide? I ask four questions, in this order. I'll walk through them with a real example: the membership program I built for [Abay Coffee and Listening Bar](https://abay-coffee.vercel.app/), a coffee shop I help run.
+So how do you decide? I ask five questions, in this order. I'll walk through them with a real example: the membership program I built for [Abay Coffee and Listening Bar](https://abay-coffee.vercel.app/), a coffee shop I help run.
 
 ## The problem
 
 Abay had sales data from its **POS** (point of sale): the cashier app that records every order and payment. But that data was only per transaction. We didn't know **who** was buying, how much they usually spent, or when they came back. Without that, we couldn't plan promos or new menu items around real customers. That was the root cause.
 
-## 1. Can you remove or simplify it first?
+So the goal was clear: get to know our customers. The question was how.
+
+## 1. Can you simplify it first?
 
 Before thinking about tech, ask if there's a simpler way. We looked at two:
 
@@ -29,87 +31,101 @@ Before thinking about tech, ask if there's a simpler way. We looked at two:
 
 Both options failed for the same reason: **the work landed on the wrong person.** So when you judge a "simple" solution, don't just ask "is this easy?" Ask **"easy for whom?"**
 
-One more thing about this step: every change meets resistance. That's normal, and it doesn't mean your solution failed. Set your expectations early. How long should it take before people get used to it? What success rate is good enough?
+Neither option worked. So the next question was whether the problem deserved something bigger.
 
-## 2. Is it worth it?
+## 2. Is it worth solving?
 
-Before you think about how to solve it, check if it's worth solving at all. Look at four things:
+Look at four things:
 
-- **Frequency.** How often does it happen? (Every day. There are always customers.)
-- **Time per occurrence.** How long does it take each time?
-- **Reach.** Who is affected? (The owner and the customers.)
-- **Risk if it goes wrong.** What happens when the solution fails? (One transaction isn't recorded, and it can be fixed in the POS.)
+- **Frequency.** How often does it happen? For Abay: every day. There are always customers.
+- **Time per occurrence.** How long does it take each time? Keeping customer data up to date by hand would take about two minutes a day.
+- **Reach.** Who is affected? The owner and the customers.
+- **Risk if it goes wrong.** What happens if the solution fails? Here, one transaction isn't recorded, and it can be fixed in the POS.
 
-But don't stop at the risk of your solution failing. Also ask: **what's the risk if the manual process fails?** Updating the customer data by hand took about two minutes a day. Small. But it could never be forgotten, because if it was, customers couldn't redeem their points at the counter. That's a bad experience, every time.
+Two minutes a day sounds small. But also ask the opposite question: **what's the risk if the manual process fails?** That daily update could never be forgotten. If it was, customers couldn't redeem their points at the counter. That's a bad experience, every time.
 
-These four things also tell you what to measure. And to measure improvement, you need a baseline. That's why the first post asked you to write down your repetitive tasks and how long they take.
+These four things also tell you what success looks like, so write it down before you build. Start with a baseline, like the list of tasks and times from the first post. Then decide what you'll measure. For Abay: how many customers are registered, how many repeat transactions are linked to a customer, and how much time the daily update takes.
 
-After one month, this is what changed:
+And set your expectations. Every change meets resistance at first. That's normal, and it doesn't mean your solution failed. Decide how long people should need to get used to it, and what success rate is good enough.
+
+It was worth solving. So what would the solution actually be?
+
+## 3. What's the solution, done by hand?
+
+Forget tools for a moment. If one person did this by hand every day, what would they do? For Abay:
+
+1. Export the customer data from the POS.
+2. Put it into a spreadsheet that acts as the customer database.
+3. Let customers check their points and baristas redeem them, based on that spreadsheet.
+
+That's the solution. There's no tech decision in it yet. Writing it this way makes the next two questions much easier, because now you know exactly what any tool would need to do.
+
+## 4. Build or buy?
+
+Now check if a tool already does this. If the problem is personal or specific to you, I lean toward building. You learn a lot along the way, and that learning compounds. If the problem sits at team or company level, build vs buy needs a much more careful decision.
+
+Even for a personal problem, spend ten minutes checking if a tool already solves it. Build because you chose to, not because you didn't look.
+
+For Abay, the solution needs data from the POS. But the POS was on a standard plan with no API, which means other apps can't read its data directly. So loyalty apps couldn't connect to it, and upgrading the POS just for a loyalty program didn't make sense financially. The answer was to build something around what already existed.
+
+## 5. What form should it take?
+
+Look at the manual steps again. Someone would have to do them every single day. That's the moment a solution changes form. Not before.
+
+To pick the form, ask two questions about the steps:
+
+- **Does it repeat?** Or does it only come up now and then?
+- **Does it need judgement?** A clear rule means the same input always leads to the same action. Judgement means someone has to read, interpret, or decide.
+
+![A two by two grid. Rare and clear rules: an SOP or checklist. Rare and needs judgement: AI as a chat partner. Repeats and clear rules: automation, highlighted for Abay. Repeats and needs judgement: AI plus automation. Below: if someone needs to see or act on the result, add an interface.](/images/writing/do-you-even-need-ai/matrix.webp)
+
+Then one more question: **does someone need to see the result or act on it?** If yes, the solution also needs an interface, like a dashboard, a page, or a notification.
+
+For Abay, every step repeats daily and follows a clear rule. So the answer is automation, not AI.
+
+I didn't see that right away. My very first question to AI was: "Can an AI agent log in to the POS and download the report for me every day?" The answer surprised me. Yes, it could, but it shouldn't. An AI agent can give a slightly different result each run, and it can click the wrong thing. A script does exactly the same steps every time. So the advice was: **use AI to write the script, not to run the task every day.**
+
+![A chat where I ask AI, in Indonesian, how to automatically download a report from a POS without an API and upload it to Google Drive. The answer recommends a Playwright script on a schedule, with AI used to write the script.](/images/writing/do-you-even-need-ai/pos-initial-chat.webp "My first question to AI, in Indonesian. The short answer: it can, but use a script instead.")
+
+Two groups of people also needed to act on the data. So the solution got two interfaces: a member page where customers check their points, and a staff page where baristas redeem them.
+
+Put together, the final setup looks like this. A browser automation (Playwright) logs in to the POS, exports the customer data, and uploads it to Google Drive. Every morning before the shop opens, Google Apps Script updates the customer spreadsheet. Both pages read from that spreadsheet.
+
+![Every morning: the POS data is exported by Playwright, saved to Google Drive, and loaded by Apps Script into a customer spreadsheet. Customers check their points on the website and baristas redeem them on a staff page.](/images/writing/do-you-even-need-ai/system-flow.webp)
+
+## After launch
+
+The resistance I expected in step 2 showed up quickly:
+
+- **Baristas didn't know how to redeem points.** So I made the staff page do just two things: check a customer's points, and redeem an available promo. A redeemed promo can't be used again.
+- **Some customers didn't want to share their phone number.** So they can now sign up with email.
+
+Neither problem meant the solution failed. Both were signs that something was still too hard for someone. Each time, the answer was to make it simpler.
+
+After one month, these are the numbers I said I would measure:
 
 - **Every** repeat transaction is linked to a customer.
-- Updating the customer data takes **0 seconds** instead of 2 minutes a day.
+- The daily update takes **0 seconds** instead of 2 minutes.
 - **50+** customers are registered. Before, there were zero.
 
 The time saved is the smallest win here. The bigger ones: nobody has to remember a daily task anymore, and the shop now has customer data that simply didn't exist before. **Some solutions save time. The best ones make something possible that wasn't possible before.**
 
 ![Three wins, from smallest to biggest: two minutes a day saved, no daily task to remember, and zero to more than 50 registered customers in one month.](/images/writing/do-you-even-need-ai/value.webp)
 
-## 3. Build or buy?
-
-If it's worth solving, the next question is how. If the problem is personal or specific to you, I lean toward building. You learn a lot along the way, and that learning compounds. If the problem sits at team or company level, build vs buy needs a much more careful decision.
-
-Even for a personal problem, spend ten minutes checking if a tool already solves it. Build because you chose to, not because you didn't look.
-
-For Abay, buying didn't work. The POS was on a standard plan with no API, which means other apps can't read its data directly. So loyalty apps couldn't connect to it. Upgrading the POS just for a loyalty program didn't make sense financially. So the answer was to build something around what already existed.
-
-## 4. Clear rules, or judgement?
-
-If you do a task by hand, you already know the steps. Write them down, one by one. Then label each step:
-
-- **Clear rule:** the same input always leads to the same action. Plain automation can do this.
-- **Judgement:** you have to read, interpret, or decide. This is where AI + automation comes in.
-
-For the membership program, every step was a clear rule:
-
-1. Log in to the POS and export the customer data.
-2. Upload the file to Google Drive.
-3. Every morning, before the shop opens, update the customer spreadsheet from the newest file.
-4. Check membership and redeem points when a customer asks.
-
-![Four manual steps, each labelled as a rule, all lead to plain automation. The AI plus automation option is marked as not needed.](/images/writing/do-you-even-need-ai/rules.webp)
-
-So the solution has no AI inside it. It's a browser automation (Playwright) that exports the data and uploads it, plus Google Apps Script that updates the spreadsheet every morning and runs the membership and redeem logic.
-
-![Every morning: the POS data is exported by Playwright, saved to Google Drive, and loaded by Apps Script into a customer spreadsheet. Customers check their points on the website and baristas redeem them on a staff page.](/images/writing/do-you-even-need-ai/system-flow.webp)
-
 ## So where does AI fit?
 
-Everywhere else. I used AI to brainstorm the problem, explore solutions, build quick prototypes, and write the final implementation.
+Look back at the final setup: there's no AI inside it. But I used AI at every step of getting there. It helped me brainstorm the problem, explore solutions, build quick prototypes, and write the final code.
 
-My very first question was actually: "Can an AI agent log in to the POS and download the report for me every day?" The answer surprised me. Yes, it could, but it shouldn't. An AI agent can give a slightly different result each run, and it can click the wrong thing. A script does exactly the same steps every time. So the advice was: **use AI to write the script, not to run the task every day.**
-
-![A chat where I ask AI, in Indonesian, how to automatically download a report from a POS without an API and upload it to Google Drive. The answer recommends a Playwright script on a schedule, with AI used to write the script.](/images/writing/do-you-even-need-ai/pos-initial-chat.webp "My first question to AI, in Indonesian. The short answer: it can, but use a script instead.")
-
-That's the rule from step 4 again. A task with clear rules deserves a tool that follows rules the same way every time.
-
-And that's the shift I keep seeing. **AI doesn't have to be inside your solution. It can be what helps you build it.** The barrier to building your own tools is much lower than it used to be, so solving your own problems is now a real option for one person, not just for a team of engineers.
-
-## Resistance is feedback
-
-Two things went wrong at the start:
-
-- **Baristas didn't know how to redeem points.** So I built a staff-only page that does just two things: check a customer's points, and redeem an available promo. A redeemed promo can't be used again.
-- **Some customers didn't want to share their phone number.** So they can now sign up with email.
-
-Neither problem meant the solution failed. Both were signs that something was still too hard for someone. Each time, the answer was to make it simpler.
+That's the shift I keep seeing. **AI doesn't have to be inside your solution. It can be what helps you build it.** The barrier to building your own tools is much lower than it used to be, so solving your own problems is now a real option for one person, not just for a team of engineers.
 
 ## Your checklist
 
 Before you build anything, ask:
 
-1. Can I remove or simplify it first? Easy for whom?
-2. Is it worth it? What's my baseline, and what will I measure?
-3. Build or buy?
-4. Which steps are clear rules, and which need judgement?
+1. Can I simplify it first? Easy for whom?
+2. Is it worth solving? What's my baseline, and what will I measure?
+3. What's the solution if I do it by hand?
+4. Build or buy?
+5. What form should it take? An SOP, AI, automation, or AI + automation? Does someone need an interface?
 
 In the next post, I'll write about the building part, and why most of my early attempts failed.
