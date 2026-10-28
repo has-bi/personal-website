@@ -4,7 +4,7 @@ date: "2026-10-27"
 type: note
 topic: ai
 lang: en
-excerpt: "AI moves fast, so most people never start. Why your fundamentals matter more than the tools, and one small step you can take this week."
+excerpt: "AI moves fast, so most people never start. Why your fundamentals matter more than the tools, and how to use AI to find the real problem before you fix anything."
 tags: [AI, Productivity, Root Cause]
 cover: "/images/writing/where-to-start-learning-ai/01-cover.webp"
 draft: false
@@ -28,15 +28,15 @@ I'm not saying you shouldn't learn AI tools. But tools change every few months. 
 2. **Logic.** Breaking a big problem into small steps and finding the root cause. This is how you explain a task clearly to AI, and how you check its work.
 3. **Creativity.** Seeing where AI could fit into your work, and trying another way when the first one doesn't work.
 
-![A tower whose foundation is three fixed blocks for domain knowledge, logic and creativity, while the tool blocks on top keep being swapped out.](/images/writing/where-to-start-learning-ai/02-fundamentals.webp "The foundation stays. The tools on top keep changing.")
+![The foundation is three solid blocks marked with a briefcase, a flowchart and a light bulb. On top, AI app windows are lifted away and replaced by a crane.](/images/writing/where-to-start-learning-ai/02-fundamentals.webp "The foundation stays. The tools on top keep changing.")
 
-So no, you're not too late. If your fundamentals are strong, you can pick up any tool when you need it.
+So no, you're not too late. If your fundamentals are strong, you can pick up any tool when you need it. And the first fundamental to use is logic: finding the real problem.
 
 ## Start with the problem, not the tool
 
 Most people start by asking, "Which AI tool is the best?" I think that's backwards.
 
-Start with the problem. This is where logic comes in. If you know what the problem is, you're already halfway to the solution. And I don't mean the surface problem. I mean the **root cause**. Many problems share the same root cause. If you've fixed a problem but things still feel inefficient, that's usually a sign you haven't touched the root cause yet.
+Start with the problem. If you know what the problem is, you're already halfway to the solution. And I don't mean the surface problem. I mean the **root cause**. Many problems share the same root cause. If you've fixed a problem but things still feel inefficient, that's usually a sign you haven't touched the root cause yet.
 
 Here's an example I use a lot. Why were you late to the office?
 
@@ -46,88 +46,80 @@ Here's an example I use a lot. Why were you late to the office?
 - Why didn't the alarm go off? → My phone died.
 - Why did your phone die? → I fell asleep watching YouTube last night.
 
-**That's the root cause.** This is called the **5 Whys**: keep asking "why" until you reach the real reason.
+**That's the root cause.** "Set more alarms" won't fix it, because the phone will still die. The real fix is a sleep timer and a charging phone.
+
+This technique is called the **5 Whys**. I won't explain all of it here, because [this guide from Adobe](https://business.adobe.com/blog/basics/5-whys-root-cause-analysis) does it better.
 
 ![A ball rolls down five steps, one for each why, and stops in the hole of the last step: the root cause.](/images/writing/where-to-start-learning-ai/03-five-whys.webp "Five whys down to the root cause.")
 
-Now look at the solutions. "Set more alarms" or "run faster to catch the bus" won't fix anything, because the phone will still die. The real fix is simple: set a sleep timer so videos stop on their own, and make sure your phone is charging before you sleep.
+The good news: you don't have to do this alone. This is the first place where AI can help.
 
-Do the same with your repetitive tasks at work.
+## Use AI to find the root cause
 
-AI is just a tool. A great tool is useless if you don't know what you need it for.
+Asking "why" five times sounds easy. In practice, we stop too early. We stop at the first answer that sounds right, or we jump straight to a solution.
 
-## My story: college notes
+AI is good at keeping you honest here. It doesn't get tired of asking "why", and it doesn't let you skip ahead if you tell it not to. You bring the answers, because you know your work. AI brings the discipline.
 
-The first time I used AI to cut repetitive work was in college. I kept two sets of notes: handwritten notes in class, and detailed notes in Notion where I could see the history.
-
-Moving everything from paper to Notion and cleaning it up was very repetitive. So I used AI to tidy up my notes into the format I had already built in Notion.
-
-It worked really well. And I think the reason was how we split the work:
-
-> **I wrote it. AI cleaned it up. I defined the structure.**
-
-![Messy handwritten notes go into an AI machine on a conveyor belt and come out as a neat, structured stack.](/images/writing/where-to-start-learning-ai/04-who-does-what.webp)
-
-Because of that, I still understood everything in my notes. AI didn't think for me. It only did the repetitive part.
-
-## Honestly, it failed a lot at first
-
-This is the part people rarely talk about.
-
-In the beginning, I failed more than I succeeded. I didn't know the best structure yet, and AI back then wasn't as smart as it is now. I spent hours "debugging" the process until the result matched what I expected.
-
-So if your first week feels slower, that's normal. **The time savings come later.** Once the process works, you save a lot of time, and you keep saving it every time you repeat the task.
-
-![Two lines over time: manual work stays flat, while working with AI starts higher, then crosses below it.](/images/writing/where-to-start-learning-ai/05-time-curve.webp "Flat line: manual. Purple line: with AI. Slower first, faster later.")
-
-## The key: get on the same page
-
-The biggest problem with AI is that it doesn't know what's in your head. So it guesses, and it often guesses wrong.
-
-What finally made my results good was an **interview**. Before AI does anything, make sure you both understand the task the same way. Keep going through every confusing question and every open item until everything is clear.
-
-The easiest way is to make AI ask *you*. Copy this prompt:
+Copy this prompt:
 
 ```text
-I want to [your task].
-Before you start, interview me.
+I want to find the root cause of a problem at work:
+[describe the task and why it bothers you].
+Use the 5 Whys method.
+Ask me one "why" question per message.
+Don't suggest any solutions yet.
+If my answer is vague, ask me to be more specific.
+Stop when we reach a cause I can actually change,
+then summarize the chain from the problem to the root cause.
+```
+
+Here's how it could go for my friend's spreadsheet problem. I don't know his exact answers, so this is just an illustration:
+
+- Why do you type data into the spreadsheet by hand? → Orders come in from chats, calls, and notes.
+- Why do they come from so many places? → Every customer orders in their own way.
+- Why is there no single way to order? → There's no order form. I write down whatever they send.
+- Why is there no order form? → Nobody made one. It has always been done like this.
+
+Now the problem looks different. Typing isn't the real problem. It's a symptom. The root cause is that **orders don't arrive in one format**. If AI only helped him type faster, he would still be cleaning messy data every week.
+
+## Then find the solution together
+
+Only now, with the root cause in hand, do you start looking for a solution.
+
+The biggest problem with AI here is that it doesn't know what's in your head. So it guesses, and it often guesses wrong. What finally made my results good was an **interview**: before AI suggests anything, make sure you both understand the problem the same way. Keep going through every confusing question and every open item until everything is clear.
+
+Start a new chat with your root cause, and make AI ask *you*:
+
+```text
+I found the root cause of a problem at work: [your root cause].
+Help me find a solution. Before you suggest anything, interview me.
 Ask one question per message.
 For each question, suggest the answer you recommend,
 so I can just say "yes" or correct it.
-Keep going until you understand the context, the format,
+Keep going until you understand the context, my constraints,
 and the result I want.
-Then summarize your understanding before you start working.
+Then summarize your understanding and give me two or three options.
 ```
 
 ![Two cubes pass questions and answers back and forth on a loop, and only then does the track lead into the working machine.](/images/writing/where-to-start-learning-ai/06-interview-loop.webp)
 
-For complex tasks, this can take a long time. But that's the process, and the output is much better.
+For complex problems, this can take a long time. But that's the process, and the answer is much better.
 
 Fun fact: this post was written the same way. AI asked me questions one by one, I answered, and then it helped me put it together. The stories and opinions are still mine.
 
 If you get comfortable with this, check out the [grilling skill by Matt Pocock](https://skills.sh/mattpocock/skills/grilling). It's built for stress-testing plans and ideas, and it's a good next step.
 
-## Three levels, one step at a time
-
-You don't need to build a fancy system right away. Think of it as three levels:
-
-1. **Chat with AI.** Copy and paste into ChatGPT, Claude, or Gemini. Good for building or explaining forecasting formulas, or researching potential leads.
-2. **AI inside the tools you already use.** For example, AI in Google Sheets, or turning a photo or PDF into a table. Good for data entry.
-3. **Automation.** Workflows or chatbots that run on their own. Good for answering the same lead questions over and over.
-
-Start at level 1. Move up when the current level feels easy.
-
 ## AI is not a replacement
 
-If there's one thing I want you to remember: **AI is not replacing you.** It's a tool to improve your speed, your quality, and the value of your work. You still understand your data. You still understand your customers. If a forecast from AI looks strange, you're the one who has to say, "This is wrong."
+In both steps, you're the one with the answers. AI asks the questions and keeps the process honest, but **AI is not replacing you.** It's a tool to improve your speed, your quality, and the value of your work. You still understand your data. You still understand your customers. If AI's summary looks wrong, you're the one who has to say, "This is wrong."
 
 ## Start this week
 
 If you only have time for one thing this week:
 
 1. **Write down** every repetitive task you do for one week, and roughly how long each one takes.
-2. **Ask "why"** about the one that takes the most time, just like the bus example. Why is it manual? Why are the formats different? Keep asking until you find the root cause.
-3. **Pick one.** Just one.
-4. **Let AI interview you** with the prompt above, and try it together.
+2. **Pick the one** that takes the most time. Just one.
+3. **Find its root cause** with AI, using the first prompt.
+4. **Explore solutions** with AI, using the second prompt. Don't build anything yet.
 
-It doesn't have to work on the first try. What matters is that you start.
+Building the solution is a different story, and it's where most of my early AI work failed. That's the next post. For now, find the real problem first.
