@@ -1,0 +1,115 @@
+---
+title: "You Found the Problem. Do You Even Need AI to Solve It?"
+date: "2026-10-28"
+type: note
+topic: ai
+lang: en
+excerpt: "Four questions to ask before you build anything, walked through with a real membership program for a coffee shop. Sometimes the answer isn't AI at all."
+tags: [AI, Automation, Problem Solving]
+cover: "/images/writing/do-you-even-need-ai/cover.webp"
+draft: false
+---
+
+In [the last post](/writing/where-to-start-learning-ai), we used AI to find the root cause of a problem. So now what?
+
+Most people jump straight to "let's build an AI for it." I get it. Building is the fun part. But in my experience, a lot of problems don't need AI at all. Sometimes the fix is a better SOP. Sometimes it's a simple form. And sometimes you really do need to build something.
+
+So how do you decide? I ask four questions, in this order. I'll walk through them with a real example: the membership program I built for [Abay Coffee and Listening Bar](https://abay-coffee.vercel.app/), a coffee shop I help run.
+
+## The problem
+
+Abay had sales data from its **POS** (point of sale): the cashier app that records every order and payment. But that data was only per transaction. We didn't know **who** was buying, how much they usually spent, or when they came back. Without that, we couldn't plan promos or new menu items around real customers. That was the root cause.
+
+## 1. Can you remove or simplify it first?
+
+Before thinking about tech, ask if there's a simpler way. We looked at two:
+
+- **A manual spreadsheet at the counter.** Baristas would need a proper device, every entry would look different, and typing data isn't their job. Their job is hospitality.
+- **Stamp cards.** Most customers forget to bring the card. It also wastes paper, and printing isn't cheap.
+
+Both options failed for the same reason: **the work landed on the wrong person.** So when you judge a "simple" solution, don't just ask "is this easy?" Ask **"easy for whom?"**
+
+One more thing about this step: every change meets resistance. That's normal, and it doesn't mean your solution failed. Set your expectations early. How long should it take before people get used to it? What success rate is good enough?
+
+## 2. Is it worth it?
+
+Before you think about how to solve it, check if it's worth solving at all. Look at four things:
+
+- **Frequency.** How often does it happen? (Every day. There are always customers.)
+- **Time per occurrence.** How long does it take each time?
+- **Reach.** Who is affected? (The owner and the customers.)
+- **Risk if it goes wrong.** What happens when the solution fails? (One transaction isn't recorded, and it can be fixed in the POS.)
+
+But don't stop at the risk of your solution failing. Also ask: **what's the risk if the manual process fails?** Updating the customer data by hand took about two minutes a day. Small. But it could never be forgotten, because if it was, customers couldn't redeem their points at the counter. That's a bad experience, every time.
+
+These four things also tell you what to measure. And to measure improvement, you need a baseline. That's why the first post asked you to write down your repetitive tasks and how long they take.
+
+After one month, this is what changed:
+
+- **Every** repeat transaction is linked to a customer.
+- Updating the customer data takes **0 seconds** instead of 2 minutes a day.
+- **50+** customers are registered. Before, there were zero.
+
+The time saved is the smallest win here. The bigger ones: nobody has to remember a daily task anymore, and the shop now has customer data that simply didn't exist before. **Some solutions save time. The best ones make something possible that wasn't possible before.**
+
+![Three wins, from smallest to biggest: two minutes a day saved, no daily task to remember, and zero to more than 50 registered customers in one month.](/images/writing/do-you-even-need-ai/value.webp)
+
+## 3. Build or buy?
+
+If it's worth solving, the next question is how. If the problem is personal or specific to you, I lean toward building. You learn a lot along the way, and that learning compounds. If the problem sits at team or company level, build vs buy needs a much more careful decision.
+
+Even for a personal problem, spend ten minutes checking if a tool already solves it. Build because you chose to, not because you didn't look.
+
+For Abay, buying didn't work. The POS was on a standard plan with no API, which means other apps can't read its data directly. So loyalty apps couldn't connect to it. Upgrading the POS just for a loyalty program didn't make sense financially. So the answer was to build something around what already existed.
+
+## 4. Clear rules, or judgement?
+
+If you do a task by hand, you already know the steps. Write them down, one by one. Then label each step:
+
+- **Clear rule:** the same input always leads to the same action. Plain automation can do this.
+- **Judgement:** you have to read, interpret, or decide. This is where AI + automation comes in.
+
+For the membership program, every step was a clear rule:
+
+1. Log in to the POS and export the customer data.
+2. Upload the file to Google Drive.
+3. Every morning, before the shop opens, update the customer spreadsheet from the newest file.
+4. Check membership and redeem points when a customer asks.
+
+![Four manual steps, each labelled as a rule, all lead to plain automation. The AI plus automation option is marked as not needed.](/images/writing/do-you-even-need-ai/rules.webp)
+
+So the solution has no AI inside it. It's a browser automation (Playwright) that exports the data and uploads it, plus Google Apps Script that updates the spreadsheet every morning and runs the membership and redeem logic.
+
+![Every morning: the POS data is exported by Playwright, saved to Google Drive, and loaded by Apps Script into a customer spreadsheet. Customers check their points on the website and baristas redeem them on a staff page.](/images/writing/do-you-even-need-ai/system-flow.webp)
+
+## So where does AI fit?
+
+Everywhere else. I used AI to brainstorm the problem, explore solutions, build quick prototypes, and write the final implementation.
+
+My very first question was actually: "Can an AI agent log in to the POS and download the report for me every day?" The answer surprised me. Yes, it could, but it shouldn't. An AI agent can give a slightly different result each run, and it can click the wrong thing. A script does exactly the same steps every time. So the advice was: **use AI to write the script, not to run the task every day.**
+
+![A chat where I ask AI, in Indonesian, how to automatically download a report from a POS without an API and upload it to Google Drive. The answer recommends a Playwright script on a schedule, with AI used to write the script.](/images/writing/do-you-even-need-ai/pos-initial-chat.webp "My first question to AI, in Indonesian. The short answer: it can, but use a script instead.")
+
+That's the rule from step 4 again. A task with clear rules deserves a tool that follows rules the same way every time.
+
+And that's the shift I keep seeing. **AI doesn't have to be inside your solution. It can be what helps you build it.** The barrier to building your own tools is much lower than it used to be, so solving your own problems is now a real option for one person, not just for a team of engineers.
+
+## Resistance is feedback
+
+Two things went wrong at the start:
+
+- **Baristas didn't know how to redeem points.** So I built a staff-only page that does just two things: check a customer's points, and redeem an available promo. A redeemed promo can't be used again.
+- **Some customers didn't want to share their phone number.** So they can now sign up with email.
+
+Neither problem meant the solution failed. Both were signs that something was still too hard for someone. Each time, the answer was to make it simpler.
+
+## Your checklist
+
+Before you build anything, ask:
+
+1. Can I remove or simplify it first? Easy for whom?
+2. Is it worth it? What's my baseline, and what will I measure?
+3. Build or buy?
+4. Which steps are clear rules, and which need judgement?
+
+In the next post, I'll write about the building part, and why most of my early attempts failed.
