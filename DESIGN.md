@@ -565,7 +565,7 @@ All three are self-hosted, subset to Latin, `font-display: swap`. Paid fonts see
 
 ### Grid & Container
 - 12-column grid, max content width 1280px, centred.
-- **Hero:** headline spans columns 1–8; `{component.hero-abstract}` spans 10–12, separated by a 1px vertical `{colors.hairline}` rule.
+- **Hero:** headline spans columns 1–8; `{component.hero-abstract}` spans 10–12 (no divider rule; the column gap separates them).
 - **Stat strip:** full width, equal cells divided by 1px vertical hairlines.
 - **Project grid:** 2-up desktop and tablet (3-up once there are 3+ projects), 1-up mobile. Cards are equal height on purpose: this is a spec sheet, and uniformity is the point.
 - **Case study:** single centred column at `{component.case-study-body}` width, with a sticky meta column on the left at desktop.

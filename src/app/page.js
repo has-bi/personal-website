@@ -56,7 +56,7 @@ function Hero() {
             <span className="block text-accent">& automation.</span>
           </h1>
         </div>
-        <div className="flex flex-col gap-lg lg:w-[360px] lg:shrink-0 lg:justify-end lg:border-l lg:border-hairline lg:pl-xl">
+        <div className="flex flex-col gap-lg lg:w-[360px] lg:shrink-0 lg:justify-end">
           <SectionLabel>Abstract</SectionLabel>
           <p className="t-body-md text-body">
             Step-by-step tutorials and plain-language notes on LLMs, RAG and workflow automation. By Hasbi
