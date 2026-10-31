@@ -17,7 +17,7 @@ No environment variables are needed. Content is read from the repository at buil
 
 ```
 content/
-  writing/<slug>.<lang>.mdx    # posts, e.g. understanding-usestate-react.en.mdx
+  writing/<slug>.<lang>.mdx    # posts, e.g. do-you-even-need-ai.en.mdx
   projects/<slug>.mdx          # personal projects only (client and employer work is under NDA)
   about.en.mdx                 # your own intro paragraph for /about and Home (draft until you write it)
 ```
@@ -27,7 +27,7 @@ Routes: `/`, `/writing` (filters: `?type=tutorial&topic=ai&lang=id`), `/writing/
 Post front matter:
 
 ```yaml
-title: "Understanding useState in React"
+title: "Where Should You Start Learning AI?"
 date: "2025-06-15"
 type: tutorial          # tutorial | note
 topic: ai               # ai | automation | web
