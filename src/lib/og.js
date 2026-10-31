@@ -36,7 +36,7 @@ export async function renderOg({ label, title, accent }) {
         <div
           style={{ ...monoText, display: "flex", justifyContent: "space-between", alignItems: "center", height: 80, padding: "0 64px", borderTop: "2px solid #ddd8ed", background: "#f8f6ff", color: "#5f5a72" }}
         >
-          <span>Tutorials and notes on AI and automation</span>
+          <span>Solutions Engineer · Notes on AI and automation</span>
           <span style={{ color: "#201936" }}>hasbi.pro</span>
         </div>
       </div>

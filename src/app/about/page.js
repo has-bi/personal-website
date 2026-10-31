@@ -2,11 +2,11 @@ import Image from "next/image";
 import { getAboutIntro } from "@/utils/content";
 import { SectionLabel, Tag } from "@/components/ui/primitives";
 import { alternates } from "@/lib/site";
-import { LEARNING_PATH, TEACHING_ROLE, TEACHING_TOPICS, TOOLS } from "./data";
+import { CURRENT_ROLE, LEARNING_PATH, SOLUTION_STEPS, TEACHING_ROLE, TEACHING_TOPICS, TOOLS } from "./data";
 
 export const metadata = {
   title: "About",
-  description: "About Hasbi Hassadiqin, who writes tutorials and notes on AI and automation.",
+  description: "About Hasbi Hassadiqin, Solutions Engineer, who writes notes on AI and automation.",
   alternates: alternates("/about"),
 };
 
@@ -19,6 +19,28 @@ function BandHead({ label, title }) {
     <div className="flex flex-col gap-md">
       <SectionLabel>{label}</SectionLabel>
       <h2 className="t-title-lg text-ink lg:text-[28px]">{title}</h2>
+    </div>
+  );
+}
+
+// A role card beside a numbered list: used for the current role and for teaching.
+function RoleBlock({ label, role, items }) {
+  return (
+    <div className="flex flex-col gap-lg lg:flex-row lg:gap-xxl">
+      <div className="flex flex-col gap-xs border border-hairline bg-surface p-lg lg:w-[400px] lg:shrink-0">
+        <p className="t-mono-label text-muted">{label}</p>
+        <p className="t-title-md text-ink">{role.title}</p>
+        <p className="t-body-sm text-body">{role.detail}</p>
+      </div>
+      <ol className="flex-1 border-t border-hairline">
+        {items.map((item, index) => (
+          <li key={item.title} className="flex min-h-11 items-center gap-md border-b border-hairline py-sm">
+            <span className="t-mono-meta text-faint">{String(index + 1).padStart(2, "0")}</span>
+            <span className="t-body-md flex-1 text-ink">{item.title}</span>
+            {item.topic ? <Tag topic={item.topic} /> : null}
+          </li>
+        ))}
+      </ol>
     </div>
   );
 }
@@ -50,31 +72,21 @@ export default async function AboutPage() {
 
       <Band>
         <div className="flex flex-col gap-lg lg:gap-xxl">
-          <BandHead label="§ 03.1 · Teaching" title="What I teach" />
-          <div className="flex flex-col gap-lg lg:flex-row lg:gap-xxl">
-            <div className="flex flex-col gap-xs border border-hairline bg-surface p-lg lg:w-[400px] lg:shrink-0">
-              <p className="t-mono-label text-muted">
-                {TEACHING_ROLE.org} · {TEACHING_ROLE.kind}
-              </p>
-              <p className="t-title-md text-ink">{TEACHING_ROLE.title}</p>
-              <p className="t-body-sm text-body">{TEACHING_ROLE.detail}</p>
-            </div>
-            <ol className="flex-1 border-t border-hairline">
-              {TEACHING_TOPICS.map((item, index) => (
-                <li key={item.title} className="flex min-h-11 items-center gap-md border-b border-hairline py-sm">
-                  <span className="t-mono-meta text-faint">{String(index + 1).padStart(2, "0")}</span>
-                  <span className="t-body-md flex-1 text-ink">{item.title}</span>
-                  {item.topic ? <Tag topic={item.topic} /> : null}
-                </li>
-              ))}
-            </ol>
-          </div>
+          <BandHead label="§ 03.1 · Work" title="What I do" />
+          <RoleBlock label={CURRENT_ROLE.kind} role={CURRENT_ROLE} items={SOLUTION_STEPS} />
         </div>
       </Band>
 
       <Band>
         <div className="flex flex-col gap-lg lg:gap-xxl">
-          <BandHead label="§ 03.2 · Learning path" title="How I learned it" />
+          <BandHead label="§ 03.2 · Teaching" title="What I teach" />
+          <RoleBlock label={`${TEACHING_ROLE.org} · ${TEACHING_ROLE.kind}`} role={TEACHING_ROLE} items={TEACHING_TOPICS} />
+        </div>
+      </Band>
+
+      <Band>
+        <div className="flex flex-col gap-lg lg:gap-xxl">
+          <BandHead label="§ 03.3 · Learning path" title="How I learned it" />
           <ol className="border-t border-hairline">
             {LEARNING_PATH.map((item) => (
               <li key={item.title} className="flex flex-col gap-sm border-b border-hairline py-md lg:flex-row lg:items-center lg:gap-lg">
@@ -110,7 +122,7 @@ export default async function AboutPage() {
 
       <Band>
         <div className="flex flex-col gap-lg lg:gap-xxl">
-          <BandHead label="§ 03.3 · Tools" title="What I teach with" />
+          <BandHead label="§ 03.4 · Tools" title="What I work with" />
           <div className="grid grid-cols-1 border-t border-hairline lg:grid-cols-3">
             {TOOLS.map((group, index) => (
               <div

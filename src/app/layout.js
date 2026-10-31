@@ -17,9 +17,9 @@ const jetbrainsMono = JetBrains_Mono({
   variable: "--font-jetbrains-mono",
 });
 
-const SITE_TITLE = "Hasbi Hassadiqin | Tutorials on AI & Automation";
+const SITE_TITLE = "Hasbi Hassadiqin | Solutions Engineer";
 const SITE_DESCRIPTION =
-  "Tutorials and notes on AI and automation by Hasbi Hassadiqin, plus a few personal projects.";
+  "Notes on AI and automation by Hasbi Hassadiqin, Solutions Engineer: finding the real problem, then choosing the right solution.";
 
 export const metadata = {
   metadataBase: new URL(SITE_URL),
@@ -31,7 +31,7 @@ export const metadata = {
   alternates: {
     types: alternates("/").types,
   },
-  keywords: ["AI tutorials", "LLM", "RAG", "Automation", "Hasbi Hassadiqin"],
+  keywords: ["Solutions Engineer", "AI", "LLM", "RAG", "Automation", "Hasbi Hassadiqin"],
   authors: [{ name: "Hasbi Hassadiqin", url: SITE_URL }],
   creator: "Hasbi Hassadiqin",
   publisher: "Hasbi Hassadiqin",
@@ -107,7 +107,8 @@ const personSchema = {
     "https://www.linkedin.com/in/hasbi-hassadiqin/",
     "https://github.com/has-bi",
   ],
-  description: "Writes tutorials and notes on AI and automation.",
+  jobTitle: "Solutions Engineer",
+  description: "Solutions Engineer who writes notes on AI and automation.",
 };
 
 export default function RootLayout({ children }) {

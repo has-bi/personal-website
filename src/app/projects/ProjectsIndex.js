@@ -31,7 +31,7 @@ export function ProjectsList({ projects, filters = { topic: "all" } }) {
             Nothing is published under this topic yet.
           </EmptyState>
         ) : (
-          <EmptyState title="No projects yet" action={{ href: "/writing", label: "Read the tutorials" }}>
+          <EmptyState title="No projects yet" action={{ href: "/writing", label: "Read the writing" }}>
             No projects are published yet.
           </EmptyState>
         )}

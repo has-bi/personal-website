@@ -1,7 +1,7 @@
 ---
 version: alpha.3
 name: Hasbi-personal-site
-description: A teacher's lab notebook on a white page. Bilingual (EN / ID) tutorials and notes on AI and automation, plus personal projects. Near-violet ink, one purple accent carried over from the old site and the logo, hairline rules and zero radius, where a monospace label system does most of the talking and a large Funnel Sans headline carries the hierarchy. Two topic colours (AI purple, automation green) appear only on tags and card header strips. Everything is light; the only dark surface is a code block. Structure borrowed from itsua.com, storytelling from jithinrp.com, grid restraint from boostlab.
+description: A solutions engineer's lab notebook on a white page. Bilingual (EN / ID) tutorials and notes on AI and automation, plus personal projects. Near-violet ink, one purple accent carried over from the old site and the logo, hairline rules and zero radius, where a monospace label system does most of the talking and a large Funnel Sans headline carries the hierarchy. Two topic colours (AI purple, automation green) appear only on tags and card header strips. Everything is light; the only dark surface is a code block. Structure borrowed from itsua.com, storytelling from jithinrp.com, grid restraint from boostlab.
 
 colors:
   primary: "#201936"
@@ -428,7 +428,7 @@ components:
 
 ## Overview
 
-This site reads like a **teacher's lab notebook**: numbered sections, plain labels, nothing hidden. It exists to teach AI and automation through bilingual (English / Bahasa Indonesia) tutorials and notes, plus a few personal projects. It is not a portfolio of client work: that work is under NDA and never appears here. The page is `{colors.canvas}` (white), type is `{colors.ink}` (a near-black violet), with 1px `{colors.hairline}` rules and zero border radius anywhere except the brand mark and avatars. Every section opens with a monospace label (`§ 01 · WRITING`) and a slash-heading (`/writing`), the nav is numbered like a table of contents (`[ 01 ] WRITING`), and the footer lists where else to find the owner in a key-value table. The metaphor is deliberate: a course syllabus is precise and scannable, and so is this site.
+This site reads like a **solutions engineer's lab notebook**: numbered sections, plain labels, nothing hidden. The owner is a Solutions Engineer who also teaches; the site exists to explain AI and automation through bilingual (English / Bahasa Indonesia) tutorials and notes, plus a few personal projects. It is not a portfolio of client work: that work is under NDA and never appears here. The page is `{colors.canvas}` (white), type is `{colors.ink}` (a near-black violet), with 1px `{colors.hairline}` rules and zero border radius anywhere except the brand mark and avatars. Every section opens with a monospace label (`§ 01 · WRITING`) and a slash-heading (`/writing`), the nav is numbered like a table of contents (`[ 01 ] WRITING`), and the footer lists where else to find the owner in a key-value table. The metaphor is deliberate: a course syllabus is precise and scannable, and so is this site.
 
 **Design Read:** a bilingual teaching site for beginner-to-intermediate learners of AI and automation, in a lab-notebook / spec-sheet language. **Dials: ENERGY 2 / RHYTHM 2 / MOTION 1.** RHYTHM 2 means the label + slash-heading pattern repeats, with at least one deliberate break (on Home, `/about` is a split layout without a slash-heading).
 
@@ -901,6 +901,7 @@ Logged decisions:
 - 2026-10-26, writing pass: the "Featured" block is **dropped** (not in the spec; with one published post it would duplicate the list). Article dek uses the real excerpt instead of agent copy. Component defaults scrubbed of NDA content.
 - 2026-10-27, first AI note: owner approves agent-drafted copy (body and excerpt) for "Where Should You Start Learning AI?", built from the owner's interview answers; owner re-reads after publish.
 - 2026-10-27: line-art illustrations switch from "never filled" to the Loop reference style (solid accent fills, ink shadows); first set generated for the AI note.
+- 2026-10-31, positioning: the owner brands as **Solutions Engineer**. The site stays writing-first with minimal contact; teaching (RevoU) stays as a secondary section on /about; the hero stays descriptive ("Notes on AI & automation."). The current role is described by what it covers, never by employer or client (NDA). Font switched to Funnel Sans.
 
 ## Iteration Guide
 
