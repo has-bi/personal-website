@@ -34,9 +34,6 @@ export default async function WritingPage() {
                 <dd className="t-body-sm text-body">One idea, explained in plain language.</dd>
               </div>
             </dl>
-            <a href="/feed.xml" className="t-body-md self-start text-accent underline underline-offset-2 hover:decoration-2">
-              Subscribe via RSS ↗
-            </a>
           </div>
         </div>
       </section>

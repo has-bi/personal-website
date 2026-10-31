@@ -30,7 +30,7 @@ export const LEARNING_PATH = [
   },
   {
     period: "2018–23",
-    title: "B.Eng, Computer Engineering",
+    title: "S.T., Computer Engineering",
     place: "Universitas Brawijaya",
   },
 ];
