@@ -922,15 +922,15 @@ Logged decisions:
 - Resolved by the rebrand: #19 (stat strip removed), #20 and #21 (dials set), #22 (descriptive hero), #24 (`/stack` removed), #26 (accent-serif "Selected builds" and stat suffix removed with their sections).
 
 **Content (the real bottleneck):**
-- Published posts today: **1** (useState, a React tutorial, topic `web`). In the two teaching topics (AI, automation): **0 published**, 1 draft ("Understanding RAG Mental Models"). No Indonesian posts yet. Home's `/writing` band, the router rows and `/id` all stay hidden until their content exists, so the first launch needs at least 2 published posts, ideally one per topic.
-- The two React posts are off-topic: keep them as a `web` archive, or unpublish. Owner decides.
-- Personal projects: TheraMind (bootcamp team project) and a Next.js mini project. Thumbnails and screenshots needed.
+- Published posts today: **2**, both AI notes ("Where Should You Start Learning AI?", "Do You Even Need AI to Solve It?"). Automation: **0 published**. Drafts: "Understanding RAG Mental Models" (AI) and the React Virtual DOM post (web). No Indonesian posts yet. The automation router row and `/id` stay hidden until their content exists.
+- The useState post was removed (off-topic, hot-linked third-party images). The React Virtual DOM draft is off-topic too: owner decides whether it ever ships.
+- Personal projects: TheraMind and the Next.js mini project are hidden (`draft: true`) until the owner decides how to present them. `/projects` and the Home band show the empty state meanwhile.
 - The about paragraph (`[YOUR WORDS]`) and the about photo.
 - Indonesian UI strings for nav, labels and empty states.
 
 **Other:**
 - **Signature moment** (terminal hero vs. a small live widget vs. none) is undecided.
-- Tutorial fields still to be written by the owner for existing posts: `level`, `prerequisites`, `check`. The `learn` lines in the Figma mockup are drafted from the useState post's own headings; confirm or rewrite.
+- Tutorial fields still to be written by the owner for existing posts: `level`, `prerequisites`, `check`. The lesson brief's `learn` lines come from each tutorial's own headings.
 - Project page content comes from the owner's Notion page for TheraMind. Two items still need the owner: "What I'd do next" and whether the source code is public. The Notion conclusion uses an em dash after "a bootcamp final project"; that sentence was left out of the mockup, and the owner decides how to rewrite it before migration (R-02).
 - About: the owner paragraph, the photo, and whether to add a CV link.
 - The Next.js mini project has no write-up yet; its card links to a page that must exist before launch, or the card waits.
