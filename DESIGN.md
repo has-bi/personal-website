@@ -715,7 +715,7 @@ The third row is written in Indonesian on purpose: it addresses Indonesian reade
 ### Writing Index (`/writing`)
 
 ```
-§ 01 · WRITING   /writing (display-xl) + dek | TWO KINDS OF POSTS: TUTORIAL / NOTE + "Subscribe via RSS ↗"
+§ 01 · WRITING   /writing (display-xl) + dek | TWO KINDS OF POSTS: TUTORIAL / NOTE
 filter bar       TYPE [ALL][TUTORIAL][NOTE] · TOPIC [ALL][AI][AUTOMATION][WEB] · LANGUAGE [ALL][EN][ID]   03 ENTRIES · NEWEST FIRST
 list             column header → year-group "2025 · 3 ENTRIES" → post-rows (excerpt shown)
 footer-band
