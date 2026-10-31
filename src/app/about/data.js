@@ -1,5 +1,19 @@
-// About page facts, shared with the about split on Home. Teaching and learning only:
-// client and employer work is under NDA and is not listed anywhere on the site.
+// About page facts, shared with the about split on Home. Client and employer work is
+// under NDA: the current role is described by what it covers, never by who it is for.
+
+export const CURRENT_ROLE = {
+  kind: "Now",
+  title: "Solutions Engineer",
+  detail:
+    "Turning business problems into working systems. Client and employer work stays under NDA, so it is not shown here.",
+};
+
+export const SOLUTION_STEPS = [
+  { title: "Finding the real problem before the fix" },
+  { title: "Choosing between an SOP, automation and AI" },
+  { title: "Designing the solution end to end" },
+  { title: "Building it, then measuring whether it worked" },
+];
 
 export const TEACHING_ROLE = {
   org: "RevoU",

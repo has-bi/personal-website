@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { getPost, getPosts } from "@/utils/content";
-import { EMAIL, formatDate, LANGS, SITE_URL, TOPICS, TYPES } from "@/lib/site";
+import { alternates, EMAIL, formatDate, LANGS, SITE_URL, TOPICS, TYPES } from "@/lib/site";
 import {
   Breadcrumb,
   ButtonGhost,
@@ -27,7 +27,7 @@ export async function generateMetadata({ params }) {
   return {
     title: post.title,
     description: post.excerpt || undefined,
-    alternates: { canonical: `/writing/${post.slug}` },
+    alternates: alternates(`/writing/${post.slug}`),
     openGraph: {
       type: "article",
       title: post.title,
@@ -48,9 +48,9 @@ function LessonBrief({ post }) {
       <div className="flex flex-col gap-sm px-lg py-md">
         <p className="t-mono-label text-muted">What you'll learn</p>
         <ol className="flex flex-col gap-sm">
-          {post.headings.map((heading) => (
+          {post.headings.map((heading, index) => (
             <li key={heading.id} className="flex gap-md">
-              <span className="t-mono-meta pt-[2px] text-faint">{heading.number}</span>
+              <span className="t-mono-meta pt-[2px] text-faint">{heading.number || String(index + 1).padStart(2, "0")}</span>
               <span className={rowText}>{heading.text}</span>
             </li>
           ))}

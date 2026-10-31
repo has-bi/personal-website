@@ -3,6 +3,15 @@ export const SITE_URL = "https://www.hasbi.pro";
 export const SITE_NAME = "Hasbi Hassadiqin";
 export const EMAIL = "hasbi.at.work@gmail.com";
 
+// Page alternates: a canonical URL plus the RSS link. A page that sets `alternates`
+// replaces the layout's, so every page builds them here to keep the feed link.
+export function alternates(path) {
+  return {
+    canonical: path,
+    types: { "application/rss+xml": [{ url: "/feed.xml", title: `${SITE_NAME}: writing` }] },
+  };
+}
+
 export const NAV_ITEMS = [
   { href: "/", number: "00", label: "Index" },
   { href: "/writing", number: "01", label: "Writing" },

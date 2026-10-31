@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { getProject, getProjects } from "@/utils/content";
-import { SITE_URL, TOPICS } from "@/lib/site";
+import { alternates, SITE_URL, TOPICS } from "@/lib/site";
 import { Breadcrumb, ButtonGhost, MetaStrip, SectionLabel, Tag } from "@/components/ui/primitives";
 import { DesktopToc, MobileToc } from "@/components/ui/ArticleAside";
 
@@ -20,7 +20,7 @@ export async function generateMetadata({ params }) {
   return {
     title: project.title,
     description: project.desc || undefined,
-    alternates: { canonical: `/projects/${project.slug}` },
+    alternates: alternates(`/projects/${project.slug}`),
     openGraph: {
       title: project.title,
       description: project.desc || undefined,

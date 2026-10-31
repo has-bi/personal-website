@@ -26,7 +26,7 @@
   --color-tint-automation: #e6f7f1;
   --color-focus-ring: #6840c8;
 
-  --font-sans: var(--font-space-grotesk), "Inter", "Helvetica Neue", Arial, sans-serif;
+  --font-sans: var(--font-funnel-sans), "Inter", "Helvetica Neue", Arial, sans-serif;
   --font-mono: var(--font-jetbrains-mono), "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
 
   --spacing-xxs: 4px;

@@ -4,7 +4,10 @@ import { getAboutIntro, getPosts, getProjects } from "@/utils/content";
 import { ButtonGhost, ButtonPrimary, EmptyState, SectionHead, SectionLabel } from "@/components/ui/primitives";
 import { PostRow, PostTableHeader } from "@/components/ui/PostRow";
 import { ProjectGrid } from "@/components/ui/ProjectCard";
-import { LEARNING_PATH, TEACHING_ROLE } from "@/app/about/data";
+import { CURRENT_ROLE, LEARNING_PATH, TEACHING_ROLE } from "@/app/about/data";
+import { alternates } from "@/lib/site";
+
+export const metadata = { alternates: alternates("/") };
 
 // /start router rows. A row is hidden while its destination has no published post.
 const ROUTES = [
@@ -53,11 +56,11 @@ function Hero() {
             <span className="block text-accent">& automation.</span>
           </h1>
         </div>
-        <div className="flex flex-col gap-lg lg:w-[360px] lg:shrink-0 lg:justify-end lg:border-l lg:border-hairline lg:pl-xl">
+        <div className="flex flex-col gap-lg lg:w-[360px] lg:shrink-0 lg:justify-end">
           <SectionLabel>Abstract</SectionLabel>
           <p className="t-body-md text-body">
-            Step-by-step tutorials and plain-language notes on LLMs, RAG and workflow automation. By Hasbi
-            Hassadiqin, AI &amp; data instructor at RevoU.
+            Plain-language notes on LLMs, RAG and workflow automation, from finding the real problem to
+            choosing the solution. By Hasbi Hassadiqin, Solutions Engineer.
           </p>
           <ButtonPrimary href="/writing">Start reading</ButtonPrimary>
         </div>
@@ -144,7 +147,7 @@ function LatestProjects({ projects }) {
       {projects.length ? (
         <ProjectGrid projects={projects.slice(0, 3)} />
       ) : (
-        <EmptyState title="No projects yet" action={{ href: "/writing", label: "Read the tutorials" }}>
+        <EmptyState title="No projects yet" action={{ href: "/writing", label: "Read the writing" }}>
           No projects are published yet.
         </EmptyState>
       )}
@@ -154,7 +157,8 @@ function LatestProjects({ projects }) {
 
 function AboutSplit({ intro }) {
   const rows = [
-    { when: "Freelance", what: TEACHING_ROLE.title, where: TEACHING_ROLE.org },
+    { when: CURRENT_ROLE.kind, what: CURRENT_ROLE.title, where: "" },
+    { when: TEACHING_ROLE.kind, what: TEACHING_ROLE.title, where: TEACHING_ROLE.org },
     ...LEARNING_PATH.map((item) => ({ when: item.period, what: item.title, where: item.place })),
   ];
 
@@ -163,7 +167,7 @@ function AboutSplit({ intro }) {
       <div className="flex flex-col gap-lg lg:flex-row lg:gap-xxl">
         <div className="relative aspect-4/5 w-full overflow-hidden border border-hairline bg-surface-sunken lg:w-[360px] lg:shrink-0">
           <Image
-            src="/images/Me-1.png"
+            src="/images/me.webp"
             alt="Hasbi Hassadiqin"
             fill
             sizes="(min-width: 1024px) 360px, 100vw"
@@ -181,7 +185,7 @@ function AboutSplit({ intro }) {
               >
                 <span className="t-mono-meta uppercase text-muted lg:w-[120px] lg:shrink-0">
                   {row.when}
-                  <span className="lg:hidden"> · {row.where}</span>
+                  {row.where ? <span className="lg:hidden"> · {row.where}</span> : null}
                 </span>
                 <span className="t-body-md flex-1 text-ink">{row.what}</span>
                 <span className="t-mono-meta hidden uppercase text-muted lg:block">{row.where}</span>

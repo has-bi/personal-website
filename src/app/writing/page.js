@@ -1,12 +1,13 @@
 import { Suspense } from "react";
 import { getAllPosts } from "@/utils/content";
 import { SectionLabel } from "@/components/ui/primitives";
+import { alternates } from "@/lib/site";
 import WritingIndex, { WritingList } from "./WritingIndex";
 
 export const metadata = {
   title: "Writing",
   description: "Tutorials and notes on AI and automation.",
-  alternates: { canonical: "/writing" },
+  alternates: alternates("/writing"),
 };
 
 export default async function WritingPage() {

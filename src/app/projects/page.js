@@ -1,12 +1,13 @@
 import { Suspense } from "react";
 import { getProjects } from "@/utils/content";
 import { SectionLabel } from "@/components/ui/primitives";
+import { alternates } from "@/lib/site";
 import ProjectsIndex, { ProjectsList } from "./ProjectsIndex";
 
 export const metadata = {
   title: "Projects",
   description: "Personal projects in AI, automation, and web development.",
-  alternates: { canonical: "/projects" },
+  alternates: alternates("/projects"),
 };
 
 export default async function ProjectsPage() {

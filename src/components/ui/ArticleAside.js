@@ -37,7 +37,7 @@ function TocList({ headings, active }) {
                 current ? "border-l-2 border-accent" : "border-l border-hairline hover:border-hairline-strong"
               }`}
             >
-              <span className={current ? "text-accent" : "text-faint"}>{heading.number}</span>
+              {heading.number ? <span className={current ? "text-accent" : "text-faint"}>{heading.number}</span> : null}
               <span className={current ? "text-ink" : "text-muted"}>{heading.text}</span>
             </a>
           </li>
