@@ -1,11 +1,13 @@
 import Image from "next/image";
 import { getAboutIntro } from "@/utils/content";
 import { SectionLabel, Tag } from "@/components/ui/primitives";
+import { alternates } from "@/lib/site";
 import { LEARNING_PATH, TEACHING_ROLE, TEACHING_TOPICS, TOOLS } from "./data";
 
 export const metadata = {
   title: "About",
   description: "About Hasbi Hassadiqin, who writes tutorials and notes on AI and automation.",
+  alternates: alternates("/about"),
 };
 
 function Band({ children, className = "" }) {
@@ -35,7 +37,7 @@ export default async function AboutPage() {
           </div>
           <div className="relative aspect-4/5 w-full overflow-hidden border border-hairline bg-surface-sunken lg:w-[360px] lg:shrink-0">
             <Image
-              src="/images/Me-1.png"
+              src="/images/me.webp"
               alt="Hasbi Hassadiqin"
               fill
               priority

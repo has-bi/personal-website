@@ -5,6 +5,9 @@ import { ButtonGhost, ButtonPrimary, EmptyState, SectionHead, SectionLabel } fro
 import { PostRow, PostTableHeader } from "@/components/ui/PostRow";
 import { ProjectGrid } from "@/components/ui/ProjectCard";
 import { LEARNING_PATH, TEACHING_ROLE } from "@/app/about/data";
+import { alternates } from "@/lib/site";
+
+export const metadata = { alternates: alternates("/") };
 
 // /start router rows. A row is hidden while its destination has no published post.
 const ROUTES = [
@@ -163,7 +166,7 @@ function AboutSplit({ intro }) {
       <div className="flex flex-col gap-lg lg:flex-row lg:gap-xxl">
         <div className="relative aspect-4/5 w-full overflow-hidden border border-hairline bg-surface-sunken lg:w-[360px] lg:shrink-0">
           <Image
-            src="/images/Me-1.png"
+            src="/images/me.webp"
             alt="Hasbi Hassadiqin"
             fill
             sizes="(min-width: 1024px) 360px, 100vw"

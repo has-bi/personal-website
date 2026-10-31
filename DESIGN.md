@@ -1,7 +1,7 @@
 ---
 version: alpha.3
 name: Hasbi-personal-site
-description: A teacher's lab notebook on a white page. Bilingual (EN / ID) tutorials and notes on AI and automation, plus personal projects. Near-violet ink, one purple accent carried over from the old site and the logo, hairline rules and zero radius, where a monospace label system does most of the talking and a large Space Grotesk headline carries the hierarchy. Two topic colours (AI purple, automation green) appear only on tags and card header strips. Everything is light; the only dark surface is a code block. Structure borrowed from itsua.com, storytelling from jithinrp.com, grid restraint from boostlab.
+description: A teacher's lab notebook on a white page. Bilingual (EN / ID) tutorials and notes on AI and automation, plus personal projects. Near-violet ink, one purple accent carried over from the old site and the logo, hairline rules and zero radius, where a monospace label system does most of the talking and a large Funnel Sans headline carries the hierarchy. Two topic colours (AI purple, automation green) appear only on tags and card header strips. Everything is light; the only dark surface is a code block. Structure borrowed from itsua.com, storytelling from jithinrp.com, grid restraint from boostlab.
 
 colors:
   primary: "#201936"
@@ -30,19 +30,19 @@ colors:
 
 typography:
   display-xl:
-    fontFamily: "Space Grotesk, Inter, Helvetica Neue, Arial, sans-serif"
+    fontFamily: "Funnel Sans, Inter, Helvetica Neue, Arial, sans-serif"
     fontSize: 120px
     fontWeight: 500
     lineHeight: 0.95
     letterSpacing: -4.8px
   display-lg:
-    fontFamily: "Space Grotesk, Inter, Helvetica Neue, Arial, sans-serif"
+    fontFamily: "Funnel Sans, Inter, Helvetica Neue, Arial, sans-serif"
     fontSize: 72px
     fontWeight: 500
     lineHeight: 1.0
     letterSpacing: -2.16px
   display-md:
-    fontFamily: "Space Grotesk, Inter, Helvetica Neue, Arial, sans-serif"
+    fontFamily: "Funnel Sans, Inter, Helvetica Neue, Arial, sans-serif"
     fontSize: 48px
     fontWeight: 400
     lineHeight: 1.1
@@ -54,43 +54,43 @@ typography:
     lineHeight: 1.05
     letterSpacing: -0.5px
   stat:
-    fontFamily: "Space Grotesk, Inter, Helvetica Neue, Arial, sans-serif"
+    fontFamily: "Funnel Sans, Inter, Helvetica Neue, Arial, sans-serif"
     fontSize: 72px
     fontWeight: 500
     lineHeight: 1.0
     letterSpacing: -2.16px
   title-lg:
-    fontFamily: "Space Grotesk, Inter, Helvetica Neue, Arial, sans-serif"
+    fontFamily: "Funnel Sans, Inter, Helvetica Neue, Arial, sans-serif"
     fontSize: 24px
     fontWeight: 500
     lineHeight: 1.3
     letterSpacing: -0.48px
   title-md:
-    fontFamily: "Space Grotesk, Inter, Helvetica Neue, Arial, sans-serif"
+    fontFamily: "Funnel Sans, Inter, Helvetica Neue, Arial, sans-serif"
     fontSize: 20px
     fontWeight: 500
     lineHeight: 1.35
     letterSpacing: -0.4px
   body-lg:
-    fontFamily: "Space Grotesk, Inter, Helvetica Neue, Arial, sans-serif"
+    fontFamily: "Funnel Sans, Inter, Helvetica Neue, Arial, sans-serif"
     fontSize: 19px
     fontWeight: 400
     lineHeight: 1.55
     letterSpacing: 0
   body-md:
-    fontFamily: "Space Grotesk, Inter, Helvetica Neue, Arial, sans-serif"
+    fontFamily: "Funnel Sans, Inter, Helvetica Neue, Arial, sans-serif"
     fontSize: 17px
     fontWeight: 400
     lineHeight: 1.6
     letterSpacing: 0
   body-sm:
-    fontFamily: "Space Grotesk, Inter, Helvetica Neue, Arial, sans-serif"
+    fontFamily: "Funnel Sans, Inter, Helvetica Neue, Arial, sans-serif"
     fontSize: 15px
     fontWeight: 400
     lineHeight: 1.5
     letterSpacing: 0
   quote:
-    fontFamily: "Space Grotesk, Inter, Helvetica Neue, Arial, sans-serif"
+    fontFamily: "Funnel Sans, Inter, Helvetica Neue, Arial, sans-serif"
     fontSize: 22px
     fontWeight: 400
     lineHeight: 1.45
@@ -432,7 +432,7 @@ This site reads like a **teacher's lab notebook**: numbered sections, plain labe
 
 **Design Read:** a bilingual teaching site for beginner-to-intermediate learners of AI and automation, in a lab-notebook / spec-sheet language. **Dials: ENERGY 2 / RHYTHM 2 / MOTION 1.** RHYTHM 2 means the label + slash-heading pattern repeats, with at least one deliberate break (on Home, `/about` is a split layout without a slash-heading).
 
-Two type voices split the work. **Space Grotesk** carries hierarchy at large sizes (a 120px hero, 72px slash-headings) with tight negative tracking. **JetBrains Mono** carries everything small: nav, labels, tags, meta, buttons. A third voice, **Instrument Serif** italic, appears at most twice per page as a moment of warmth. (The font pairing is under review, see Known Gaps.)
+Two type voices split the work. **Funnel Sans** carries hierarchy at large sizes (a 120px hero, 72px slash-headings) with tight negative tracking. **JetBrains Mono** carries everything small: nav, labels, tags, meta, buttons. A third voice, **Instrument Serif** italic, appears at most twice per page as a moment of warmth. (The font pairing is under review, see Known Gaps.)
 
 Colour comes from the owner's existing identity: the purple `{colors.accent}` (`#6840C8`) from the previous site, now also the colour of the logo. Brand voltage does not come from big colour fields. It comes from **two topic colours** (`{colors.domain-ai}`, `{colors.domain-automation}`) that tag every post and project. They appear small and often, never large. Anything outside the two teaching topics (older React posts, web projects) gets the neutral `{component.tag-web}`: no hue. There is no dark band: the whole page stays light, and the only dark surface is `{component.code-block}`.
 
@@ -517,7 +517,7 @@ Not shipped. The site is light only, by the owner's choice. If a toggle is added
 ## Typography
 
 ### Font Family
-- **Space Grotesk** (Google Fonts, free, variable 300–700): all display, titles and body. The grotesk with mono DNA; it pairs naturally with a monospace system.
+- **Funnel Sans** (Google Fonts, free, variable 300–800): all display, titles and body. Chosen by the owner on 2026-10-31, replacing Space Grotesk.
 - **JetBrains Mono** (free, OFL): nav, labels, tags, meta, buttons, code. Substitute: Geist Mono.
 - **Instrument Serif** italic (Google Fonts, free): accent titles only.
 
@@ -638,7 +638,7 @@ There are **no box-shadows** in the system. Depth comes from tone steps and bord
 
 ### Brand
 
-**`brand-mark`**: the logo, six rounded squares in `{colors.accent}`. Sits at the left of the nav before the name. The PNGs in `public/images/` (`#6A55F2`) must be re-exported in `#6840C8`, ideally as SVG.
+**`brand-mark`**: the logo, six rounded squares in `{colors.accent}`. Sits at the left of the nav before the name. Served as `public/images/brand/logo-mark.svg` in `#6840C8` (exported from the Figma component). The old `#6A55F2` PNGs are removed.
 
 ### Navigation
 
@@ -826,7 +826,7 @@ Not allowed: intro loaders, WebGL backgrounds, sound, scroll-hijacking, "best vi
 ### Do
 - Keep `{component.button-primary}` ink with the `{colors.accent}` arrow square. One per viewport.
 - Open every section with `{component.section-label}` + slash-heading.
-- Put anything that is data (dates, stacks, numbers) in mono; put anything that is a sentence in Space Grotesk.
+- Put anything that is data (dates, stacks, numbers) in mono; put anything that is a sentence in Funnel Sans.
 - Use topic colours small and often: tags and header strips.
 - End every tutorial with a working result the reader can check.
 - Write every project page with the seven-heading story structure.
@@ -882,7 +882,7 @@ Not allowed: intro loaders, WebGL backgrounds, sound, scroll-hijacking, "best vi
 - Full keyboard navigation; skip-to-content link.
 - Alt text on every screenshot and photo describing what it shows.
 - LCP < 2.0s on mobile 4G; home page JS < 50KB; fonts self-hosted and subset.
-- OG images generated per page in this style (title in Space Grotesk, meta in mono, on `{colors.canvas}`).
+- OG images generated per page in this style (title in Funnel Sans, meta in mono, on `{colors.canvas}`).
 - `<html lang>` matches the page language; EN and ID versions of a post link each other with `hreflang`.
 
 ## Quality Filter (antislop)
@@ -915,7 +915,7 @@ Logged decisions:
 
 **Owner decisions pending (antislop audit 001):**
 - **#12 Hero grid lines.** A background grid is a named pattern; on white the lines are also almost invisible (1.23:1). Keep (with the reason logged) or drop.
-- **#13 Fonts.** Space Grotesk and JetBrains Mono are both on the "AI default" roster, and uppercase mono labels are used heavily. Keep with the spec-sheet reason, or return to the old site's Manrope + Newsreader. Either way, consider limiting uppercase mono to labels.
+- **#13 Fonts.** Resolved 2026-10-31: the owner chose Funnel Sans for display and body; JetBrains Mono stays for labels and data.
 
 **Open audit items (not yet approved):**
 - #18 Interactive containers (cards, router rows) separate from white by a 1.39:1 hairline; non-text contrast for clickable boundaries should reach 3:1.
@@ -934,7 +934,6 @@ Logged decisions:
 - Project page content comes from the owner's Notion page for TheraMind. Two items still need the owner: "What I'd do next" and whether the source code is public. The Notion conclusion uses an em dash after "a bootcamp final project"; that sentence was left out of the mockup, and the owner decides how to rewrite it before migration (R-02).
 - About: the owner paragraph, the photo, and whether to add a CV link.
 - The Next.js mini project has no write-up yet; its card links to a page that must exist before launch, or the card waits.
-- The logo PNGs still use `#6A55F2`; re-export in `#6840C8`.
 - Form components (contact form, newsletter) are out of scope; contact is email-only for now.
 - Fluid type values (`clamp()`) are documented in prose because the token format holds fixed sizes only.
 - Link and focus-ring components declare `{colors.canvas}` as background for contrast linting; in practice they inherit whatever surface they sit on (accent passes AA on canvas, surface and surface-sunken).

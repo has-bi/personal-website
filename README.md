@@ -41,7 +41,7 @@ prerequisites: ["Basic JavaScript"]   # optional; "Before you start" in the less
 draft: true             # drafts never reach the live site
 ```
 
-Every `## Heading` is numbered and listed in "On this page". Tutorials open with a lesson brief built from those headings.
+Every `## Heading` is numbered and listed in "On this page". If you number headings yourself (`## 1. Can you simplify it?`), automatic numbers are switched off for that post. Tutorials open with a lesson brief built from those headings. Straight quotes are turned into typographic ones at build time.
 
 Project front matter: `title`, `year`, `topic`, `stack`, `description` (the dek), `outcome` (one line on the card), `role`, `team`, `cover`, `gallery` (up to 3 card thumbnails), `liveUrl`, `sourceUrl`, `featured`, `draft`.
 

@@ -2,6 +2,7 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { cache } from "react";
 import { compileMDX } from "next-mdx-remote/rsc";
+import remarkSmartypants from "remark-smartypants";
 import { createMdxComponents, slugify } from "@/components/mdx/MDXComponents";
 
 // Content lives in /content as MDX (see DESIGN.md, "Content Model").
@@ -13,8 +14,20 @@ const DEFAULT_LANG = "en";
 
 const bodyOf = (source) => source.replace(/^---[\s\S]*?---/, "");
 
+// Typographic quotes for text that skips the MDX pipeline (front matter, TOC).
+function smartQuotes(text = "") {
+  return String(text)
+    .replace(/(\w)'(\w)/g, "$1\u2019$2")
+    .replace(/(^|[\s(\[])'/g, "$1\u2018")
+    .replace(/'/g, "\u2019")
+    .replace(/(^|[\s(\[])"/g, "$1\u201c")
+    .replace(/"/g, "\u201d");
+}
+
 // "## Heading" lines outside code fences, numbered in order. They feed the TOC,
-// the lesson brief and the numbered <h2> labels.
+// the lesson brief and the numbered <h2> labels. When the author numbers any
+// heading themselves ("## 1. Can you simplify it?"), automatic numbers are off
+// for that file so a heading never shows two numbers.
 function extractHeadings(source) {
   const headings = [];
   let inFence = false;
@@ -23,9 +36,12 @@ function extractHeadings(source) {
     if (inFence) continue;
     const match = /^##\s+(.+?)\s*#*\s*$/.exec(line);
     if (match) {
-      const text = match[1].replace(/[*_`]/g, "").trim();
-      headings.push({ text, id: slugify(text), number: String(headings.length + 1).padStart(2, "0") });
+      const raw = match[1].replace(/[*_`]/g, "").trim();
+      headings.push({ text: smartQuotes(raw), id: slugify(raw), number: String(headings.length + 1).padStart(2, "0") });
     }
+  }
+  if (headings.some((heading) => /^\d+[.)]\s/.test(heading.text))) {
+    for (const heading of headings) heading.number = "";
   }
   return headings;
 }
@@ -35,7 +51,11 @@ async function compileFile(file, source) {
   const { content, frontmatter } = await compileMDX({
     source,
     components: createMdxComponents({ headings }),
-    options: { parseFrontmatter: true },
+    options: {
+      parseFrontmatter: true,
+      // Straight quotes become typographic ones; the display font draws " as a closing quote.
+      mdxOptions: { remarkPlugins: [remarkSmartypants] },
+    },
   });
   return { file, source, content, frontmatter, headings };
 }
@@ -68,8 +88,8 @@ function toPost({ file, source, content, frontmatter: fm, headings }) {
     id: `${slug}.${lang}`,
     slug,
     lang,
-    title: fm.title || "Untitled Post",
-    excerpt: fm.excerpt || "",
+    title: smartQuotes(fm.title) || "Untitled Post",
+    excerpt: smartQuotes(fm.excerpt),
     date: fm.date || "",
     tags: fm.tags || [],
     coverImage: fm.cover || "",
@@ -91,9 +111,9 @@ function toProject({ file, content, frontmatter: fm, headings }) {
   return {
     id: slug,
     slug,
-    title: fm.title || "Untitled Project",
-    desc: fm.description || "",
-    outcome: fm.outcome || "",
+    title: smartQuotes(fm.title) || "Untitled Project",
+    desc: smartQuotes(fm.description),
+    outcome: smartQuotes(fm.outcome),
     coverImage: fm.cover || "",
     gallery: fm.gallery || [],
     date: fm.year ? String(fm.year) : "",

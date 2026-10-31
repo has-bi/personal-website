@@ -94,7 +94,7 @@ export function EmptyState({ title, children, action }) {
 // Meta strip: equal cells divided by hairlines. 2-column grid on mobile.
 export function MetaStrip({ items }) {
   return (
-    <dl className="grid w-full grid-cols-2 border-l border-t border-hairline bg-surface lg:flex lg:border-l-0 lg:border-t-0 lg:border">
+    <dl className="grid w-full grid-cols-2 border-l border-t border-hairline bg-surface lg:flex lg:border-l-0 lg:border-t-0 lg:border [&>div:last-child:nth-child(odd)]:col-span-2">
       {items.map((item) => (
         <div
           key={item.label}

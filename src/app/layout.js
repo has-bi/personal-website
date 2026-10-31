@@ -1,14 +1,14 @@
 import "./globals.css";
-import { JetBrains_Mono, Space_Grotesk } from "next/font/google";
+import { Funnel_Sans, JetBrains_Mono } from "next/font/google";
 import ClientRuntimeGuards from "@/components/ClientRuntimeGuards";
 import SiteFooter from "@/components/site/SiteFooter";
 import SiteNav from "@/components/site/SiteNav";
-import { SITE_URL } from "@/lib/site";
+import { alternates, SITE_URL } from "@/lib/site";
 
-const spaceGrotesk = Space_Grotesk({
+const funnelSans = Funnel_Sans({
   subsets: ["latin"],
   weight: ["400", "500"],
-  variable: "--font-space-grotesk",
+  variable: "--font-funnel-sans",
 });
 
 const jetbrainsMono = JetBrains_Mono({
@@ -29,7 +29,7 @@ export const metadata = {
   },
   description: SITE_DESCRIPTION,
   alternates: {
-    types: { "application/rss+xml": [{ url: "/feed.xml", title: "Hasbi Hassadiqin: writing" }] },
+    types: alternates("/").types,
   },
   keywords: ["AI tutorials", "LLM", "RAG", "Automation", "Hasbi Hassadiqin"],
   authors: [{ name: "Hasbi Hassadiqin", url: SITE_URL }],
@@ -45,7 +45,7 @@ export const metadata = {
   },
 
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: SITE_TITLE,
     description: SITE_DESCRIPTION,
     creator: "@hssdqn",
@@ -112,7 +112,7 @@ const personSchema = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={`${spaceGrotesk.variable} ${jetbrainsMono.variable}`}>
+    <html lang="en" className={`${funnelSans.variable} ${jetbrainsMono.variable}`}>
       <body id="top">
         <script
           type="application/ld+json"
