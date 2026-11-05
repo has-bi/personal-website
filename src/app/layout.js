@@ -5,7 +5,7 @@ import SiteFooter from "@/components/site/SiteFooter";
 import SiteNav from "@/components/site/SiteNav";
 import { SITE_URL } from "@/lib/site";
 import { CURRENT_ROLE } from "@/app/about/data";
-import { getPosts } from "@/utils/content";
+import { getPosts, getProjects } from "@/utils/content";
 
 const funnelSans = Funnel_Sans({
   subsets: ["latin"],
@@ -112,7 +112,7 @@ const personSchema = {
 };
 
 export default async function RootLayout({ children }) {
-  const idPosts = await getPosts({ lang: "id" });
+  const [idPosts, projects] = await Promise.all([getPosts({ lang: "id" }), getProjects()]);
 
   return (
     <html lang="en" className={`${funnelSans.variable} ${jetbrainsMono.variable}`}>
@@ -128,7 +128,7 @@ export default async function RootLayout({ children }) {
           Skip to content
         </a>
         <ClientRuntimeGuards />
-        <SiteNav showLanguage={idPosts.length > 0} />
+        <SiteNav showLanguage={idPosts.length > 0} showProjects={projects.length > 0} />
         <main id="main">{children}</main>
         <SiteFooter />
       </body>

@@ -34,13 +34,13 @@ export const LEARNING_PATH = [
     period: "2025",
     title: "Full Stack Developer Bootcamp",
     place: "Devscale Indonesia",
-    certificate: "/images/about/devscale-certificate.jpg",
+    certificate: "/images/about/devscale-certificate.webp",
   },
   {
     period: "2023",
     title: "Full Stack Data Analytics",
     place: "RevoU",
-    certificate: "/images/about/revou-certificate.jpg",
+    certificate: "/images/about/revou-certificate.webp",
   },
   {
     period: "2018–23",

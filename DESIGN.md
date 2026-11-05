@@ -905,6 +905,7 @@ Logged decisions:
 - 2026-11-05: current role on /about and the Home about split is **Solutions Architect at Cekat.AI** (named by the owner; client work stays under NDA). The Home `/projects` band is hidden while no project is published. RSS removed.
 - 2026-11-05, titles: Solutions Engineer is the owner's career goal, not a held title. Factual places (hero abstract byline, Person schema `jobTitle` + `worksFor`) use the current role, Solutions Architect at Cekat.AI. The site title is descriptive ("Notes on AI & Automation"); "Solutions Engineer" stays only in keywords and in the positioning of the copy.
 - 2026-11-05: the EN / ID language toggle, and the LANGUAGE filter on /writing, are hidden until the first Indonesian post is published (both led to an empty list). Contrast item #18, the prev-post link and `frontmatter.json` stay as they are, by the owner's call.
+- 2026-11-05: the `[ 02 ] PROJECTS` nav item (and `/projects` in the sitemap) is hidden while no project is published. Nav numbers stay fixed so they keep matching the § section numbers.
 
 ## Iteration Guide
 
