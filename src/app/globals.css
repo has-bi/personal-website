@@ -41,7 +41,6 @@
   --spacing-tap: 44px;
 
   --container-content: 1280px;
-  --container-prose: 680px;
 }
 
 /* Type scale. Mobile sizes come from the 390px Figma frames. */
@@ -266,6 +265,16 @@
   }
   .text-link:active {
     color: var(--color-accent-active);
+  }
+
+  /* Article and project bodies: the column runs to the cover's right edge, but running
+     text stops at a readable measure (about 80 characters). Figures, code, callouts and
+     other blocks marked .wide use the full column. */
+  .article-flow > * {
+    max-width: 760px;
+  }
+  .article-flow > .wide {
+    max-width: none;
   }
 
   /* Hide the scrollbar on sideways-scrolling filter rows (mobile). */
