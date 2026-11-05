@@ -22,7 +22,7 @@ export default async function ProjectsPage() {
             <h1 className="t-display-xl text-ink">/projects</h1>
             <p className="t-display-md text-muted">Things built to learn from, and to teach from.</p>
           </div>
-          <div className="flex flex-col gap-md lg:w-[360px] lg:shrink-0 lg:justify-end lg:border-l lg:border-hairline lg:pl-xl">
+          <div className="flex flex-col gap-md lg:w-[360px] lg:shrink-0 lg:justify-end">
             <SectionLabel>About this list</SectionLabel>
             <p className="t-body-sm text-body">
               Personal and bootcamp projects only. Client and employer work is under NDA and is not listed here.
