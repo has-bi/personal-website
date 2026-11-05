@@ -30,7 +30,9 @@ function LanguageToggle({ className = "" }) {
   );
 }
 
-export default function SiteNav() {
+// `showLanguage` stays false until an Indonesian post is published, so ID never leads
+// to an empty page.
+export default function SiteNav({ showLanguage = false }) {
   const pathname = usePathname() || "/";
   const [open, setOpen] = useState(false);
 
@@ -75,7 +77,7 @@ export default function SiteNav() {
           })}
         </nav>
         <div className="flex-1" />
-        <LanguageToggle className="border-l border-hairline px-md" />
+        {showLanguage ? <LanguageToggle className="border-l border-hairline px-md" /> : null}
       </div>
 
       {/* Mobile */}
@@ -85,7 +87,7 @@ export default function SiteNav() {
           Hasbi
         </Link>
         <div className="flex items-center gap-md">
-          <LanguageToggle className="px-xs" />
+          {showLanguage ? <LanguageToggle className="px-xs" /> : null}
           <button
             type="button"
             aria-expanded={open}
