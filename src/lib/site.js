@@ -1,15 +1,11 @@
-// Site-wide constants shared by the nav, footer, metadata and feed.
+// Site-wide constants shared by the nav, footer and metadata.
 export const SITE_URL = "https://www.hasbi.pro";
 export const SITE_NAME = "Hasbi Hassadiqin";
 export const EMAIL = "hasbi.at.work@gmail.com";
 
-// Page alternates: a canonical URL plus the RSS link. A page that sets `alternates`
-// replaces the layout's, so every page builds them here to keep the feed link.
+// Page alternates: the canonical URL for each page.
 export function alternates(path) {
-  return {
-    canonical: path,
-    types: { "application/rss+xml": [{ url: "/feed.xml", title: `${SITE_NAME}: writing` }] },
-  };
+  return { canonical: path };
 }
 
 export const NAV_ITEMS = [
@@ -23,7 +19,6 @@ export const ELSEWHERE = [
   { label: "Email", value: EMAIL, href: `mailto:${EMAIL}` },
   { label: "LinkedIn", value: "hasbi-hassadiqin ↗", href: "https://www.linkedin.com/in/hasbi-hassadiqin/", external: true },
   { label: "GitHub", value: "has-bi ↗", href: "https://github.com/has-bi", external: true },
-  { label: "RSS", value: "/feed.xml ↗", href: "/feed.xml" },
 ];
 
 export const TOPICS = {

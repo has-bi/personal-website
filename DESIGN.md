@@ -473,7 +473,7 @@ Content lives in the repository, not in Notion. The site is **read-only by desig
 - **Projects** (`content/projects/<slug>.mdx`): personal projects only.
 - Front matter: `title`, `date`, `type` (`tutorial` | `note`), `topic` (`ai` | `automation` | `web`), `lang`, `readTime`, `excerpt`, `cover`, `draft`, `tags`. Tutorials add `level` (`beginner` | `intermediate`), `learn` (3 to 5 lines, taken from the post's own headings), `prerequisites` and `check` (one task that proves it works), all written or approved by the owner. Projects add `stack` and `year`.
 - Authoring flow: the owner uploads a piece of writing; the agent converts it to MDX and maps it onto the components in this file (`CodeBlock`, `Figure`, `Quote`, `Callout`, headings, lists), without rewriting the owner's voice. A translation is a separate file, never machine-filled without the owner's review.
-- RSS: `/feed.xml` (and `/id/feed.xml`), generated from the MDX at build time.
+- No RSS feed (removed 2026-11-05 at the owner's request).
 - Stack: Next.js 15 (App Router) + Tailwind + MDX, deployed on Vercel.
 
 ## Colors
@@ -579,12 +579,12 @@ All three are self-hosted, subset to Latin, `font-display: swap`. Paid fonts see
 § 01 · WRITING  /writing     latest post-rows (band hidden until ≥ 2 posts are published)
 § 02 · PROJECTS  /projects   project-card grid (personal projects only)
 § 03 · ABOUT                 split: about-photo | owner's paragraph + teaching & learning line
-§ 04 · ELSEWHERE             footer-band: EMAIL · LINKEDIN · GITHUB · RSS, © + back to top
+§ 04 · ELSEWHERE             footer-band: EMAIL · LINKEDIN · GITHUB, © + back to top
 ```
 Section numbers match the nav numbers. There is no stat strip: the only numbers available came from NDA work. `{component.stat-strip}` stays in the system for real teaching numbers later (e.g. published tutorials, learners taught, with a source).
 
 ### Routes that must exist when Home ships
-Every destination on Home must be a real page: `/writing`, `/writing?topic=ai`, `/writing?topic=automation`, `/projects`, `/about`, `/id`, `/feed.xml`, `mailto:` and the external profiles. A row or link whose page is empty is removed, not left dead.
+Every destination on Home must be a real page: `/writing`, `/writing?topic=ai`, `/writing?topic=automation`, `/projects`, `/about`, `/id`, `mailto:` and the external profiles. A row or link whose page is empty is removed, not left dead.
 
 ### Project Write-up Composition
 Every `/projects/<slug>` page follows the same seven headings (adapted from jithinrp.com's Parcel Sorter story):
@@ -801,7 +801,7 @@ footer-band
 
 **`footer-band`**: full-bleed `{colors.surface}` with a top hairline, opened by `§ 04 · ELSEWHERE`. No headline and no sales CTA: the site is for reading.
 
-**`contact-spec-row`**: key-value rows in `{typography.mono-meta}`, min height 44px: `EMAIL · LINKEDIN ↗ · GITHUB ↗ · RSS /feed.xml ↗`. Keys in `{colors.muted}`, values in `{colors.ink}`.
+**`contact-spec-row`**: key-value rows in `{typography.mono-meta}`, min height 44px: `EMAIL · LINKEDIN ↗ · GITHUB ↗`. Keys in `{colors.muted}`, values in `{colors.ink}`.
 
 **`footer`**: last row of the band. `© YEAR NAME` left, an optional one-line personal note centre (owner's own words only), `BACK TO TOP ↑` right in a 44px hit area, all in `{typography.mono-label}`.
 
@@ -902,6 +902,7 @@ Logged decisions:
 - 2026-10-27, first AI note: owner approves agent-drafted copy (body and excerpt) for "Where Should You Start Learning AI?", built from the owner's interview answers; owner re-reads after publish.
 - 2026-10-27: line-art illustrations switch from "never filled" to the Loop reference style (solid accent fills, ink shadows); first set generated for the AI note.
 - 2026-10-31, positioning: the owner brands as **Solutions Engineer**. The site stays writing-first with minimal contact; teaching (RevoU) stays as a secondary section on /about; the hero stays descriptive ("Notes on AI & automation."). The current role is described by what it covers, never by employer or client (NDA). Font switched to Funnel Sans.
+- 2026-11-05: current role on /about and the Home about split is **Solutions Architect at Cekat.AI** (named by the owner; client work stays under NDA). The Home `/projects` band is hidden while no project is published. RSS removed.
 
 ## Iteration Guide
 

@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { getAboutIntro, getPosts, getProjects } from "@/utils/content";
-import { ButtonGhost, ButtonPrimary, EmptyState, SectionHead, SectionLabel } from "@/components/ui/primitives";
+import { ButtonGhost, ButtonPrimary, SectionHead, SectionLabel } from "@/components/ui/primitives";
 import { PostRow, PostTableHeader } from "@/components/ui/PostRow";
 import { ProjectGrid } from "@/components/ui/ProjectCard";
 import { CURRENT_ROLE, LEARNING_PATH, TEACHING_ROLE } from "@/app/about/data";
@@ -137,27 +137,19 @@ function LatestProjects({ projects }) {
         label="§ 02 · Projects"
         heading="/projects"
         more={
-          projects.length ? (
-            <ButtonGhost href="/projects" bare>
-              All projects
-            </ButtonGhost>
-          ) : null
+          <ButtonGhost href="/projects" bare>
+            All projects
+          </ButtonGhost>
         }
       />
-      {projects.length ? (
-        <ProjectGrid projects={projects.slice(0, 3)} />
-      ) : (
-        <EmptyState title="No projects yet" action={{ href: "/writing", label: "Read the writing" }}>
-          No projects are published yet.
-        </EmptyState>
-      )}
+      <ProjectGrid projects={projects.slice(0, 3)} />
     </section>
   );
 }
 
 function AboutSplit({ intro }) {
   const rows = [
-    { when: CURRENT_ROLE.kind, what: CURRENT_ROLE.title, where: "" },
+    { when: CURRENT_ROLE.kind, what: CURRENT_ROLE.title, where: CURRENT_ROLE.org },
     { when: TEACHING_ROLE.kind, what: TEACHING_ROLE.title, where: TEACHING_ROLE.org },
     ...LEARNING_PATH.map((item) => ({ when: item.period, what: item.title, where: item.place })),
   ];
@@ -216,7 +208,8 @@ export default async function Home() {
       {routes.length ? <StartHere routes={routes} /> : null}
       {/* The /writing band stays hidden until at least two posts are published. */}
       {posts.length >= 2 ? <LatestWriting posts={posts} /> : null}
-      <LatestProjects projects={projects} />
+      {/* The /projects band stays hidden while no project is published. */}
+      {projects.length ? <LatestProjects projects={projects} /> : null}
       <AboutSplit intro={intro} />
     </>
   );
