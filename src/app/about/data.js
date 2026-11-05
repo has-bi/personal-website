@@ -1,11 +1,11 @@
-// About page facts, shared with the about split on Home. Client and employer work is
-// under NDA: the current role is described by what it covers, never by who it is for.
+// About page facts, shared with the about split on Home. Client work is under NDA:
+// the current role is described by what it covers, never by who it is for.
 
 export const CURRENT_ROLE = {
+  org: "Cekat.AI",
   kind: "Now",
-  title: "Solutions Engineer",
-  detail:
-    "Turning business problems into working systems. Client and employer work stays under NDA, so it is not shown here.",
+  title: "Solutions Architect",
+  detail: "Turning business problems into working systems. Client work stays under NDA, so it is not shown here.",
 };
 
 export const SOLUTION_STEPS = [

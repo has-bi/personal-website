@@ -22,7 +22,7 @@ content/
   about.en.mdx                 # your own intro paragraph for /about and Home (draft until you write it)
 ```
 
-Routes: `/`, `/writing` (filters: `?type=tutorial&topic=ai&lang=id`), `/writing/<slug>`, `/projects` (`?topic=`), `/projects/<slug>`, `/about`, `/feed.xml`. Old `/blog/*` and `/contact` URLs redirect.
+Routes: `/`, `/writing` (filters: `?type=tutorial&topic=ai&lang=id`), `/writing/<slug>`, `/projects` (`?topic=`), `/projects/<slug>`, `/about`. Old `/blog/*` and `/contact` URLs redirect.
 
 Post front matter:
 

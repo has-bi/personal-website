@@ -6,7 +6,7 @@ import { CURRENT_ROLE, LEARNING_PATH, SOLUTION_STEPS, TEACHING_ROLE, TEACHING_TO
 
 export const metadata = {
   title: "About",
-  description: "About Hasbi Hassadiqin, Solutions Engineer, who writes notes on AI and automation.",
+  description: "About Hasbi Hassadiqin, Solutions Architect at Cekat.AI, who writes notes on AI and automation.",
   alternates: alternates("/about"),
 };
 
@@ -73,7 +73,7 @@ export default async function AboutPage() {
       <Band>
         <div className="flex flex-col gap-lg lg:gap-xxl">
           <BandHead label="§ 03.1 · Work" title="What I do" />
-          <RoleBlock label={CURRENT_ROLE.kind} role={CURRENT_ROLE} items={SOLUTION_STEPS} />
+          <RoleBlock label={`${CURRENT_ROLE.org} · ${CURRENT_ROLE.kind}`} role={CURRENT_ROLE} items={SOLUTION_STEPS} />
         </div>
       </Band>
 

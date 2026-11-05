@@ -3,7 +3,7 @@ import { Funnel_Sans, JetBrains_Mono } from "next/font/google";
 import ClientRuntimeGuards from "@/components/ClientRuntimeGuards";
 import SiteFooter from "@/components/site/SiteFooter";
 import SiteNav from "@/components/site/SiteNav";
-import { alternates, SITE_URL } from "@/lib/site";
+import { SITE_URL } from "@/lib/site";
 
 const funnelSans = Funnel_Sans({
   subsets: ["latin"],
@@ -28,9 +28,6 @@ export const metadata = {
     template: "%s | Hasbi Hassadiqin",
   },
   description: SITE_DESCRIPTION,
-  alternates: {
-    types: alternates("/").types,
-  },
   keywords: ["Solutions Engineer", "AI", "LLM", "RAG", "Automation", "Hasbi Hassadiqin"],
   authors: [{ name: "Hasbi Hassadiqin", url: SITE_URL }],
   creator: "Hasbi Hassadiqin",
