@@ -9,11 +9,18 @@ export function alternates(path) {
 }
 
 export const NAV_ITEMS = [
-  { href: "/", number: "00", label: "Index" },
-  { href: "/writing", number: "01", label: "Writing" },
-  { href: "/projects", number: "02", label: "Projects" },
-  { href: "/about", number: "03", label: "About" },
+  { key: "index", href: "/", label: "Index" },
+  { key: "writing", href: "/writing", label: "Writing" },
+  { key: "projects", href: "/projects", label: "Projects" },
+  { key: "about", href: "/about", label: "About" },
 ];
+
+// Section numbers follow the visible order, so they stay consecutive: while no project
+// is published, Projects drops out and About becomes 02. Nav items and § labels share them.
+export function sectionNumbers({ hasProjects }) {
+  const order = ["index", "writing", ...(hasProjects ? ["projects"] : []), "about", "elsewhere"];
+  return Object.fromEntries(order.map((key, index) => [key, String(index).padStart(2, "0")]));
+}
 
 export const ELSEWHERE = [
   { label: "Email", value: EMAIL, href: `mailto:${EMAIL}` },

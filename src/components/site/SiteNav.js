@@ -30,10 +30,11 @@ function LanguageToggle({ className = "" }) {
   );
 }
 
-// `showLanguage` stays false until an Indonesian post is published, and `showProjects`
-// until a project is, so no nav item leads to an empty page.
-export default function SiteNav({ showLanguage = false, showProjects = true }) {
-  const items = NAV_ITEMS.filter((item) => showProjects || item.href !== "/projects");
+// `showLanguage` stays false until an Indonesian post is published. `sections` holds the
+// numbers from sectionNumbers(); an item without a number (Projects, while none is
+// published) is left out, so no nav item leads to an empty page.
+export default function SiteNav({ showLanguage = false, sections }) {
+  const items = NAV_ITEMS.filter((item) => sections[item.key]).map((item) => ({ ...item, number: sections[item.key] }));
   const pathname = usePathname() || "/";
   const [open, setOpen] = useState(false);
 
