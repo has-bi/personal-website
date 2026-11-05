@@ -4,6 +4,7 @@ import ClientRuntimeGuards from "@/components/ClientRuntimeGuards";
 import SiteFooter from "@/components/site/SiteFooter";
 import SiteNav from "@/components/site/SiteNav";
 import { SITE_URL } from "@/lib/site";
+import { CURRENT_ROLE } from "@/app/about/data";
 
 const funnelSans = Funnel_Sans({
   subsets: ["latin"],
@@ -17,9 +18,9 @@ const jetbrainsMono = JetBrains_Mono({
   variable: "--font-jetbrains-mono",
 });
 
-const SITE_TITLE = "Hasbi Hassadiqin | Solutions Engineer";
+const SITE_TITLE = "Hasbi Hassadiqin | Notes on AI & Automation";
 const SITE_DESCRIPTION =
-  "Notes on AI and automation by Hasbi Hassadiqin, Solutions Engineer: finding the real problem, then choosing the right solution.";
+  "Notes on AI and automation by Hasbi Hassadiqin: designing and building solutions, from finding the real problem to choosing the right fix.";
 
 export const metadata = {
   metadataBase: new URL(SITE_URL),
@@ -28,7 +29,7 @@ export const metadata = {
     template: "%s | Hasbi Hassadiqin",
   },
   description: SITE_DESCRIPTION,
-  keywords: ["Solutions Engineer", "AI", "LLM", "RAG", "Automation", "Hasbi Hassadiqin"],
+  keywords: ["Solutions Engineer", "Solutions Architect", "AI", "LLM", "RAG", "Automation", "Hasbi Hassadiqin"],
   authors: [{ name: "Hasbi Hassadiqin", url: SITE_URL }],
   creator: "Hasbi Hassadiqin",
   publisher: "Hasbi Hassadiqin",
@@ -104,8 +105,9 @@ const personSchema = {
     "https://www.linkedin.com/in/hasbi-hassadiqin/",
     "https://github.com/has-bi",
   ],
-  jobTitle: "Solutions Engineer",
-  description: "Solutions Engineer who writes notes on AI and automation.",
+  jobTitle: CURRENT_ROLE.title,
+  worksFor: { "@type": "Organization", name: CURRENT_ROLE.org },
+  description: "Designs and builds solutions, and writes notes on AI and automation.",
 };
 
 export default function RootLayout({ children }) {
