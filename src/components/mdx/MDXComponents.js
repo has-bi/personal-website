@@ -23,7 +23,7 @@ function CodeBlock({ children }) {
   const language = /language-(\w+)/.exec(codeProps.className || "")?.[1];
 
   return (
-    <div className="bg-surface-dark-elevated">
+    <div className="wide bg-surface-dark-elevated">
       <div className="t-mono-label flex min-h-11 items-center justify-between border-b border-on-dark-muted/40 px-md text-on-dark-muted lg:px-lg">
         <span>{language || "Code"}</span>
         <CodeCopyButton code={code} />
@@ -38,7 +38,7 @@ function CodeBlock({ children }) {
 // Images are the author's own screenshots and diagrams; a markdown title becomes the caption.
 function Figure({ src, alt = "", title }) {
   return (
-    <figure className="-mx-md flex flex-col gap-xs lg:mx-0">
+    <figure className="wide -mx-md flex flex-col gap-xs lg:mx-0">
       {/* eslint-disable-next-line @next/next/no-img-element -- MDX images come from mixed hosts and sizes */}
       <img src={src} alt={alt} loading="lazy" className="w-full border-y border-hairline bg-surface-sunken lg:border" />
       {title ? <figcaption className="t-mono-meta px-md uppercase text-muted lg:px-0">{title}</figcaption> : null}
@@ -48,7 +48,7 @@ function Figure({ src, alt = "", title }) {
 
 export function YouTube({ id, title = "Video" }) {
   return (
-    <div className="-mx-md aspect-video border-y border-hairline bg-surface-sunken lg:mx-0 lg:border">
+    <div className="wide -mx-md aspect-video border-y border-hairline bg-surface-sunken lg:mx-0 lg:border">
       <iframe
         src={`https://www.youtube-nocookie.com/embed/${id}`}
         title={title}
@@ -64,7 +64,7 @@ export function YouTube({ id, title = "Video" }) {
 // callout: NOTE, TIP, RULES, WARNING, CHECK YOUR WORK. Full hairline box, no coloured stripe.
 export function Callout({ kind = "Note", children }) {
   return (
-    <aside className="flex flex-col gap-xs border border-hairline bg-surface px-lg py-md">
+    <aside className="wide flex flex-col gap-xs border border-hairline bg-surface px-lg py-md">
       <p className="t-mono-label text-muted">{kind}</p>
       <div className="t-body-md flex flex-col gap-xs text-ink [&_p]:m-0 [&_p]:text-[17px] [&_p]:text-ink">{children}</div>
     </aside>
@@ -75,7 +75,7 @@ export function Callout({ kind = "Note", children }) {
 export function Features({ children }) {
   const items = Children.toArray(children).filter((child) => child?.props?.name);
   return (
-    <ol className="border-t border-hairline">
+    <ol className="wide border-t border-hairline">
       {items.map((child, index) => (
         <li key={child.props.name} className="flex flex-col gap-xs border-b border-hairline py-sm lg:flex-row lg:gap-lg">
           <span className="flex gap-sm lg:w-[220px] lg:shrink-0">
@@ -96,7 +96,7 @@ export function Feature() {
 export function Spec({ children }) {
   const rows = Children.toArray(children).filter((child) => child?.props?.label);
   return (
-    <dl className="border border-hairline bg-surface">
+    <dl className="wide border border-hairline bg-surface">
       {rows.map((child) => (
         <div
           key={child.props.label}
@@ -117,7 +117,7 @@ export function SpecRow() {
 export function Problems({ children }) {
   const items = Children.toArray(children).filter((child) => child?.props?.problem);
   return (
-    <ul className="border-t border-hairline">
+    <ul className="wide border-t border-hairline">
       {items.map((child) => (
         <li key={child.props.problem} className="flex flex-col gap-xs border-b border-hairline py-md">
           <p className="flex flex-col gap-xxs lg:flex-row lg:gap-md">
@@ -148,7 +148,7 @@ export function Learned({ label, children }) {
 }
 
 export function Screenshots({ children }) {
-  return <div className="grid grid-cols-2 gap-xxs lg:grid-cols-3">{children}</div>;
+  return <div className="wide grid grid-cols-2 gap-xxs lg:grid-cols-3">{children}</div>;
 }
 
 export function Shot({ src, alt = "" }) {
@@ -176,7 +176,13 @@ export function createMdxComponents({ headings = [] } = {}) {
     },
     h3: ({ children }) => <h3 className="t-title-md pt-xs text-ink">{children}</h3>,
     h4: ({ children }) => <h4 className="t-mono-label pt-xs text-muted">{children}</h4>,
-    p: ({ children }) => <p className="t-body-lg text-body">{children}</p>,
+    p: ({ children }) => {
+      // An image on its own line arrives wrapped in a paragraph; render the figure bare so
+      // it is valid HTML and can use the full article width.
+      const only = Children.toArray(children);
+      if (only.length === 1 && only[0]?.type === Figure) return only[0];
+      return <p className="t-body-lg text-body">{children}</p>;
+    },
     ul: ({ children }) => <ul className="t-body-lg flex list-disc flex-col gap-xs pl-lg text-body marker:text-faint">{children}</ul>,
     ol: ({ children }) => <ol className="t-body-lg flex list-decimal flex-col gap-xs pl-lg text-body marker:t-mono-meta marker:text-faint">{children}</ol>,
     li: ({ children }) => <li className="pl-xxs">{children}</li>,

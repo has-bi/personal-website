@@ -141,7 +141,7 @@ export default async function ProjectPage({ params }) {
             <ProjectLinks project={project} />
           </DesktopToc>
         </aside>
-        <div className="flex w-full max-w-prose min-w-0 flex-col gap-lg">
+        <div className="article-flow flex min-w-0 flex-1 flex-col gap-lg">
           {project.content}
           <div className="lg:hidden">
             <ProjectLinks project={project} />

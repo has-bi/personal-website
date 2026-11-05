@@ -44,7 +44,7 @@ export async function generateMetadata({ params }) {
 function LessonBrief({ post }) {
   const rowText = "t-body-md flex-1 text-ink";
   return (
-    <div className="border border-hairline bg-surface">
+    <div className="wide border border-hairline bg-surface">
       <div className="flex flex-col gap-sm px-lg py-md">
         <p className="t-mono-label text-muted">What you'll learn</p>
         <ol className="flex flex-col gap-sm">
@@ -151,7 +151,7 @@ export default async function ArticlePage({ params }) {
           </DesktopToc>
         </aside>
 
-        <div className="flex w-full max-w-prose min-w-0 flex-col gap-lg">
+        <div className="article-flow flex min-w-0 flex-1 flex-col gap-lg">
           {post.type === "tutorial" && post.headings.length ? <LessonBrief post={post} /> : null}
           {post.content}
           <p className="t-body-md text-body">
