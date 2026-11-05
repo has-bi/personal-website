@@ -60,7 +60,7 @@ function Hero() {
           <SectionLabel>Abstract</SectionLabel>
           <p className="t-body-md text-body">
             Plain-language notes on LLMs, RAG and workflow automation, from finding the real problem to
-            choosing the solution. By Hasbi Hassadiqin, Solutions Engineer.
+            choosing the solution. By Hasbi Hassadiqin, {CURRENT_ROLE.title} at {CURRENT_ROLE.org}.
           </p>
           <ButtonPrimary href="/writing">Start reading</ButtonPrimary>
         </div>
