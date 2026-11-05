@@ -1,7 +1,7 @@
 import Image from "next/image";
-import { getAboutIntro } from "@/utils/content";
+import { getAboutIntro, getProjects } from "@/utils/content";
 import { SectionLabel, Tag } from "@/components/ui/primitives";
-import { alternates } from "@/lib/site";
+import { alternates, sectionNumbers } from "@/lib/site";
 import { CURRENT_ROLE, LEARNING_PATH, SOLUTION_STEPS, TEACHING_ROLE, TEACHING_TOPICS, TOOLS } from "./data";
 
 export const metadata = {
@@ -46,14 +46,15 @@ function RoleBlock({ label, role, items }) {
 }
 
 export default async function AboutPage() {
-  const intro = await getAboutIntro();
+  const [intro, projects] = await Promise.all([getAboutIntro(), getProjects()]);
+  const n = sectionNumbers({ hasProjects: projects.length > 0 }).about;
 
   return (
     <>
       <Band>
         <div className="flex flex-col gap-lg lg:flex-row lg:gap-xxl">
           <div className="flex flex-1 flex-col gap-lg">
-            <SectionLabel>§ 03 · About</SectionLabel>
+            <SectionLabel>§ {n} · About</SectionLabel>
             <h1 className="t-display-xl text-ink">/about</h1>
             {intro ? <div className="intro-flow t-intro text-body">{intro}</div> : null}
           </div>
@@ -72,21 +73,21 @@ export default async function AboutPage() {
 
       <Band>
         <div className="flex flex-col gap-lg lg:gap-xxl">
-          <BandHead label="§ 03.1 · Work" title="What I do" />
+          <BandHead label={`§ ${n}.1 · Work`} title="What I do" />
           <RoleBlock label={`${CURRENT_ROLE.org} · ${CURRENT_ROLE.kind}`} role={CURRENT_ROLE} items={SOLUTION_STEPS} />
         </div>
       </Band>
 
       <Band>
         <div className="flex flex-col gap-lg lg:gap-xxl">
-          <BandHead label="§ 03.2 · Teaching" title="What I teach" />
+          <BandHead label={`§ ${n}.2 · Teaching`} title="What I teach" />
           <RoleBlock label={`${TEACHING_ROLE.org} · ${TEACHING_ROLE.kind}`} role={TEACHING_ROLE} items={TEACHING_TOPICS} />
         </div>
       </Band>
 
       <Band>
         <div className="flex flex-col gap-lg lg:gap-xxl">
-          <BandHead label="§ 03.3 · Learning path" title="How I learned it" />
+          <BandHead label={`§ ${n}.3 · Learning path`} title="How I learned it" />
           <ol className="border-t border-hairline">
             {LEARNING_PATH.map((item) => (
               <li key={item.title} className="flex flex-col gap-sm border-b border-hairline py-md lg:flex-row lg:items-center lg:gap-lg">
@@ -122,7 +123,7 @@ export default async function AboutPage() {
 
       <Band>
         <div className="flex flex-col gap-lg lg:gap-xxl">
-          <BandHead label="§ 03.4 · Tools" title="What I work with" />
+          <BandHead label={`§ ${n}.4 · Tools`} title="What I work with" />
           <div className="grid grid-cols-1 border-t border-hairline lg:grid-cols-3">
             {TOOLS.map((group, index) => (
               <div

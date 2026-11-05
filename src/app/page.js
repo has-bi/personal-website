@@ -5,7 +5,7 @@ import { ButtonGhost, ButtonPrimary, SectionHead, SectionLabel } from "@/compone
 import { PostRow, PostTableHeader } from "@/components/ui/PostRow";
 import { ProjectGrid } from "@/components/ui/ProjectCard";
 import { CURRENT_ROLE, LEARNING_PATH, TEACHING_ROLE } from "@/app/about/data";
-import { alternates } from "@/lib/site";
+import { alternates, sectionNumbers } from "@/lib/site";
 
 export const metadata = { alternates: alternates("/") };
 
@@ -147,7 +147,7 @@ function LatestProjects({ projects }) {
   );
 }
 
-function AboutSplit({ intro }) {
+function AboutSplit({ intro, number }) {
   const rows = [
     { when: CURRENT_ROLE.kind, what: CURRENT_ROLE.title, where: CURRENT_ROLE.org },
     { when: TEACHING_ROLE.kind, what: TEACHING_ROLE.title, where: TEACHING_ROLE.org },
@@ -167,7 +167,7 @@ function AboutSplit({ intro }) {
           />
         </div>
         <div className="flex flex-1 flex-col gap-lg lg:gap-xl">
-          <SectionLabel>§ 03 · About</SectionLabel>
+          <SectionLabel>§ {number} · About</SectionLabel>
           {intro ? <div className="intro-flow t-intro text-ink">{intro}</div> : null}
           <ul className="border-t border-hairline">
             {rows.map((row) => (
@@ -201,6 +201,7 @@ export default async function Home() {
     getAboutIntro(),
   ]);
   const routes = ROUTES.filter((route) => route.has(posts, idPosts));
+  const sections = sectionNumbers({ hasProjects: projects.length > 0 });
 
   return (
     <>
@@ -210,7 +211,7 @@ export default async function Home() {
       {posts.length >= 2 ? <LatestWriting posts={posts} /> : null}
       {/* The /projects band stays hidden while no project is published. */}
       {projects.length ? <LatestProjects projects={projects} /> : null}
-      <AboutSplit intro={intro} />
+      <AboutSplit intro={intro} number={sections.about} />
     </>
   );
 }

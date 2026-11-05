@@ -2,11 +2,11 @@ import { ELSEWHERE } from "@/lib/site";
 import { SectionLabel } from "@/components/ui/primitives";
 
 // footer-band: where else to find the owner, as a key-value table.
-export default function SiteFooter() {
+export default function SiteFooter({ number }) {
   return (
     <footer className="band border-t border-hairline bg-surface pb-xl pt-xxxl">
       <div className="flex flex-col gap-xxl lg:px-md">
-        <SectionLabel>§ 04 · Elsewhere</SectionLabel>
+        <SectionLabel>§ {number} · Elsewhere</SectionLabel>
         <dl className="border-t border-hairline">
           {ELSEWHERE.map((row) => (
             <div key={row.label} className="flex min-h-11 items-center justify-between border-b border-hairline lg:justify-start">

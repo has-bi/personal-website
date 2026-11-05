@@ -3,7 +3,7 @@ import { Funnel_Sans, JetBrains_Mono } from "next/font/google";
 import ClientRuntimeGuards from "@/components/ClientRuntimeGuards";
 import SiteFooter from "@/components/site/SiteFooter";
 import SiteNav from "@/components/site/SiteNav";
-import { SITE_URL } from "@/lib/site";
+import { sectionNumbers, SITE_URL } from "@/lib/site";
 import { CURRENT_ROLE } from "@/app/about/data";
 import { getPosts, getProjects } from "@/utils/content";
 
@@ -113,6 +113,7 @@ const personSchema = {
 
 export default async function RootLayout({ children }) {
   const [idPosts, projects] = await Promise.all([getPosts({ lang: "id" }), getProjects()]);
+  const sections = sectionNumbers({ hasProjects: projects.length > 0 });
 
   return (
     <html lang="en" className={`${funnelSans.variable} ${jetbrainsMono.variable}`}>
@@ -128,9 +129,9 @@ export default async function RootLayout({ children }) {
           Skip to content
         </a>
         <ClientRuntimeGuards />
-        <SiteNav showLanguage={idPosts.length > 0} showProjects={projects.length > 0} />
+        <SiteNav showLanguage={idPosts.length > 0} sections={sections} />
         <main id="main">{children}</main>
-        <SiteFooter />
+        <SiteFooter number={sections.elsewhere} />
       </body>
     </html>
   );
