@@ -8,7 +8,6 @@ export default async function sitemap() {
   const staticRoutes = [
     { url: SITE_URL, lastModified: latest, changeFrequency: "weekly", priority: 1 },
     { url: `${SITE_URL}/writing`, lastModified: latest, changeFrequency: "weekly", priority: 0.9 },
-    { url: `${SITE_URL}/projects`, changeFrequency: "monthly", priority: 0.8 },
     { url: `${SITE_URL}/about`, changeFrequency: "monthly", priority: 0.7 },
   ];
 
@@ -20,6 +19,11 @@ export default async function sitemap() {
       changeFrequency: "monthly",
       priority: 0.7,
     }));
+
+  // /projects is listed only once a project is published.
+  if (projects.some((project) => project.published)) {
+    staticRoutes.push({ url: `${SITE_URL}/projects`, changeFrequency: "monthly", priority: 0.8 });
+  }
 
   const projectRoutes = projects
     .filter((project) => project.published)

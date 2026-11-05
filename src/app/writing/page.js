@@ -6,7 +6,8 @@ import WritingIndex, { WritingList } from "./WritingIndex";
 
 export const metadata = {
   title: "Writing",
-  description: "Tutorials and notes on AI and automation.",
+  description:
+    "Notes and tutorials on AI and automation by Hasbi Hassadiqin: find the real problem first, then choose between an SOP, automation or AI.",
   alternates: alternates("/writing"),
 };
 

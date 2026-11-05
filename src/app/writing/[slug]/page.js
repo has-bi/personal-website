@@ -106,6 +106,8 @@ export default async function ArticlePage({ params }) {
     inLanguage: post.lang,
     url,
     author: { "@type": "Person", name: post.author, url: SITE_URL },
+    image: post.coverImage ? `${SITE_URL}${post.coverImage}` : undefined,
+    mainEntityOfPage: url,
     keywords: post.tags.join(", "),
   };
 
@@ -145,11 +147,11 @@ export default async function ArticlePage({ params }) {
       <MobileToc headings={post.headings} />
 
       <div className="band flex gap-[60px] pb-xxl pt-xl lg:py-section">
-        <aside className="hidden w-[240px] shrink-0 lg:block">
+        <div className="hidden w-[240px] shrink-0 lg:block">
           <DesktopToc headings={post.headings}>
             <ShareLinks url={url} title={post.title} />
           </DesktopToc>
-        </aside>
+        </div>
 
         <div className="article-flow flex min-w-0 flex-1 flex-col gap-lg">
           {post.type === "tutorial" && post.headings.length ? <LessonBrief post={post} /> : null}

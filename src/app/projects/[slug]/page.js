@@ -136,11 +136,11 @@ export default async function ProjectPage({ params }) {
       <MobileToc headings={project.headings} />
 
       <div className="band flex gap-[60px] pb-xxl pt-xl lg:py-section">
-        <aside className="hidden w-[240px] shrink-0 lg:block">
+        <div className="hidden w-[240px] shrink-0 lg:block">
           <DesktopToc headings={project.headings}>
             <ProjectLinks project={project} />
           </DesktopToc>
-        </aside>
+        </div>
         <div className="article-flow flex min-w-0 flex-1 flex-col gap-lg">
           {project.content}
           <div className="lg:hidden">

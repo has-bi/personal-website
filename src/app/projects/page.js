@@ -6,7 +6,8 @@ import ProjectsIndex, { ProjectsList } from "./ProjectsIndex";
 
 export const metadata = {
   title: "Projects",
-  description: "Personal projects in AI, automation, and web development.",
+  description:
+    "Personal projects by Hasbi Hassadiqin in AI, automation and the web. Client work is under NDA and is not listed here.",
   alternates: alternates("/projects"),
 };
 

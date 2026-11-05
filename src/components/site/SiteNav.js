@@ -30,9 +30,10 @@ function LanguageToggle({ className = "" }) {
   );
 }
 
-// `showLanguage` stays false until an Indonesian post is published, so ID never leads
-// to an empty page.
-export default function SiteNav({ showLanguage = false }) {
+// `showLanguage` stays false until an Indonesian post is published, and `showProjects`
+// until a project is, so no nav item leads to an empty page.
+export default function SiteNav({ showLanguage = false, showProjects = true }) {
+  const items = NAV_ITEMS.filter((item) => showProjects || item.href !== "/projects");
   const pathname = usePathname() || "/";
   const [open, setOpen] = useState(false);
 
@@ -60,7 +61,7 @@ export default function SiteNav({ showLanguage = false }) {
           Hasbi Hassadiqin
         </Link>
         <nav aria-label="Primary" className="flex items-stretch">
-          {NAV_ITEMS.map((item) => {
+          {items.map((item) => {
             const active = isActive(pathname, item.href);
             return (
               <Link
@@ -107,7 +108,7 @@ export default function SiteNav({ showLanguage = false }) {
           className="fixed inset-x-0 bottom-0 top-14 z-40 overflow-y-auto bg-canvas lg:hidden"
         >
           <ul className="border-t border-hairline">
-            {NAV_ITEMS.map((item) => {
+            {items.map((item) => {
               const active = isActive(pathname, item.href);
               return (
                 <li key={item.href} className="border-b border-hairline">

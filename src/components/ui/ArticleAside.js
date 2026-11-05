@@ -54,8 +54,12 @@ export function DesktopToc({ headings, children }) {
     <div className="sticky top-[88px] flex flex-col gap-lg">
       {headings.length ? (
         <>
-          <p className="t-mono-label text-faint">On this page</p>
-          <TocList headings={headings} active={active} />
+          <nav aria-labelledby="toc-label" className="flex flex-col gap-lg">
+            <p id="toc-label" className="t-mono-label text-faint">
+              On this page
+            </p>
+            <TocList headings={headings} active={active} />
+          </nav>
           <div className="h-px bg-hairline" />
         </>
       ) : null}
@@ -68,7 +72,7 @@ export function DesktopToc({ headings, children }) {
 export function MobileToc({ headings }) {
   if (!headings.length) return null;
   return (
-    <details className="group border-y border-hairline lg:hidden">
+    <details aria-label="On this page" className="group border-y border-hairline lg:hidden">
       <summary className="band t-mono-label flex min-h-12 cursor-pointer list-none items-center justify-between text-ink [&::-webkit-details-marker]:hidden">
         <span>
           On this page · {String(headings.length).padStart(2, "0")}

@@ -64,10 +64,10 @@ export function YouTube({ id, title = "Video" }) {
 // callout: NOTE, TIP, RULES, WARNING, CHECK YOUR WORK. Full hairline box, no coloured stripe.
 export function Callout({ kind = "Note", children }) {
   return (
-    <aside className="wide flex flex-col gap-xs border border-hairline bg-surface px-lg py-md">
+    <div role="note" className="wide flex flex-col gap-xs border border-hairline bg-surface px-lg py-md">
       <p className="t-mono-label text-muted">{kind}</p>
       <div className="t-body-md flex flex-col gap-xs text-ink [&_p]:m-0 [&_p]:text-[17px] [&_p]:text-ink">{children}</div>
-    </aside>
+    </div>
   );
 }
 
