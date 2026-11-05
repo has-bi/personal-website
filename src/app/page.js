@@ -168,7 +168,7 @@ function AboutSplit({ intro }) {
         </div>
         <div className="flex flex-1 flex-col gap-lg lg:gap-xl">
           <SectionLabel>§ 03 · About</SectionLabel>
-          {intro ? <div className="t-intro text-ink [&_p]:m-0 [&_p]:[color:inherit] [&_p]:[font:inherit] [&_p]:[letter-spacing:inherit]">{intro}</div> : null}
+          {intro ? <div className="intro-flow t-intro text-ink">{intro}</div> : null}
           <ul className="border-t border-hairline">
             {rows.map((row) => (
               <li
