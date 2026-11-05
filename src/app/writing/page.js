@@ -23,7 +23,7 @@ export default async function WritingPage() {
             <h1 className="t-display-xl text-ink">/writing</h1>
             <p className="t-display-md text-muted">Tutorials and notes on AI and automation.</p>
           </div>
-          <div className="flex flex-col gap-md lg:w-[360px] lg:shrink-0 lg:justify-end lg:border-l lg:border-hairline lg:pl-xl">
+          <div className="flex flex-col gap-md lg:w-[360px] lg:shrink-0 lg:justify-end">
             <SectionLabel>Two kinds of posts</SectionLabel>
             <dl className="flex flex-col gap-sm">
               <div className="flex gap-md">
