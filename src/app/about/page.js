@@ -55,7 +55,7 @@ export default async function AboutPage() {
           <div className="flex flex-1 flex-col gap-lg">
             <SectionLabel>§ 03 · About</SectionLabel>
             <h1 className="t-display-xl text-ink">/about</h1>
-            {intro ? <div className="t-intro text-muted [&_p]:m-0">{intro}</div> : null}
+            {intro ? <div className="t-intro text-muted [&_p]:m-0 [&_p]:[color:inherit] [&_p]:[font:inherit] [&_p]:[letter-spacing:inherit]">{intro}</div> : null}
           </div>
           <div className="relative aspect-4/5 w-full overflow-hidden border border-hairline bg-surface-sunken lg:w-[360px] lg:shrink-0">
             <Image
