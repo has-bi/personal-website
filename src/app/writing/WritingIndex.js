@@ -18,6 +18,8 @@ function emptyTitle({ type, topic, lang }) {
 }
 
 export function WritingList({ posts, filters = { type: "all", topic: "all", lang: "all" } }) {
+  // The language filter only appears once posts exist in more than one language.
+  const multilingual = new Set(posts.map((post) => post.lang)).size > 1;
   const shown = posts.filter(
     (post) =>
       (filters.type === "all" || post.type === filters.type) &&
@@ -41,7 +43,9 @@ export function WritingList({ posts, filters = { type: "all", topic: "all", lang
           <div className="flex flex-col lg:flex-row lg:items-center lg:gap-xl">
             <FilterGroup pathname="/writing" current={filters} name="type" label="Type" options={options(TYPES)} />
             <FilterGroup pathname="/writing" current={filters} name="topic" label="Topic" options={options(TOPICS)} />
-            <FilterGroup pathname="/writing" current={filters} name="lang" label="Language" options={options(LANGS)} />
+            {multilingual ? (
+              <FilterGroup pathname="/writing" current={filters} name="lang" label="Language" options={options(LANGS)} />
+            ) : null}
           </div>
           <p className="t-mono-meta hidden shrink-0 uppercase text-muted lg:block" aria-live="polite">
             {pad2(shown.length)} {shown.length === 1 ? "entry" : "entries"} · Newest first
