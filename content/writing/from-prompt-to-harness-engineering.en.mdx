@@ -67,40 +67,27 @@ Put the three on one timeline and the reason for separate files stops being an a
 
 ## One flow, end to end
 
-Definitions only take you so far, so here is a flow I actually run. Not a coding one: content production for Abay Coffee & Listening Bar, a specialty coffee and vinyl bar in South Jakarta. I picked it deliberately, because creative work is where people assume a harness cannot help. The output is supposed to be a judgement call.
+Definitions only take you so far, so here is a cycle I actually run. Not a coding one: the monthly content cycle for Abay Coffee & Listening Bar, a specialty coffee and vinyl bar in South Jakarta. I picked it because creative work is where people assume context engineering cannot help, since the output is supposed to be a judgement call.
 
-It helps. It just cannot be a straight line, and that is the interesting part.
+The thing worth noticing first is where the loop sits. It is not inside a single post. It runs at the speed of a month.
 
-### The direction comes from the campaign, not from the post
+1. **Sales analysis.** The month that just closed, read for what moved and what did not. The output is a sales report, and this is where AI does most of its work in the cycle.
+2. **Brainstorm with the stakeholders.** A meeting, with people in it. This is the part no harness replaces, and nothing here is trying to.
+3. **Goals for next month.** What comes out of that meeting.
+4. **The campaign.** Those goals get translated into a campaign, and that is where `campaign-<month>.md` comes from: one file per month, naming what we are driving at and which stage we are in.
+5. **Content and visuals.** The campaign decides what gets made. Visuals come from Magnific, connected over MCP.
 
-This is the piece that makes the rest work. Content is not a stream of individually good ideas. Each month has a campaign with something it is trying to do, and a product launch is not one post. It is a sequence: prepare, teaser, launch, then the follow-through. A teaser and a launch post are judged by completely different rules. If the agent does not know which stage it is standing in, every draft is a guess, no matter how good the voice file is.
+Then next month's numbers close, and step 1 runs again on sales the last campaign helped produce.
 
-So the campaign file is the first thing the flow reads. And notice where it sits in the three layers above: it is **interpreted data**, the fastest-expiring layer, rewritten every month, and the one that decides what "good" even means this week. The brand voice tells the agent how to sound. The campaign tells it what it is trying to achieve by sounding that way.
+![Five steps in a closed cycle: sales analysis, brainstorm with stakeholders, goals, campaign file, content and visuals, then back to sales analysis.](/images/writing/from-prompt-to-harness-engineering/05-abay-monthly-cycle.svg "The campaign file is the output of a loop that was already running.")
 
-That file is not something I sit down and invent. It comes out of a conversation with the AI about the previous month's sales reporting: what moved, what did not, what next month should push. The campaign decision was going to happen anyway. The only new habit is writing the conclusion into a file the agent can read, instead of leaving it in a chat log or in my head.
+### Why this is the example I picked
 
-### The folder
+Notice what makes `campaign-<month>.md` different from a file written to feed an agent. Nobody added a step to the business to produce it. The sales analysis happened. The meeting happened. The goals happened. The file is just the written-down form of a decision that was already made, by people, for reasons that have nothing to do with AI.
 
-- `campaign-<month>.md`: what this month's campaign is driving at and which stage we are in right now. Rewritten monthly.
-- `brand-voice.md`: how Abay sounds. The register, the words it never uses, how it talks about coffee without sliding into tasting-note jargon, how it talks about the records without sounding like a crate-digger showing off.
-- `content-pillars.md`: what the account is about. The coffee, the listening room, the people in it.
-- `posted-log.md`: what went out over the last ninety days, so the fourth pour-over post never gets written.
-- `post-check.md`: what a draft has to satisfy before it reaches me. Right stage of the campaign, on a pillar, in the voice, claims about the beans actually true, nothing close to it posted recently.
-- `content-flow.md`: the orchestration.
+That is also what makes it the fastest-expiring layer from the table above, and the one that decides what "good" means this month. A teaser post and a launch post are judged by completely different rules. Brand voice, if you have written one, tells the agent how to sound. The campaign tells it what it is trying to achieve by sounding that way. Without it, every draft is a guess.
 
-The visual comes from **Magnific, connected over MCP**, generated against a brief the draft step writes. That is the same idea as the check, one layer down: the agent is not picking an image it likes, it is writing a brief that has to answer to the campaign stage, then generating against that brief. The brief is reviewable in a way that a taste call is not.
-
-Then the trigger is one line:
-
-> Run the content flow for this week's teaser.
-
-That is the whole prompt. And notice what the check buys: the draft loops between the draft step and the check on its own. I never see the first attempt, or the second. I see the one that already cleared the rules I wrote down while I was thinking clearly, which is not the state I am in at eleven at night approving captions.
-
-{/* TODO before publish: paste 4 to 5 real lines from post-check.md, and one real stage block from a campaign-<month>.md. */}
-
-![Four steps in a row with a decision diamond: one-line prompt, pull context, draft, generate asset over MCP, then a post-check that either sends the draft back to be revised or schedules it.](/images/writing/from-prompt-to-harness-engineering/05-abay-content-flow.svg "The Abay content flow, with the revise loop.")
-
-A draft that fails goes back to step 3 with the reason attached, and because the visual brief is rewritten there too, the asset regenerates with it. The loop runs until it passes, or until the agent reports that it cannot get there, which is itself useful information about the campaign brief I gave it.
+What is **not** in this cycle yet is a check step: something that tells the agent whether a draft is on-campaign before it reaches me. Right now that judgement is mine, every single time. Which is exactly the gap the next section is about.
 
 ## A harness that does not improve is just a folder
 
@@ -116,7 +103,7 @@ The second one is what I had underrated. Stated in reverse, the goal of a harnes
 
 ![An isometric cube with a violet track that leaves one face, arcs outward and re-enters the same cube, carrying a sphere back around, while a separate ramp sends one finished sphere out the front.](/images/writing/from-prompt-to-harness-engineering/06-verify-loop.webp "Work that fails the check returns to the machine. Only a pass leaves.")
 
-The practical trigger: any time I correct the same thing twice, that correction belongs in the harness, not in the conversation.
+The trigger worth watching for: any time you correct the same thing twice, that correction belongs in the harness, not in the conversation. For the Abay cycle above, that is the check step. The campaign file already tells the agent what this month is driving at, so the rule for whether a draft is on-campaign is written down in everything but name.
 
 ## Where the context lives, and why plain files won
 
