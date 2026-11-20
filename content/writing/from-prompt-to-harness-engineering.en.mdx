@@ -1,0 +1,177 @@
+---
+title: "From Prompt Engineering to Harness Engineering"
+date: "2026-11-20"
+type: note
+topic: ai
+lang: en
+excerpt: "Better prompts stop helping once the AI does not know your work. What changed for me was moving the effort into the files, tools and checks around the agent, plus the one rule that decides whether any of it survives."
+tags: [AI, Context Engineering, Workflow]
+cover: "/images/writing/from-prompt-to-harness-engineering/01-cover.webp"
+draft: true
+---
+
+You ask an AI to draft a campaign brief. What comes back is well structured, clean, built on a reasonable framework. Then you spend the next forty minutes rewriting it, because it did not know that the Q4 target moved last week, that the brief goes to the BD lead and not to marketing, and that the last campaign built on this exact angle underperformed.
+
+The model was not the problem. The output was good. It was just good *in general*, and your work is never in general.
+
+Most people are still trying to close that gap with better prompts. I spent a long time there too. What actually closed it for me was moving the effort out of the prompt and into the environment the AI works in: the files it reads, the tools it can reach, the order it runs things in.
+
+Mitchell Hashimoto calls the practice of building that environment **harness engineering**, and he is upfront that he does not know whether the industry has settled on a name for it. I am borrowing the term here, with one note below on where I stretch it.
+
+## Prompt engineering was not wrong. It was incomplete.
+
+There is a progression here, and it helps to see all three stages before arguing about tools.
+
+**Prompt engineering** is about how you phrase the request. This is a real skill and it still matters, because a vague ask still produces a vague answer. But it has a ceiling: a perfectly engineered prompt about a situation the model knows nothing about still returns a generic answer, delivered confidently.
+
+**Context engineering** is about managing the information the model stands on before you ask anything. The prompt is the question. The context is everything the model already knows when the question arrives. Most of the quality gap I used to blame on prompting turned out to live here.
+
+**Harness engineering** is about building the environment so the AI can *execute* rather than just answer: which tools it can call, which files it can read and write, and the order it works through a task.
+
+![Three isometric groups in a row, each more built up than the last: a lone sphere, then a sphere with upright slabs behind it, then both enclosed in a violet frame with a track running through.](/images/writing/from-prompt-to-harness-engineering/02-progression.webp "Each stage keeps the one before it and adds structure around it.")
+
+This usually gets drawn as two camps: Claude and ChatGPT are chatbots, Claude Code and Codex are harnesses. It is a useful first cut, but it is not quite the distinction Hashimoto draws, and the difference is worth keeping. In his framing, what you open is an **agent**: an LLM that can chat *and* invoke external behaviour in a loop, which at minimum means reading files, running programs, and making HTTP requests. The **harness** is not the agent. It is everything you build around it. Calling Claude Code a harness collapses the two, and it hides the part that matters most: the harness is yours to build, not something the vendor ships you.
+
+The camps are also getting less clean every month, since the chat apps now have web search, code execution, and connectors into your own tools.
+
+The difference that actually holds is not whether tools exist. It is two other things:
+
+1. **The loop.** A harness runs many steps in a row, calling a tool, reading the result, noticing it failed, correcting itself, calling another, before it comes back to you. A chat turn is usually one pass with you as the loop.
+2. **The environment.** A harness works *inside* your file system: it opens your files and writes them back. A chatbot works *on top of* whatever you uploaded.
+
+So read it as a spectrum of agency, not a brand war. The real question is not which product you open. It is how much of the work it can carry without you in the middle of every step.
+
+## The three layers of context
+
+"Give the AI more context" is useless advice until you split context into kinds, because the kinds behave differently. These are the three I work with.
+
+| Layer | What it holds | Goes stale | Example file |
+|---|---|---|---|
+| Domain knowledge | How your field works | Quarterly, if ever | `bi-fmcg.md` |
+| Tribal knowledge | How *your company* works | When people or process change | `team-operations.md` |
+| Interpreted data | Where the business stands now | Weekly, sometimes daily | `sales-context.md` |
+
+**Domain knowledge** is industry expertise, and it is not about your company at all. For me that means how a BI team actually operates inside FMCG: which metrics the business argues about, what a weekly sales review looks like, which questions get asked before anyone trusts a number. Write it once, revisit it every few months.
+
+**Tribal knowledge** is the layer below that, specific to your company. Org structure, who owns what, how a process really runs as opposed to how the SOP describes it, communication lines, which tools are in play, what the team is measured on. This is the layer a new hire spends three months absorbing and that nobody has written down. Mine turns into files like `team-operations.md`, so the agent knows who a finished deliverable goes to, and `meeting-notes.md`, which is how new knowledge gets into the system at all: a product change, a campaign going live, a shift in priorities.
+
+**Interpreted data** is the current state: recent performance, financials, live campaigns, trends. `sales-context.md`, `channel-performance.md`, `campaign-learning.md`. This layer expires fastest and it is the one that makes the difference between a generic answer and a useful one.
+
+![Three stacked isometric slabs: a thick violet one at the bottom, a white one above it, and a thin top slab lifted away with a replacement hovering beside it.](/images/writing/from-prompt-to-harness-engineering/03-layers.webp "The base holds. The top gets swapped.")
+
+The part that took me longest to notice: **those three decay at completely different rates, and that is the whole design constraint.** If you put them in one big context file you get one of two failure modes. You update it rarely, so the agent reasons from last quarter's numbers. Or you rewrite the whole thing every week until you quietly stop. Separate files, separate update rhythms. The structure exists to match how fast each kind of knowledge rots.
+
+![Three lanes on a shared timeline. Domain knowledge has one dot, tribal knowledge has three, interpreted data has thirteen.](/images/writing/from-prompt-to-harness-engineering/04-decay-rates.svg "Rewrite frequency by layer, one dot per rewrite.")
+
+Put the three on one timeline and the reason for separate files stops being an argument. One file cannot be on all three of those rhythms at once.
+
+## One flow, end to end
+
+Definitions only take you so far, so here is a flow I actually run. Not a coding one: content production for Abay Coffee & Listening Bar, a specialty coffee and vinyl bar in South Jakarta. I picked it deliberately, because creative work is where people assume a harness cannot help. The output is supposed to be a judgement call.
+
+It helps. It just cannot be a straight line, and that is the interesting part.
+
+### The direction comes from the campaign, not from the post
+
+This is the piece that makes the rest work. Content is not a stream of individually good ideas. Each month has a campaign with something it is trying to do, and a product launch is not one post. It is a sequence: prepare, teaser, launch, then the follow-through. A teaser and a launch post are judged by completely different rules. If the agent does not know which stage it is standing in, every draft is a guess, no matter how good the voice file is.
+
+So the campaign file is the first thing the flow reads. And notice where it sits in the three layers above: it is **interpreted data**, the fastest-expiring layer, rewritten every month, and the one that decides what "good" even means this week. The brand voice tells the agent how to sound. The campaign tells it what it is trying to achieve by sounding that way.
+
+That file is not something I sit down and invent. It comes out of a conversation with the AI about the previous month's sales reporting: what moved, what did not, what next month should push. The campaign decision was going to happen anyway. The only new habit is writing the conclusion into a file the agent can read, instead of leaving it in a chat log or in my head.
+
+### The folder
+
+- `campaign-<month>.md`: what this month's campaign is driving at and which stage we are in right now. Rewritten monthly.
+- `brand-voice.md`: how Abay sounds. The register, the words it never uses, how it talks about coffee without sliding into tasting-note jargon, how it talks about the records without sounding like a crate-digger showing off.
+- `content-pillars.md`: what the account is about. The coffee, the listening room, the people in it.
+- `posted-log.md`: what went out over the last ninety days, so the fourth pour-over post never gets written.
+- `post-check.md`: what a draft has to satisfy before it reaches me. Right stage of the campaign, on a pillar, in the voice, claims about the beans actually true, nothing close to it posted recently.
+- `content-flow.md`: the orchestration.
+
+The visual comes from **Magnific, connected over MCP**, generated against a brief the draft step writes. That is the same idea as the check, one layer down: the agent is not picking an image it likes, it is writing a brief that has to answer to the campaign stage, then generating against that brief. The brief is reviewable in a way that a taste call is not.
+
+Then the trigger is one line:
+
+> Run the content flow for this week's teaser.
+
+That is the whole prompt. And notice what the check buys: the draft loops between the draft step and the check on its own. I never see the first attempt, or the second. I see the one that already cleared the rules I wrote down while I was thinking clearly, which is not the state I am in at eleven at night approving captions.
+
+{/* TODO before publish: paste 4 to 5 real lines from post-check.md, and one real stage block from a campaign-<month>.md. */}
+
+![Four steps in a row with a decision diamond: one-line prompt, pull context, draft, generate asset over MCP, then a post-check that either sends the draft back to be revised or schedules it.](/images/writing/from-prompt-to-harness-engineering/05-abay-content-flow.svg "The Abay content flow, with the revise loop.")
+
+A draft that fails goes back to step 3 with the reason attached, and because the visual brief is rewritten there too, the asset regenerates with it. The loop runs until it passes, or until the agent reports that it cannot get there, which is itself useful information about the campaign brief I gave it.
+
+## A harness that does not improve is just a folder
+
+Everything above is setup. What turns it into a practice rather than a one-time configuration is what you do when the agent gets something wrong.
+
+Hashimoto's version of this is the sharpest statement of it I have found: when the agent makes a mistake, you do not just correct it in the chat, you build something so it cannot repeat the mistake. That takes two forms.
+
+**Instructions.** The recurring bad behaviour goes into the agent's instruction file: `AGENTS.md`, `CLAUDE.md`, whatever your setup reads. It ran the wrong command, it reached for an API that does not exist, it formatted the output wrong again. That correction belongs in a file, not in a message you will retype next week.
+
+**Tools.** Some mistakes are not fixable with words. If the agent cannot tell whether its own work is correct, write the script that tells it. Take the screenshot, run the filtered test, check the output shape. Then note in the instruction file that the script exists.
+
+The second one is what I had underrated. Stated in reverse, the goal of a harness is **to give the agent a way to verify that it is doing the right thing**, instead of making you the verifier on every single run. Context tells it what is true about your world. Tools let it check whether what it just produced is actually correct. A harness with rich context and no verification still puts you in the loop on every output, which is roughly where you were before you started.
+
+![An isometric cube with a violet track that leaves one face, arcs outward and re-enters the same cube, carrying a sphere back around, while a separate ramp sends one finished sphere out the front.](/images/writing/from-prompt-to-harness-engineering/06-verify-loop.webp "Work that fails the check returns to the machine. Only a pass leaves.")
+
+The practical trigger: any time I correct the same thing twice, that correction belongs in the harness, not in the conversation.
+
+## Where the context lives, and why plain files won
+
+Once context is the thing you are engineering, the next question is where to keep it. My split:
+
+- **Obsidian** for personal. Side projects, career path, learning notes.
+- **Notion** for work. Project overviews, anything a client or a teammate will read.
+- **Linear** for task-level context. Big things get chunked down to here.
+
+None of that is required, and I want to be clear about it: a folder of `.md` files with a sensible structure does the same job. The tool matters far less than the discipline of keeping the files current.
+
+What I did stop using is Claude Projects and custom GPTs. Not because their retrieval is bad, but because of **update friction**. Every time the context changed, I had to re-upload. With files on disk I edit the file, and the next run already reads the new version. No upload step, no re-indexing, no wondering which copy it is working from.
+
+That sounds like a small convenience difference. It is not. Context you can only maintain through an upload step is context you will eventually stop maintaining, and stale context is the failure mode that actually costs you.
+
+## MCP, for the context that is not in your folder
+
+Files cover the context that lives inside your own system. A lot of your real context does not: it is in Slack threads, Gmail, Trello cards, a Notion database, a warehouse table.
+
+That is what MCP (Model Context Protocol) is for: a standard way for an agent to talk to an external tool, so you are not writing a bespoke integration for every one of them.
+
+The part I did not expect: **an MCP connection is access, not context.** The agent can read your Notion now. It still does not know which board is the source of truth, what your statuses actually mean, or whether it is allowed to write anything. So every MCP I set up gets a context file beside it, like `notion-context.md` describing the boards, the update process, and what it must not touch.
+
+### The question people ask first
+
+Is it safe to give an AI access to your work email and Slack? Fair question, and the honest answer is that it depends entirely on scope. How I handle it: read-only wherever reading is enough, nothing connected that can send externally or touch money without a human step, and anything client-confidential kept out of the personal vault entirely. Worth deciding before you connect, not after you notice.
+
+## When a harness is overkill
+
+I have been making the case for this the whole way down, so here is the other side. Three real costs.
+
+**Maintenance.** Context is now a thing you own. A file nobody updates becomes a confident lie, because the agent will not warn you that the number is three months old. It will simply use it. Stale context is worse than no context: no context makes the output generic, stale context makes it wrong while sounding specific.
+
+What decides whether a file survives is worth saying plainly: **the files that stay current are the ones that record a decision you were already making.** The campaign file earlier works because that conversation happens every month regardless of whether an agent reads the result, so writing it down is the only added step. A file invented purely to feed the agent, with no decision behind it, is the one that quietly goes stale by week three. So before adding a file to the harness, check whether anything *outside* the harness already forces you to keep it honest. If nothing does, you are signing up for maintenance you will not do.
+
+**Setup overhead.** For a one-off task, writing the instruction files costs more than just doing the task. A harness pays off on work that repeats: weekly reporting, research, recurring client documents. If you will do it twice, keep it in the prompt.
+
+**Token cost and attention.** More context loaded means more tokens per run, and a context folder that grows without pruning starts hurting the output rather than helping it. Context engineering includes deciding what to delete.
+
+The rule I use: build a harness when the work repeats *and* the context is stable enough to be worth writing down. Everything else, just prompt well.
+
+![A two by two. Vertical axis: whether a decision outside the harness keeps the file current. Horizontal axis: how often the work repeats. Build the harness sits in the top right.](/images/writing/from-prompt-to-harness-engineering/07-when-to-build.svg "Repetition on its own is not enough.")
+
+The bottom-right quadrant is the one worth watching. Work that repeats feels like the obvious case for a harness, and it is, right up until nothing outside the harness forces the context to stay current. That is where most abandoned setups come from.
+
+## Where to start
+
+Do not start by designing the whole system. You will build a folder structure you never use.
+
+Pick one task you already do every week. Then:
+
+1. One folder.
+2. Two files: `<task>.md` for how you want it done, and `<task>-output.md` for the shape you want the result in.
+3. One flow file saying the order.
+
+Run it. The gaps show up immediately, and they will not be the gaps you predicted. Fix those, then add the third file.
+
+Better context produces better output, but only if the context is live. That is the whole argument, and the only way to find out whether it holds for your work is to run one flow for two weeks.
