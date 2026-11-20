@@ -2,6 +2,7 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { cache } from "react";
 import { compileMDX } from "next-mdx-remote/rsc";
+import remarkGfm from "remark-gfm";
 import remarkSmartypants from "remark-smartypants";
 import { createMdxComponents, slugify } from "@/components/mdx/MDXComponents";
 
@@ -54,7 +55,7 @@ async function compileFile(file, source) {
     options: {
       parseFrontmatter: true,
       // Straight quotes become typographic ones; the display font draws " as a closing quote.
-      mdxOptions: { remarkPlugins: [remarkSmartypants] },
+      mdxOptions: { remarkPlugins: [remarkGfm, remarkSmartypants] },
     },
   });
   return { file, source, content, frontmatter, headings };
