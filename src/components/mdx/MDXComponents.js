@@ -147,6 +147,16 @@ export function Learned({ label, children }) {
   );
 }
 
+// Tables come from remark-gfm. Hairline rules only: no fills, no zebra, no radius.
+// Scrolls sideways on mobile rather than squeezing columns.
+function Table({ children }) {
+  return (
+    <div className="wide -mx-md overflow-x-auto px-md lg:mx-0 lg:px-0">
+      <table className="w-full min-w-[34rem] border-collapse border-t border-hairline text-left">{children}</table>
+    </div>
+  );
+}
+
 export function Screenshots({ children }) {
   return <div className="wide grid grid-cols-2 gap-xxs lg:grid-cols-3">{children}</div>;
 }
@@ -206,6 +216,13 @@ export function createMdxComponents({ headings = [] } = {}) {
       </blockquote>
     ),
     hr: () => <hr className="border-hairline" />,
+    table: Table,
+    th: ({ children }) => (
+      <th className="t-mono-label border-b border-hairline py-sm pr-md align-top text-muted last:pr-0">{children}</th>
+    ),
+    td: ({ children }) => (
+      <td className="t-body-sm border-b border-hairline py-sm pr-md align-top text-body last:pr-0">{children}</td>
+    ),
     pre: CodeBlock,
     code: ({ children }) => <code className="bg-surface-sunken px-1 py-px font-mono text-[0.88em] text-ink">{children}</code>,
     img: Figure,
