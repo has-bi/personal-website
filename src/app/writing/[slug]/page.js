@@ -139,7 +139,7 @@ export default async function ArticlePage({ params }) {
       {post.coverImage ? (
         <div className="lg:band">
           <div className="relative aspect-video w-full overflow-hidden border-y border-hairline bg-surface-sunken lg:border">
-            <Image src={post.coverImage} alt="" fill priority sizes="(min-width: 1024px) 1280px, 100vw" className="object-cover" />
+            <Image src={post.coverImage} alt={post.coverAlt || post.title} fill priority sizes="(min-width: 1024px) 1280px, 100vw" className="object-cover" />
           </div>
         </div>
       ) : null}

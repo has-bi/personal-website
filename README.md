@@ -36,6 +36,7 @@ readTime: 4             # optional; estimated from word count if missing
 excerpt: "One or two sentences."
 tags: [React, Hooks]
 cover: "/images/writing/<slug>/cover.png"   # optional
+coverAlt: "Short description of the cover"   # optional; cover alt text, falls back to the title
 level: Beginner         # optional; shown in the meta strip
 prerequisites: ["Basic JavaScript"]   # optional; "Before you start" in the lesson brief
 draft: true             # drafts never reach the live site
