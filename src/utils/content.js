@@ -94,6 +94,7 @@ function toPost({ file, source, content, frontmatter: fm, headings }) {
     date: fm.date || "",
     tags: fm.tags || [],
     coverImage: fm.cover || "",
+    coverAlt: smartQuotes(fm.coverAlt) || "",
     author: fm.author || "Hasbi Hassadiqin",
     readMinutes: readMinutesOf(fm, source),
     level: fm.level || "",
