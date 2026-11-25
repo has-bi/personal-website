@@ -23,22 +23,36 @@ function useActiveHeading(ids) {
   return active;
 }
 
-function TocList({ headings, active }) {
+// `compact` (desktop): every heading but the current one is cut to a single line and
+// opens up to its full title on hover or keyboard focus.
+function TocList({ headings, active, compact = false }) {
   return (
     <ol className="t-mono-meta flex flex-col">
       {headings.map((heading) => {
         const current = heading.id === active;
+        const clipped = compact && !current;
         return (
           <li key={heading.id}>
             <a
               href={`#${heading.id}`}
+              title={clipped ? heading.text : undefined}
               aria-current={current ? "location" : undefined}
-              className={`flex min-h-9 items-center gap-sm py-xxs pl-sm ${
+              className={`group flex min-h-8 items-baseline gap-sm py-xxs pl-sm ${
                 current ? "border-l-2 border-accent" : "border-l border-hairline hover:border-hairline-strong"
               }`}
             >
-              {heading.number ? <span className={current ? "text-accent" : "text-faint"}>{heading.number}</span> : null}
-              <span className={current ? "text-ink" : "text-muted"}>{heading.text}</span>
+              {heading.number ? (
+                <span className={`shrink-0 ${current ? "text-accent" : "text-faint"}`}>{heading.number}</span>
+              ) : null}
+              <span
+                className={`min-w-0 ${current ? "text-ink" : "text-muted group-hover:text-ink"} ${
+                  clipped
+                    ? "truncate group-hover:overflow-visible group-hover:whitespace-normal group-focus-visible:overflow-visible group-focus-visible:whitespace-normal"
+                    : ""
+                }`}
+              >
+                {heading.text}
+              </span>
             </a>
           </li>
         );
@@ -58,7 +72,7 @@ export function DesktopToc({ headings, children }) {
             <p id="toc-label" className="t-mono-label text-faint">
               On this page
             </p>
-            <TocList headings={headings} active={active} />
+            <TocList headings={headings} active={active} compact />
           </nav>
           <div className="h-px bg-hairline" />
         </>
