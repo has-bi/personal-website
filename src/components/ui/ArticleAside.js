@@ -23,36 +23,22 @@ function useActiveHeading(ids) {
   return active;
 }
 
-// `compact` (desktop): every heading but the current one is cut to a single line and
-// opens up to its full title on hover or keyboard focus.
-function TocList({ headings, active, compact = false }) {
+function TocList({ headings, active }) {
   return (
     <ol className="t-mono-meta flex flex-col">
       {headings.map((heading) => {
         const current = heading.id === active;
-        const clipped = compact && !current;
         return (
           <li key={heading.id}>
             <a
               href={`#${heading.id}`}
-              title={clipped ? heading.text : undefined}
               aria-current={current ? "location" : undefined}
-              className={`group flex min-h-8 items-baseline gap-sm py-xxs pl-sm ${
+              className={`flex min-h-9 items-center gap-sm py-xxs pl-sm ${
                 current ? "border-l-2 border-accent" : "border-l border-hairline hover:border-hairline-strong"
               }`}
             >
-              {heading.number ? (
-                <span className={`shrink-0 ${current ? "text-accent" : "text-faint"}`}>{heading.number}</span>
-              ) : null}
-              <span
-                className={`min-w-0 ${current ? "text-ink" : "text-muted group-hover:text-ink"} ${
-                  clipped
-                    ? "truncate group-hover:overflow-visible group-hover:whitespace-normal group-focus-visible:overflow-visible group-focus-visible:whitespace-normal"
-                    : ""
-                }`}
-              >
-                {heading.text}
-              </span>
+              {heading.number ? <span className={current ? "text-accent" : "text-faint"}>{heading.number}</span> : null}
+              <span className={current ? "text-ink" : "text-muted"}>{heading.text}</span>
             </a>
           </li>
         );
@@ -61,21 +47,46 @@ function TocList({ headings, active, compact = false }) {
   );
 }
 
-// Desktop: sticky "On this page" column. Hidden below lg (see MobileToc).
+// Desktop: a quiet rail of numbered ticks so the body keeps the reader's attention.
+// The current section gets the long ink tick; a heading's title appears in a label
+// beside its tick on hover or keyboard focus.
 export function DesktopToc({ headings, children }) {
   const active = useActiveHeading(headings.map((heading) => heading.id));
   return (
     <div className="sticky top-[88px] flex flex-col gap-lg">
       {headings.length ? (
-        <>
-          <nav aria-labelledby="toc-label" className="flex flex-col gap-lg">
-            <p id="toc-label" className="t-mono-label text-faint">
-              On this page
-            </p>
-            <TocList headings={headings} active={active} compact />
-          </nav>
-          <div className="h-px bg-hairline" />
-        </>
+        <nav aria-label="On this page">
+          <ol className="flex flex-col">
+            {headings.map((heading, index) => {
+              const current = heading.id === active;
+              const number = heading.number || String(index + 1).padStart(2, "0");
+              return (
+                <li key={heading.id} className="relative">
+                  <a
+                    href={`#${heading.id}`}
+                    aria-current={current ? "location" : undefined}
+                    className="group flex h-9 items-center gap-sm"
+                  >
+                    <span
+                      aria-hidden="true"
+                      className={`h-px transition-all duration-150 ${
+                        current ? "w-8 bg-ink" : "w-5 bg-faint group-hover:w-8 group-hover:bg-ink group-focus-visible:w-8"
+                      }`}
+                    />
+                    <span className={`t-mono-meta ${current ? "text-ink" : "text-faint group-hover:text-ink"}`}>{number}</span>
+                    <span className="sr-only">{heading.text}</span>
+                    <span
+                      aria-hidden="true"
+                      className="t-body-sm pointer-events-none absolute left-[76px] top-1/2 z-10 -translate-y-1/2 whitespace-nowrap rounded-full bg-ink px-md py-xs text-on-primary opacity-0 transition-opacity duration-150 group-hover:opacity-100 group-focus-visible:opacity-100"
+                    >
+                      {heading.text}
+                    </span>
+                  </a>
+                </li>
+              );
+            })}
+          </ol>
+        </nav>
       ) : null}
       {children}
     </div>
