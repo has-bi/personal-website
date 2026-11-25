@@ -3,7 +3,6 @@ import { notFound } from "next/navigation";
 import { getPost, getPosts } from "@/utils/content";
 import { alternates, EMAIL, formatDate, LANGS, SITE_URL, TOPICS, TYPES } from "@/lib/site";
 import {
-  Breadcrumb,
   ButtonGhost,
   ButtonPrimary,
   MetaLine,
@@ -11,6 +10,8 @@ import {
   Tag,
 } from "@/components/ui/primitives";
 import { DesktopToc, MobileToc } from "@/components/ui/ArticleAside";
+import CopyContext from "@/components/ui/CopyContext";
+import { buildAiContext } from "@/lib/ai-context";
 
 export const dynamicParams = false;
 
@@ -115,16 +116,6 @@ export default async function ArticlePage({ params }) {
     <article lang={post.lang}>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
 
-      <Breadcrumb
-        parent="/writing"
-        slug={post.slug}
-        aside={
-          <p className="t-tag shrink-0 text-muted lg:t-mono-label">
-            Available in · {LANGS[post.lang]?.label || post.lang}
-          </p>
-        }
-      />
-
       <header className="band flex flex-col gap-lg pb-xl pt-xxl lg:gap-xl lg:pb-xxl lg:pt-section">
         <SectionLabel>
           § 01 · Writing / {type}
@@ -133,7 +124,7 @@ export default async function ArticlePage({ params }) {
           <h1 className="t-article-title text-ink">{post.title}</h1>
           {post.excerpt ? <p className="t-dek text-muted">{post.excerpt}</p> : null}
         </div>
-        <MetaLine items={meta} />
+        <MetaLine items={meta} action={<CopyContext context={buildAiContext(post)} />} />
       </header>
 
       {post.coverImage ? (

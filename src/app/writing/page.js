@@ -13,7 +13,7 @@ export const metadata = {
 
 export default async function WritingPage() {
   // Client components get plain data only; the compiled MDX stays on the server.
-  const posts = (await getAllPosts()).map(({ content, headings, ...post }) => post);
+  const posts = (await getAllPosts()).map(({ content, headings, body, ...post }) => post);
 
   return (
     <>
