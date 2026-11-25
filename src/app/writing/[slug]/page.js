@@ -6,11 +6,11 @@ import {
   Breadcrumb,
   ButtonGhost,
   ButtonPrimary,
-  MetaStrip,
+  MetaLine,
   SectionLabel,
   Tag,
 } from "@/components/ui/primitives";
-import { DesktopToc, MobileToc, ShareLinks } from "@/components/ui/ArticleAside";
+import { DesktopToc, MobileToc } from "@/components/ui/ArticleAside";
 
 export const dynamicParams = false;
 
@@ -133,7 +133,7 @@ export default async function ArticlePage({ params }) {
           <h1 className="t-article-title text-ink">{post.title}</h1>
           {post.excerpt ? <p className="t-dek text-muted">{post.excerpt}</p> : null}
         </div>
-        <MetaStrip items={meta} />
+        <MetaLine items={meta} />
       </header>
 
       {post.coverImage ? (
@@ -148,9 +148,7 @@ export default async function ArticlePage({ params }) {
 
       <div className="band flex gap-[60px] pb-xxl pt-xl lg:py-section">
         <div className="hidden w-[240px] shrink-0 lg:block">
-          <DesktopToc headings={post.headings}>
-            <ShareLinks url={url} title={post.title} />
-          </DesktopToc>
+          <DesktopToc headings={post.headings} />
         </div>
 
         <div className="article-flow flex min-w-0 flex-1 flex-col gap-lg">
@@ -162,17 +160,6 @@ export default async function ArticlePage({ params }) {
               {EMAIL}
             </a>
           </p>
-          {post.tags.length ? (
-            <div className="flex flex-wrap items-center gap-xs border-t border-hairline pt-lg">
-              <span className="t-mono-label text-faint">Tagged</span>
-              {post.tags.map((tag) => (
-                <Tag key={tag}>{tag}</Tag>
-              ))}
-            </div>
-          ) : null}
-          <div className="lg:hidden">
-            <ShareLinks url={url} title={post.title} />
-          </div>
         </div>
       </div>
 
