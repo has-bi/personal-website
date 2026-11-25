@@ -7,7 +7,11 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "check:content": "node scripts/check-content.mjs",
+    "check": "npm run check:content && npm run lint",
+    "smoke": "node scripts/smoke.mjs",
+    "verify": "npm run check && npm run build && npm run smoke"
   },
   "dependencies": {
     "next": "^15.5.15",
@@ -22,6 +26,7 @@
     "@tailwindcss/postcss": "^4",
     "eslint": "^9",
     "eslint-config-next": "^15.4.6",
+    "js-yaml": "^4.1.1",
     "tailwindcss": "^4"
   }
 }
