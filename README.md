@@ -51,3 +51,4 @@ Project front matter: `title`, `year`, `topic`, `stack`, `description` (the dek)
 - MDX components available in content: `<YouTube id="..." title="..." />` and `<Callout kind="Tip">...</Callout>` (kinds: Note, Tip, Rules, Warning, Check your work).
 - Project write-up blocks (one line each, string props only): `<Features><Feature name="...">...</Feature></Features>`, `<Spec><SpecRow label="...">...</SpecRow></Spec>`, `<Problems><Problem problem="...">what worked</Problem></Problems>`, `<Learned label="...">...</Learned>`, `<Screenshots><Shot src="..." alt="..." /></Screenshots>`. See `content/projects/mental-wellness-app-nextjs.mdx`.
 - Publishing = commit the file and push; Vercel rebuilds the site.
+- Every article has a **Copy context for AI** button. It copies the post as Markdown, built by `src/lib/ai-context.js`; teach it any new MDX component you add so the copy stays readable.

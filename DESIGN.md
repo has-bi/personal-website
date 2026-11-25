@@ -907,6 +907,7 @@ Logged decisions:
 - 2026-11-05: the EN / ID language toggle, and the LANGUAGE filter on /writing, are hidden until the first Indonesian post is published (both led to an empty list). Contrast item #18, the prev-post link and `frontmatter.json` stay as they are, by the owner's call.
 - 2026-11-05: the `[ 02 ] PROJECTS` nav item (and `/projects` in the sitemap) is hidden while no project is published. Section numbers follow the visible order (`sectionNumbers()` in `src/lib/site.js`): while Projects is hidden, About is 02 and Elsewhere 03; nav and § labels always match.
 - 2026-11-25, focus: article pages drop distractions. The desktop TOC is a rail of numbered ticks (current section: long ink tick); a heading's title shows in a dark pill beside its tick on hover or focus. The pill is the one rounded shape outside the brand mark and avatars, copied from the owner's reference.
+- 2026-11-25: articles drop the breadcrumb, share links and tags; the meta strip becomes one thin line. The meta line carries **COPY CONTEXT FOR AI**: it copies the post as Markdown (brief on top, absolute links, callouts as blockquotes) so a reader can discuss it with their own AI.
 
 ## Iteration Guide
 

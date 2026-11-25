@@ -104,6 +104,7 @@ function toPost({ file, source, content, frontmatter: fm, headings }) {
     type: fm.type || "note",
     topic: fm.topic || "",
     headings,
+    body: bodyOf(source).trim(),
     content,
   };
 }
