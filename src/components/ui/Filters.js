@@ -41,11 +41,11 @@ function FilterChip({ href, active, children }) {
   );
 }
 
-export function FilterGroup({ pathname, current, name, label, options }) {
+export function FilterGroup({ pathname, current, name, label, options, allLabel = "All" }) {
   return (
     <div role="group" aria-label={label} className="no-scrollbar flex items-center gap-xs overflow-x-auto">
       <span className="t-tag w-[76px] shrink-0 text-faint lg:t-mono-label lg:w-auto">{label}</span>
-      {[{ value: "all", label: "All" }, ...options].map((option) => (
+      {[{ value: "all", label: allLabel }, ...options].map((option) => (
         <FilterChip key={option.value} href={hrefFor(pathname, current, name, option.value)} active={current[name] === option.value}>
           {option.label}
         </FilterChip>

@@ -1,7 +1,8 @@
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import { getPost, getPosts } from "@/utils/content";
-import { alternates, EMAIL, formatDate, LANGS, SITE_URL, TOPICS, TYPES } from "@/lib/site";
+import { getPost, getPostLanguages, getPosts } from "@/utils/content";
+import { alternates, EMAIL, formatDate, LANGS, SITE_URL } from "@/lib/site";
+import { localize, t } from "@/lib/i18n";
 import {
   ButtonGhost,
   ButtonPrimary,
@@ -15,22 +16,27 @@ import { buildAiContext } from "@/lib/ai-context";
 
 export const dynamicParams = false;
 
+// Every slug is listed for every language, and the page 404s when a post is missing in
+// that language. Returning an empty list for a language with no published posts yet
+// makes Next 15.5 drop the other language's paths too. English-only slugs at the root
+// never reach that 404: next.config.mjs redirects them to /en/writing/<slug>.
 export async function generateStaticParams() {
-  const posts = await getPosts();
-  return posts.map((post) => ({ slug: post.slug }));
+  const languages = await getPostLanguages();
+  return Object.keys(languages).map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({ params }) {
-  const { slug } = await params;
-  const post = await getPost(slug);
-  if (!post) return { title: "Post not found" };
+  const { slug, lang } = await params;
+  const [post, languages] = await Promise.all([getPost(slug, lang), getPostLanguages()]);
+  if (!post) return { title: t(lang).article.notFound };
 
   return {
     title: post.title,
     description: post.excerpt || undefined,
-    alternates: alternates(`/writing/${post.slug}`),
+    alternates: alternates(`/writing/${post.slug}`, lang, languages[post.slug] || [lang]),
     openGraph: {
       type: "article",
+      locale: t(lang).ogLocale,
       title: post.title,
       description: post.excerpt || undefined,
       publishedTime: post.date || undefined,
@@ -42,12 +48,12 @@ export async function generateMetadata({ params }) {
 }
 
 // lesson-brief: opens every tutorial. "What you'll learn" comes from the post's own headings.
-function LessonBrief({ post }) {
+function LessonBrief({ post, labels }) {
   const rowText = "t-body-md flex-1 text-ink";
   return (
     <div className="wide border border-hairline bg-surface">
       <div className="flex flex-col gap-sm px-lg py-md">
-        <p className="t-mono-label text-muted">What you'll learn</p>
+        <p className="t-mono-label text-muted">{labels.learn}</p>
         <ol className="flex flex-col gap-sm">
           {post.headings.map((heading, index) => (
             <li key={heading.id} className="flex gap-md">
@@ -59,7 +65,7 @@ function LessonBrief({ post }) {
       </div>
       {post.prerequisites.length ? (
         <div className="flex flex-col gap-sm border-t border-hairline px-lg py-md">
-          <p className="t-mono-label text-muted">Before you start</p>
+          <p className="t-mono-label text-muted">{labels.before}</p>
           <ol className="flex flex-col gap-sm">
             {post.prerequisites.map((item, index) => (
               <li key={item} className="flex gap-md">
@@ -82,20 +88,22 @@ function nextLesson(posts, post) {
 }
 
 export default async function ArticlePage({ params }) {
-  const { slug } = await params;
-  const [post, posts] = await Promise.all([getPost(slug), getPosts()]);
+  const { slug, lang } = await params;
+  const [post, posts] = await Promise.all([getPost(slug, lang), getPosts({ lang })]);
   if (!post) notFound();
 
+  const dict = t(lang);
+  const labels = dict.article;
   const next = nextLesson(posts, post);
-  const type = TYPES[post.type]?.label || post.type;
-  const url = `${SITE_URL}/writing/${post.slug}`;
+  const type = dict.types[post.type] || post.type;
+  const url = `${SITE_URL}${localize(lang, `/writing/${post.slug}`)}`;
   const meta = [
-    { label: "Published", value: formatDate(post.date) },
-    { label: "Read time", value: `${post.readMinutes} min` },
-    post.topic && { label: "Topic", value: <Tag topic={post.topic} /> },
-    { label: "Type", value: type },
-    post.level && { label: "Level", value: post.level },
-    { label: "Language", value: LANGS[post.lang]?.label || post.lang },
+    { label: labels.published, value: formatDate(post.date) },
+    { label: labels.readTime, value: labels.minutes(post.readMinutes) },
+    post.topic && { label: labels.topic, value: <Tag topic={post.topic} lang={lang} /> },
+    { label: labels.type, value: type },
+    post.level && { label: labels.level, value: post.level },
+    { label: labels.language, value: LANGS[post.lang]?.label || post.lang },
   ].filter(Boolean);
 
   const schema = {
@@ -118,13 +126,13 @@ export default async function ArticlePage({ params }) {
 
       <header className="band flex flex-col gap-lg pb-xl pt-xxl lg:gap-xl lg:pb-xxl lg:pt-section">
         <SectionLabel>
-          § 01 · Writing / {type}
+          § 01 · {dict.writing.title} / {type}
         </SectionLabel>
         <div className="flex max-w-[1040px] flex-col gap-lg">
           <h1 className="t-article-title text-ink">{post.title}</h1>
           {post.excerpt ? <p className="t-dek text-muted">{post.excerpt}</p> : null}
         </div>
-        <MetaLine items={meta} action={<CopyContext context={buildAiContext(post)} />} />
+        <MetaLine items={meta} action={<CopyContext context={buildAiContext(post)} labels={dict.copy} />} />
       </header>
 
       {post.coverImage ? (
@@ -135,18 +143,18 @@ export default async function ArticlePage({ params }) {
         </div>
       ) : null}
 
-      <MobileToc headings={post.headings} />
+      <MobileToc headings={post.headings} lang={lang} />
 
       <div className="band flex gap-[60px] pb-xxl pt-xl lg:py-section">
         <div className="hidden w-[240px] shrink-0 lg:block">
-          <DesktopToc headings={post.headings} />
+          <DesktopToc headings={post.headings} lang={lang} />
         </div>
 
         <div className="article-flow flex min-w-0 flex-1 flex-col gap-lg">
-          {post.type === "tutorial" && post.headings.length ? <LessonBrief post={post} /> : null}
+          {post.type === "tutorial" && post.headings.length ? <LessonBrief post={post} labels={labels} /> : null}
           {post.content}
           <p className="t-body-md text-body">
-            Stuck, or found a mistake? Email{" "}
+            {labels.stuck}{" "}
             <a href={`mailto:${EMAIL}`} className="text-accent underline underline-offset-2 hover:decoration-2">
               {EMAIL}
             </a>
@@ -154,18 +162,20 @@ export default async function ArticlePage({ params }) {
         </div>
       </div>
 
-      <nav aria-label="More writing" className="band flex flex-col-reverse gap-md border-t border-hairline pb-xxxl pt-xl lg:flex-row lg:gap-xl lg:pb-section lg:pt-xxl">
+      <nav aria-label={labels.more} className="band flex flex-col-reverse gap-md border-t border-hairline pb-xxxl pt-xl lg:flex-row lg:gap-xl lg:pb-section lg:pt-xxl">
         <div className="flex flex-1 flex-col items-start gap-md">
-          <p className="t-mono-label text-faint">Back</p>
-          <ButtonGhost href="/writing">All writing</ButtonGhost>
+          <p className="t-mono-label text-faint">{labels.back}</p>
+          <ButtonGhost href={localize(lang, "/writing")}>{labels.allWriting}</ButtonGhost>
         </div>
         {next ? (
           <div className="flex flex-1 flex-col items-start gap-md border border-hairline bg-surface p-lg">
             <p className="t-mono-label text-muted">
-              Next · {TOPICS[next.topic]?.label || next.topic} · {TYPES[next.type]?.label || next.type}
+              {labels.next} · {dict.topics[next.topic] || next.topic} · {dict.types[next.type] || next.type}
             </p>
             <p className="t-title-lg text-ink">{next.title}</p>
-            <ButtonPrimary href={`/writing/${next.slug}`}>Next {TYPES[next.type]?.label || "post"}</ButtonPrimary>
+            <ButtonPrimary href={localize(lang, `/writing/${next.slug}`)}>
+              {labels.nextButton(dict.types[next.type] || next.type)}
+            </ButtonPrimary>
           </div>
         ) : null}
       </nav>

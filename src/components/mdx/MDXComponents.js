@@ -1,6 +1,7 @@
 import { Children } from "react";
 import CodeCopyButton from "@/components/CodeCopyButton";
 import { NumberedHeading } from "@/components/ui/primitives";
+import { t } from "@/lib/i18n";
 
 function textOf(node) {
   if (typeof node === "string" || typeof node === "number") return String(node);
@@ -17,7 +18,8 @@ export function slugify(text) {
 }
 
 // code-block: the only dark surface in the system.
-function CodeBlock({ children }) {
+function CodeBlock({ children, lang }) {
+  const copy = t(lang).copy;
   const codeProps = children?.props ?? {};
   const code = textOf(codeProps.children).replace(/\n$/, "");
   const language = /language-(\w+)/.exec(codeProps.className || "")?.[1];
@@ -25,8 +27,8 @@ function CodeBlock({ children }) {
   return (
     <div className="wide bg-surface-dark-elevated">
       <div className="t-mono-label flex min-h-11 items-center justify-between border-b border-on-dark-muted/40 px-md text-on-dark-muted lg:px-lg">
-        <span>{language || "Code"}</span>
-        <CodeCopyButton code={code} />
+        <span>{language || copy.code}</span>
+        <CodeCopyButton code={code} labels={copy} />
       </div>
       <pre className="overflow-x-auto p-md lg:p-lg">
         <code className="t-code text-on-dark">{code}</code>
@@ -46,12 +48,12 @@ function Figure({ src, alt = "", title }) {
   );
 }
 
-export function YouTube({ id, title = "Video" }) {
+export function YouTube({ id, title }) {
   return (
     <div className="wide -mx-md aspect-video border-y border-hairline bg-surface-sunken lg:mx-0 lg:border">
       <iframe
         src={`https://www.youtube-nocookie.com/embed/${id}`}
-        title={title}
+        title={title || "Video"}
         className="h-full w-full"
         allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
         allowFullScreen
@@ -62,10 +64,11 @@ export function YouTube({ id, title = "Video" }) {
 }
 
 // callout: NOTE, TIP, RULES, WARNING, CHECK YOUR WORK. Full hairline box, no coloured stripe.
-export function Callout({ kind = "Note", children }) {
+// `kind` is always written in English in MDX; the label shows in the post's language.
+export function Callout({ kind = "Note", children, lang }) {
   return (
     <div role="note" className="wide flex flex-col gap-xs border border-hairline bg-surface px-lg py-md">
-      <p className="t-mono-label text-muted">{kind}</p>
+      <p className="t-mono-label text-muted">{t(lang).mdx.callouts[kind] || kind}</p>
       <div className="t-body-md flex flex-col gap-xs text-ink [&_p]:m-0 [&_p]:text-[17px] [&_p]:text-ink">{children}</div>
     </div>
   );
@@ -114,18 +117,19 @@ export function SpecRow() {
   return null;
 }
 
-export function Problems({ children }) {
+export function Problems({ children, lang }) {
+  const labels = t(lang).mdx;
   const items = Children.toArray(children).filter((child) => child?.props?.problem);
   return (
     <ul className="wide border-t border-hairline">
       {items.map((child) => (
         <li key={child.props.problem} className="flex flex-col gap-xs border-b border-hairline py-md">
           <p className="flex flex-col gap-xxs lg:flex-row lg:gap-md">
-            <span className="t-mono-label text-faint lg:w-[120px] lg:shrink-0">Problem</span>
+            <span className="t-mono-label text-faint lg:w-[120px] lg:shrink-0">{labels.problem}</span>
             <span className="t-body-md flex-1 text-ink">{child.props.problem}</span>
           </p>
           <p className="flex flex-col gap-xxs lg:flex-row lg:gap-md">
-            <span className="t-mono-label text-accent lg:w-[120px] lg:shrink-0">What worked</span>
+            <span className="t-mono-label text-accent lg:w-[120px] lg:shrink-0">{labels.worked}</span>
             <span className="t-body-md flex-1 text-body">{child.props.children}</span>
           </p>
         </li>
@@ -170,8 +174,9 @@ export function Shot({ src, alt = "" }) {
   );
 }
 
-// One component map per file, so <h2> can show its number from the file's own headings.
-export function createMdxComponents({ headings = [] } = {}) {
+// One component map per file, so <h2> can show its number from the file's own headings
+// and labels follow the file's language.
+export function createMdxComponents({ headings = [], lang = "en" } = {}) {
   const numberOf = (text) => headings.find((heading) => heading.id === slugify(text));
 
   return {
@@ -223,16 +228,16 @@ export function createMdxComponents({ headings = [] } = {}) {
     td: ({ children }) => (
       <td className="t-body-sm border-b border-hairline py-sm pr-md align-top text-body last:pr-0">{children}</td>
     ),
-    pre: CodeBlock,
+    pre: (props) => <CodeBlock {...props} lang={lang} />,
     code: ({ children }) => <code className="bg-surface-sunken px-1 py-px font-mono text-[0.88em] text-ink">{children}</code>,
     img: Figure,
     YouTube,
-    Callout,
+    Callout: (props) => <Callout {...props} lang={lang} />,
     Features,
     Feature,
     Spec,
     SpecRow,
-    Problems,
+    Problems: (props) => <Problems {...props} lang={lang} />,
     Problem,
     Learned,
     Screenshots,

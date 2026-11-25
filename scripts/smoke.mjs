@@ -1,19 +1,38 @@
 #!/usr/bin/env node
 // Starts the production build and requests every route a reader can reach: each URL in
-// sitemap.xml, the OG images, robots.txt, the old /blog and /contact redirects and a 404.
+// sitemap.xml (both languages), the OG images, robots.txt, the old /blog and /contact
+// redirects, the /id -> root redirect and a 404 in each language.
 // Needs `npm run build` first. Exit 1 if any route answers with the wrong status.
 //   node scripts/smoke.mjs            (port 3123)
 import { spawn } from "node:child_process";
 
 const PORT = process.env.SMOKE_PORT || "3123";
 const BASE = `http://localhost:${PORT}`;
-const server = spawn("npx", ["next", "start", "-p", PORT], { stdio: ["ignore", "pipe", "pipe"] });
+
+// A server left on the port would answer for an old build and make the run meaningless.
+try {
+  await fetch(BASE, { redirect: "manual" });
+  console.error(`smoke: something is already listening on ${BASE}. Stop it, or set SMOKE_PORT.`);
+  process.exit(1);
+} catch {
+  // Port is free.
+}
+
+// Run next directly in its own process group, so stopping it also stops next-server.
+const server = spawn(process.execPath, ["node_modules/next/dist/bin/next", "start", "-p", PORT], {
+  stdio: ["ignore", "pipe", "pipe"],
+  detached: true,
+});
 let serverLog = "";
 server.stdout.on("data", (d) => (serverLog += d));
 server.stderr.on("data", (d) => (serverLog += d));
 
 const stop = (code) => {
-  server.kill("SIGTERM");
+  try {
+    process.kill(-server.pid, "SIGTERM");
+  } catch {
+    server.kill("SIGTERM");
+  }
   process.exit(code);
 };
 
@@ -39,9 +58,12 @@ const checks = [
   ["/robots.txt", 200],
   ["/opengraph-image", 200],
   ["/writing/opengraph-image", 200],
+  ["/en/opengraph-image", 200],
   ["/blog", 308],
   ["/contact", 308],
+  ["/id/writing", 308],
   ["/this-page-does-not-exist", 404],
+  ["/en/this-page-does-not-exist", 404],
 ];
 
 let failed = 0;

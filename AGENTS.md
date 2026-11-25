@@ -1,6 +1,6 @@
 # hasbi.pro: agent instructions
 
-Personal site of Hasbi Hassadiqin (the **owner**): bilingual EN / ID tutorials and notes on AI and automation, plus personal projects. Next.js 15 App Router, React 19, Tailwind 4, MDX via `next-mdx-remote`. Plain JavaScript (no TypeScript). Deployed on Vercel from `main`.
+Personal site of Hasbi Hassadiqin (the **owner**): tutorials and notes on AI and automation, plus personal projects. **Indonesian first** (root URLs), English under `/en`. Next.js 15 App Router, React 19, Tailwind 4, MDX via `next-mdx-remote`. Plain JavaScript (no TypeScript). Deployed on Vercel from `main`.
 
 Read before working:
 - `README.md`: content model, front matter fields, MDX components.
@@ -23,8 +23,10 @@ Do not say a change works until `npm run verify` passes. If it fails, report the
 - `src/utils/content.js`: loads and compiles all MDX (headings, numbering, drafts, read time).
 - `src/components/mdx/MDXComponents.js`: every tag MDX may use. `createMdxComponents` is the registry.
 - `src/lib/ai-context.js`: "Copy context for AI" (post to Markdown). **A new MDX component must be taught here too.**
-- `src/lib/site.js`: site constants, `TOPICS` / `TYPES` / `LANGS`, nav, `sectionNumbers()` (nav and § labels follow the visible order).
-- `src/app/`: routes (`/`, `/writing`, `/writing/[slug]`, `/projects`, `/projects/[slug]`, `/about`), OG images, sitemap, robots.
+- `src/lib/i18n.js`: languages, `localize(lang, path)`, and **every interface string** in both languages (`t(lang)`). New UI text goes here, in both languages, never inline in JSX.
+- `src/middleware.js`: rewrites root paths to `[lang]=id`, redirects `/id/*` to the root. `next.config.mjs`: redirects English-only post URLs to `/en`.
+- `src/lib/site.js`: site constants, `TOPICS` / `TYPES` / `LANGS` keys, nav, `alternates(path, lang, langs)` (canonical + hreflang), `sectionNumbers()`.
+- `src/app/[lang]/`: every page, built once per language (`/`, `/writing`, `/writing/[slug]`, `/projects`, `/projects/[slug]`, `/about`, OG images). `src/app/sitemap.js` and `robots.js` stay at the root.
 - `src/components/ui/`, `src/components/site/`: shared UI, nav, footer.
 - `scripts/`: the checks above. `anti-slop/`: antislop audit reports.
 
@@ -35,6 +37,7 @@ Do not say a change works until `npm run verify` passes. If it fails, report the
 - No em dashes (—) in any copy, front matter or UI string. Use a colon, period or comma. En dashes in ranges are fine. The content check enforces this for MDX; apply it to JSX strings yourself.
 - Client and employer work is under NDA. Describe the current role by what it covers, never by client. Factual role: Solutions Architect at Cekat.AI. "Solutions Engineer" is a goal, not a held title.
 - New posts start as `draft: true`. Only the owner flips a post to published.
+- New posts are written in Indonesian first (`<slug>.id.mdx`). An English version is the same slug with `.en.mdx`. `<Callout kind>` values from the standard set stay in English in both (the label is translated by the component); custom kinds are written in the post's language.
 - Images live in `public/images/<section>/<slug>/` and are referenced with absolute paths and real alt text.
 
 **Design and code**

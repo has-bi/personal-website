@@ -1,18 +1,24 @@
 // Site-wide constants shared by the nav, footer and metadata.
+import { DEFAULT_LOCALE, LOCALES, localize } from "@/lib/i18n";
+
 export const SITE_URL = "https://www.hasbi.pro";
 export const SITE_NAME = "Hasbi Hassadiqin";
 export const EMAIL = "hasbi.at.work@gmail.com";
 
-// Page alternates: the canonical URL for each page.
-export function alternates(path) {
-  return { canonical: path };
+// Page alternates: the canonical URL in this language plus hreflang links to the
+// languages the page exists in. `path` is language-neutral ("/writing").
+export function alternates(path, lang, langs = LOCALES) {
+  const languages = Object.fromEntries(langs.map((code) => [code, localize(code, path)]));
+  if (langs.includes(DEFAULT_LOCALE)) languages["x-default"] = localize(DEFAULT_LOCALE, path);
+  return { canonical: localize(lang, path), languages };
 }
 
+// Labels come from t(lang).nav[key]; hrefs are language-neutral, see localize().
 export const NAV_ITEMS = [
-  { key: "index", href: "/", label: "Index" },
-  { key: "writing", href: "/writing", label: "Writing" },
-  { key: "projects", href: "/projects", label: "Projects" },
-  { key: "about", href: "/about", label: "About" },
+  { key: "index", href: "/" },
+  { key: "writing", href: "/writing" },
+  { key: "projects", href: "/projects" },
+  { key: "about", href: "/about" },
 ];
 
 // Section numbers follow the visible order, so they stay consecutive: while no project

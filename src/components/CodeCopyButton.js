@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-export default function CodeCopyButton({ code }) {
+export default function CodeCopyButton({ code, labels }) {
   const [copied, setCopied] = useState(false);
 
   return (
@@ -19,7 +19,7 @@ export default function CodeCopyButton({ code }) {
       }}
       className="t-mono-label flex min-h-11 items-center text-on-dark hover:text-on-dark-muted"
     >
-      <span aria-live="polite">{copied ? "Copied" : "Copy"}</span>
+      <span aria-live="polite">{copied ? labels.copiedShort : labels.copy}</span>
     </button>
   );
 }

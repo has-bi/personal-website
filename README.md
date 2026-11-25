@@ -19,10 +19,12 @@ No environment variables are needed. Content is read from the repository at buil
 content/
   writing/<slug>.<lang>.mdx    # posts, e.g. do-you-even-need-ai.en.mdx
   projects/<slug>.mdx          # personal projects only (client and employer work is under NDA)
-  about.en.mdx                 # your own intro paragraph for /about and Home (draft until you write it)
+  about.<lang>.mdx             # your own intro paragraph for /about and Home (the English one shows until about.id.mdx is published)
 ```
 
 Routes: `/`, `/writing` (filters: `?type=tutorial&topic=ai&lang=id`), `/writing/<slug>`, `/projects` (`?topic=`), `/projects/<slug>`, `/about`. Old `/blog/*` and `/contact` URLs redirect.
+
+Languages: Indonesian is the default and lives at the root; English lives under `/en` (`/en/writing/<slug>`). A post exists in a language when `<slug>.<lang>.mdx` is published. Until the Indonesian version of a post is published, the Indonesian list shows the English post and `/writing/<slug>` redirects to `/en/writing/<slug>`. Interface text lives in `src/lib/i18n.js`; `src/middleware.js` maps the root onto the `[lang]` routes in `src/app/[lang]/`.
 
 Post front matter:
 

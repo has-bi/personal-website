@@ -1,37 +1,52 @@
-import { getAllPosts, getProjects } from "@/utils/content";
+import { getPostLanguages, getPosts, getProjects } from "@/utils/content";
 import { SITE_URL } from "@/lib/site";
+import { DEFAULT_LOCALE, LOCALES, localize } from "@/lib/i18n";
+
+// Every page in every language it exists in, each with hreflang alternates.
+const entry = (path, langs, extra = {}) =>
+  langs.map((lang) => ({
+    url: `${SITE_URL}${localize(lang, path)}`,
+    alternates: {
+      languages: Object.fromEntries([
+        ...langs.map((code) => [code, `${SITE_URL}${localize(code, path)}`]),
+        ...(langs.includes(DEFAULT_LOCALE) ? [["x-default", `${SITE_URL}${localize(DEFAULT_LOCALE, path)}`]] : []),
+      ]),
+    },
+    ...extra,
+  }));
 
 export default async function sitemap() {
-  const [posts, projects] = await Promise.all([getAllPosts(), getProjects()]);
-  const latest = posts[0]?.date ? new Date(posts[0].date) : new Date();
+  const [posts, languages, projects] = await Promise.all([
+    Promise.all(LOCALES.map((lang) => getPosts({ lang }))).then((lists) => lists.flat()),
+    getPostLanguages(),
+    getProjects(),
+  ]);
+  const newest = posts.map((post) => post.date).sort().pop();
+  const latest = newest ? new Date(newest) : new Date();
 
-  const staticRoutes = [
-    { url: SITE_URL, lastModified: latest, changeFrequency: "weekly", priority: 1 },
-    { url: `${SITE_URL}/writing`, lastModified: latest, changeFrequency: "weekly", priority: 0.9 },
-    { url: `${SITE_URL}/about`, changeFrequency: "monthly", priority: 0.7 },
+  const pages = [
+    ...entry("/", LOCALES, { lastModified: latest, changeFrequency: "weekly", priority: 1 }),
+    ...entry("/writing", LOCALES, { lastModified: latest, changeFrequency: "weekly", priority: 0.9 }),
+    ...entry("/about", LOCALES, { changeFrequency: "monthly", priority: 0.7 }),
   ];
 
-  const postRoutes = posts
-    .filter((post) => post.published && post.lang === "en")
-    .map((post) => ({
-      url: `${SITE_URL}/writing/${post.slug}`,
-      lastModified: post.date ? new Date(post.date) : undefined,
+  // One entry per slug; its languages become the URLs and alternates.
+  const postPages = Object.entries(languages).flatMap(([slug, langs]) => {
+    const post = posts.find((item) => item.slug === slug);
+    return entry(`/writing/${slug}`, langs, {
+      lastModified: post?.date ? new Date(post.date) : undefined,
       changeFrequency: "monthly",
       priority: 0.7,
-    }));
+    });
+  });
 
   // /projects is listed only once a project is published.
-  if (projects.some((project) => project.published)) {
-    staticRoutes.push({ url: `${SITE_URL}/projects`, changeFrequency: "monthly", priority: 0.8 });
-  }
+  const projectPages = projects.length
+    ? [
+        ...entry("/projects", LOCALES, { changeFrequency: "monthly", priority: 0.8 }),
+        ...projects.flatMap((project) => entry(`/projects/${project.slug}`, LOCALES, { changeFrequency: "yearly", priority: 0.6 })),
+      ]
+    : [];
 
-  const projectRoutes = projects
-    .filter((project) => project.published)
-    .map((project) => ({
-      url: `${SITE_URL}/projects/${project.slug}`,
-      changeFrequency: "yearly",
-      priority: 0.6,
-    }));
-
-  return [...staticRoutes, ...postRoutes, ...projectRoutes];
+  return [...pages, ...postPages, ...projectPages];
 }

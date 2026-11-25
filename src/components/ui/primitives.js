@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { TOPICS } from "@/lib/site";
+import { t } from "@/lib/i18n";
 
 const cx = (...classes) => classes.filter(Boolean).join(" ");
 
@@ -13,11 +13,11 @@ const TAG_STYLES = {
   automation: "bg-tint-automation text-domain-automation",
 };
 
-export function Tag({ topic, children, className }) {
+export function Tag({ topic, lang, children, className }) {
   const style = TAG_STYLES[topic] || "bg-surface-sunken text-muted";
   return (
     <span className={cx("t-tag inline-flex shrink-0 px-xs py-xxs", style, className)}>
-      {children || TOPICS[topic]?.label || topic}
+      {children || t(lang).topics[topic] || topic}
     </span>
   );
 }
@@ -144,11 +144,12 @@ export function NumberedHeading({ number, id, children }) {
   );
 }
 
-export function Breadcrumb({ parent, slug, aside }) {
+// `parent` is the path shown ("/projects"); `href` is where it links in this language.
+export function Breadcrumb({ parent, href = parent, slug, aside }) {
   return (
     <div className="band flex min-h-11 items-center justify-between gap-sm border-b border-hairline lg:min-h-12">
       <nav aria-label="Breadcrumb" className="t-mono-nav flex min-w-0 items-center gap-sm">
-        <Link href={parent} className="flex min-h-11 shrink-0 items-center text-ink hover:text-accent">
+        <Link href={href} className="flex min-h-11 shrink-0 items-center text-ink hover:text-accent">
           ← {parent}
         </Link>
         <span aria-hidden="true" className="text-faint">

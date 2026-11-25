@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { pad3 } from "@/lib/site";
+import { localize } from "@/lib/i18n";
 import { Tag } from "./primitives";
 
 const HEADER_STRIP = {
@@ -9,12 +10,12 @@ const HEADER_STRIP = {
 };
 
 // project-card: tinted header strip, 3 thumbnails (1 on mobile), title, outcome, tag + stack.
-export default function ProjectCard({ project, index }) {
+export default function ProjectCard({ project, index, lang }) {
   const thumbs = (project.gallery.length ? project.gallery : [project.coverImage]).filter(Boolean).slice(0, 3);
 
   return (
     <Link
-      href={`/projects/${project.slug}`}
+      href={localize(lang, `/projects/${project.slug}`)}
       className="group flex h-full flex-col border border-hairline bg-surface transition-colors hover:border-hairline-strong"
     >
       <span
@@ -39,7 +40,7 @@ export default function ProjectCard({ project, index }) {
         <span className="t-title-md text-ink group-hover:text-accent">{project.title}</span>
         {project.outcome ? <span className="t-body-sm text-muted">{project.outcome}</span> : null}
         <span className="mt-auto flex items-center gap-sm">
-          {project.topic ? <Tag topic={project.topic} /> : null}
+          {project.topic ? <Tag topic={project.topic} lang={lang} /> : null}
           <span className="t-mono-meta uppercase text-muted">{project.technologies.join(" · ")}</span>
         </span>
       </span>
@@ -47,13 +48,13 @@ export default function ProjectCard({ project, index }) {
   );
 }
 
-export function ProjectGrid({ projects }) {
+export function ProjectGrid({ projects, lang }) {
   const cols = projects.length >= 3 ? "lg:grid-cols-3" : "lg:grid-cols-2";
   return (
     <ul className={`grid grid-cols-1 gap-md lg:gap-xl ${cols}`}>
       {projects.map((project, index) => (
         <li key={project.slug}>
-          <ProjectCard project={project} index={index} />
+          <ProjectCard project={project} index={index} lang={lang} />
         </li>
       ))}
     </ul>
