@@ -108,6 +108,27 @@ export function MetaStrip({ items }) {
   );
 }
 
+// Thin meta line for articles: values only, separated by slashes (dates already use dots),
+// between two hairlines.
+// Labels stay available to screen readers.
+export function MetaLine({ items }) {
+  return (
+    <dl className="t-mono-meta flex w-full flex-wrap items-center gap-x-sm gap-y-xs border-y border-hairline py-sm uppercase text-muted">
+      {items.map((item, index) => (
+        <div key={item.label} className="flex items-center gap-sm">
+          {index > 0 ? (
+            <span aria-hidden="true" className="text-faint">
+              /
+            </span>
+          ) : null}
+          <dt className="sr-only">{item.label}</dt>
+          <dd>{item.value}</dd>
+        </div>
+      ))}
+    </dl>
+  );
+}
+
 // Numbered section heading used inside articles and project write-ups.
 export function NumberedHeading({ number, id, children }) {
   return (
