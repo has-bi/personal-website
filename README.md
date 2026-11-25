@@ -7,8 +7,8 @@ Personal site of Hasbi Hassadiqin: bilingual tutorials and notes on AI and autom
 ```bash
 npm install
 npm run dev        # http://localhost:3000
-npm run lint
-npm run build
+npm run check      # content check + lint
+npm run verify     # check + build + route smoke test
 ```
 
 No environment variables are needed. Content is read from the repository at build time.
