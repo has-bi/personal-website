@@ -46,11 +46,13 @@ Do not say a change works until `npm run verify` passes. If it fails, report the
 - Hide empty things instead of showing empty states (see logged decisions: Projects nav, language toggle). Every link must lead to a page that exists at build time.
 - Keep focus states, 44px tap targets on mobile, and 4.5:1 text contrast.
 - Match the surrounding code: small functions, comments that explain *why*, no new dependencies without a reason stated to the owner.
+- The build must not need the network. Fonts are bundled in `src/lib/font-files/` and loaded with `next/font/local` (`src/lib/fonts.js`); never use `next/font/google` (a Google Fonts fetch failing mid-build broke a production deploy). OG images use the TTFs in `src/lib/og-fonts/`.
 
 **Workflow**
 - Work on a branch, never commit straight to `main`. One topic per branch and PR, usually one commit. Commit and PR titles look like `Articles: remove the breadcrumb, add Copy context for AI`: plain sentence case, area first when useful, no `feat:` prefixes. PRs land as merge commits (`<title> (#N)`).
 - `gh` is installed and logged in as the owner. Push the branch and open the PR with `gh pr create`; merge only when the owner asks, with `gh pr merge <n> --merge`, after the checks pass.
 - Vercel previews are behind Vercel Authentication, so `curl` gets a 302 to SSO. Check a preview through the Vercel connector (`web_fetch_vercel_url`) before merging changes to routing, middleware or redirects: they can behave differently on Vercel than under `next start`.
+- Stage files by path (`git add <paths>`), never `git add -A` or `git add .`: the owner drops their own files (images, notes) into the working tree, and a 4.6 MB PNG once slipped into an unrelated commit that way. Check `git status --short` before every commit.
 - Never read or print `.env*`.
 
 ## Fix the harness, not just the output
