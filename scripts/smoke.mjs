@@ -66,12 +66,15 @@ const checks = [
   ["/en/this-page-does-not-exist", 404],
 ];
 
+// A 404 must be the site's own page (nav, footer, /404 heading), not Next's bare default.
+const isSite404 = (html) => html.includes(">/404<") && html.includes('id="main"');
+
 let failed = 0;
 for (const [route, expected] of checks) {
   const res = await fetch(BASE + route, { redirect: "manual" });
-  const ok = res.status === expected;
+  const ok = res.status === expected && (expected !== 404 || isSite404(await res.text()));
   if (!ok) failed++;
-  console.log(`${ok ? "ok  " : "FAIL"} ${res.status} ${route}${ok ? "" : ` (expected ${expected})`}`);
+  console.log(`${ok ? "ok  " : "FAIL"} ${res.status} ${route}${ok ? "" : ` (expected ${expected}${expected === 404 ? " with the site's 404 page" : ""})`}`);
 }
 console.log(`smoke: ${checks.length} route(s), ${failed} failure(s)`);
 if (failed) console.error(serverLog.split("\n").slice(-30).join("\n"));

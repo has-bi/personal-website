@@ -1,6 +1,5 @@
 import "../globals.css";
 import { notFound } from "next/navigation";
-import { Funnel_Sans, JetBrains_Mono } from "next/font/google";
 import ClientRuntimeGuards from "@/components/ClientRuntimeGuards";
 import SiteFooter from "@/components/site/SiteFooter";
 import SiteNav from "@/components/site/SiteNav";
@@ -8,18 +7,8 @@ import { sectionNumbers, SITE_URL } from "@/lib/site";
 import { isLocale, LOCALES, t } from "@/lib/i18n";
 import { CURRENT_ROLE } from "@/app/[lang]/about/data";
 import { getPostLanguages, getProjects } from "@/utils/content";
+import { funnelSans, jetbrainsMono } from "@/lib/fonts";
 
-const funnelSans = Funnel_Sans({
-  subsets: ["latin"],
-  weight: ["400", "500"],
-  variable: "--font-funnel-sans",
-});
-
-const jetbrainsMono = JetBrains_Mono({
-  subsets: ["latin"],
-  weight: ["400", "500"],
-  variable: "--font-jetbrains-mono",
-});
 
 // Each language is its own root layout, so <html lang> is right from the first byte.
 export const dynamicParams = false;

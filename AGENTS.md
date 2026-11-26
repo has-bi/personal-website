@@ -49,7 +49,8 @@ Do not say a change works until `npm run verify` passes. If it fails, report the
 
 **Workflow**
 - Work on a branch, never commit straight to `main`. One topic per branch and PR, usually one commit. Commit and PR titles look like `Articles: remove the breadcrumb, add Copy context for AI`: plain sentence case, area first when useful, no `feat:` prefixes. PRs land as merge commits (`<title> (#N)`).
-- `gh` is not installed. Push the branch and give the owner the compare URL (`https://github.com/has-bi/personal-website/compare/<branch>`) unless they ask otherwise.
+- `gh` is installed and logged in as the owner. Push the branch and open the PR with `gh pr create`; merge only when the owner asks, with `gh pr merge <n> --merge`, after the checks pass.
+- Vercel previews are behind Vercel Authentication, so `curl` gets a 302 to SSO. Check a preview through the Vercel connector (`web_fetch_vercel_url`) before merging changes to routing, middleware or redirects: they can behave differently on Vercel than under `next start`.
 - Never read or print `.env*`.
 
 ## Fix the harness, not just the output

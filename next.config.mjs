@@ -30,6 +30,10 @@ const nextConfig = {
     formats: ["image/avif", "image/webp"],
   },
 
+  // The root layout sits under [lang], so there is no app/layout.js to render a 404 for
+  // URLs that match no route. src/app/global-not-found.js renders that page instead.
+  experimental: { globalNotFound: true },
+
   // The blog became /writing; /contact was folded into the footer and /about.
   async redirects() {
     return [

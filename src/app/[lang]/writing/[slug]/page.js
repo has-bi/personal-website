@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { getPost, getPostLanguages, getPosts } from "@/utils/content";
 import { alternates, EMAIL, formatDate, LANGS, SITE_URL } from "@/lib/site";
 import { localize, t } from "@/lib/i18n";
@@ -16,10 +16,11 @@ import { buildAiContext } from "@/lib/ai-context";
 
 export const dynamicParams = false;
 
-// Every slug is listed for every language, and the page 404s when a post is missing in
-// that language. Returning an empty list for a language with no published posts yet
-// makes Next 15.5 drop the other language's paths too. English-only slugs at the root
-// never reach that 404: next.config.mjs redirects them to /en/writing/<slug>.
+// Every slug is listed for every language: returning an empty list for a language with
+// no published posts yet makes Next 15.5 drop the other language's paths too. A slug
+// missing in this language redirects to the language it exists in (the same redirect
+// next.config.mjs does for old English URLs). It must not call notFound(): with the root
+// layout under [lang], a 404 thrown inside a page renders Next's bare error shell.
 export async function generateStaticParams() {
   const languages = await getPostLanguages();
   return Object.keys(languages).map((slug) => ({ slug }));
@@ -89,8 +90,12 @@ function nextLesson(posts, post) {
 
 export default async function ArticlePage({ params }) {
   const { slug, lang } = await params;
-  const [post, posts] = await Promise.all([getPost(slug, lang), getPosts({ lang })]);
-  if (!post) notFound();
+  const [post, posts, languages] = await Promise.all([getPost(slug, lang), getPosts({ lang }), getPostLanguages()]);
+  if (!post) {
+    const other = languages[slug]?.[0];
+    if (other) redirect(localize(other, `/writing/${slug}`));
+    notFound();
+  }
 
   const dict = t(lang);
   const labels = dict.article;

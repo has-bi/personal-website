@@ -11,12 +11,18 @@ export function middleware(request) {
     url.pathname = pathname.slice(3) || "/";
     return NextResponse.redirect(url, 308);
   }
-  if (pathname === "/en" || pathname.startsWith("/en/")) return NextResponse.next();
+  // x-locale tells global-not-found.js which language a 404 is in (it gets no params).
+  const headers = new Headers(request.headers);
+  if (pathname === "/en" || pathname.startsWith("/en/")) {
+    headers.set("x-locale", "en");
+    return NextResponse.next({ request: { headers } });
+  }
 
+  headers.set("x-locale", "id");
   const url = request.nextUrl.clone();
   url.pathname = `/id${pathname === "/" ? "" : pathname}`;
   url.search = search;
-  return NextResponse.rewrite(url);
+  return NextResponse.rewrite(url, { request: { headers } });
 }
 
 // Skip Next internals, the API and anything with a file extension (images, sitemap.xml,
