@@ -127,6 +127,7 @@ const en = {
     video: "Video",
   },
   about: {
+    portraitAlt: "Pixel-art portrait of Hasbi Hassadiqin",
     title: "About",
     description: "About Hasbi Hassadiqin, Solutions Architect at Cekat.AI, who writes notes on AI and automation.",
     work: "Work",
@@ -301,6 +302,7 @@ const id = {
     video: "Video",
   },
   about: {
+    portraitAlt: "Potret pixel art Hasbi Hassadiqin",
     title: "Tentang",
     description: "Tentang Hasbi Hassadiqin, Solutions Architect di Cekat.AI, yang menulis catatan tentang AI dan otomasi.",
     work: "Pekerjaan",

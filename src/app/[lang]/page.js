@@ -159,11 +159,11 @@ function AboutSplit({ intro, introLang, number, lang, about }) {
       <div className="flex flex-col gap-lg lg:flex-row lg:gap-xxl">
         <div className="relative aspect-4/5 w-full overflow-hidden border border-hairline bg-surface-sunken lg:w-[360px] lg:shrink-0">
           <Image
-            src="/images/me.webp"
-            alt="Hasbi Hassadiqin"
+            src="/images/me-pixelated.webp"
+            alt={t(lang).about.portraitAlt}
             fill
             sizes="(min-width: 1024px) 360px, 100vw"
-            className="object-cover"
+            className="object-cover [image-rendering:pixelated]"
           />
         </div>
         <div className="flex flex-1 flex-col gap-lg lg:gap-xl">
