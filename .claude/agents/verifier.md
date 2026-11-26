@@ -2,7 +2,7 @@
 name: verifier
 description: Runs the project's checks (content check, lint, production build, route smoke test) and reports pass or fail with the exact failing output. Use before declaring any change done, before opening a PR, or when a build error needs diagnosing. Does not edit files.
 tools: Bash, Read, Grep, Glob
-model: sonnet
+model: haiku
 color: green
 ---
 

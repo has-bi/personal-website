@@ -2,6 +2,7 @@
 name: new-post
 description: Scaffold a new draft post for hasbi.pro (content/writing/<slug>.<lang>.mdx) with valid front matter and its image folder. Use when the owner wants to start a new tutorial or note.
 argument-hint: "<title> [tutorial|note] [ai|automation|web] [en|id]"
+model: haiku
 ---
 
 Create a new draft post from: $ARGUMENTS
