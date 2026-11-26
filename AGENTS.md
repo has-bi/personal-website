@@ -46,6 +46,7 @@ Do not say a change works until `npm run verify` passes. If it fails, report the
 - Hide empty things instead of showing empty states (see logged decisions: Projects nav, language toggle). Every link must lead to a page that exists at build time.
 - Keep focus states, 44px tap targets on mobile, and 4.5:1 text contrast.
 - Match the surrounding code: small functions, comments that explain *why*, no new dependencies without a reason stated to the owner.
+- The build must not need the network. Fonts are bundled in `src/lib/font-files/` and loaded with `next/font/local` (`src/lib/fonts.js`); never use `next/font/google` (a Google Fonts fetch failing mid-build broke a production deploy). OG images use the TTFs in `src/lib/og-fonts/`.
 
 **Workflow**
 - Work on a branch, never commit straight to `main`. One topic per branch and PR, usually one commit. Commit and PR titles look like `Articles: remove the breadcrumb, add Copy context for AI`: plain sentence case, area first when useful, no `feat:` prefixes. PRs land as merge commits (`<title> (#N)`).
