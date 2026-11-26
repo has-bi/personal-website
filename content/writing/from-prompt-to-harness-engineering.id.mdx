@@ -1,0 +1,231 @@
+---
+title: "Dari Prompt Engineering ke Harness Engineering"
+date: "2026-11-20"
+type: note
+topic: ai
+lang: id
+excerpt: "Prompt yang lebih bagus berhenti membantu begitu AI-nya tidak kenal pekerjaanmu. Yang mengubah semuanya buat saya adalah memindahkan usaha ke file, tools, dan pengecekan di sekitar agent, plus satu aturan yang menentukan apakah semua itu bertahan."
+tags: [AI, Context Engineering, Workflow]
+cover: "/images/writing/from-prompt-to-harness-engineering/01-cover.webp"
+coverAlt: "Kubus ungu isometrik dengan bagian atas berlubang, diumpan oleh lintasan berisi lempengan tegak di satu sisi, dengan lintasan melingkar dan sebuah ramp kecil keluar dari sisi lainnya."
+draft: true
+---
+
+Pernah seharian brainstorming dengan AI, bolak-balik sampai output-nya akhirnya sesuai yang kamu mau?
+
+Lalu muncul hal baru. Satu informasi lagi yang perlu dia tahu. Jadi kamu paste, jelaskan situasinya lagi, lalu generate ulang.
+
+Lalu terjadi lagi. Dan lagi.
+
+Masalahnya bukan di model. Output-nya bagus. Cuma bagusnya *secara umum*, dan pekerjaanmu tidak pernah umum. Setiap perusahaan punya kekhususannya sendiri, begitu juga setiap masalah di dalamnya.
+
+Bosmu benci brief yang kebanyakan emoji. Em dash di mana-mana bikin tulisan terasa seperti ditulis robot. Dan tidak ada satu pun orang di tim yang mau lihat caption lagi yang dibuka dengan *dari situ gue sadar*.
+
+Semua itu tidak ada di training data model mana pun. Semuanya ada di kepalamu, atau di thread Slack empat bulan lalu.
+
+Kebanyakan orang mencoba menutup celah itu dengan prompt yang lebih bagus. Saya juga, cukup lama.
+
+Yang akhirnya berhasil adalah memindahkan usaha dari prompt ke lingkungan tempat AI bekerja: file yang dia baca, tools yang bisa dia jangkau, urutan dia menjalankan sesuatu.
+
+Mitchell Hashimoto menyebut praktik itu **harness engineering**. Dia sendiri bilang industri belum sepakat soal namanya. Saya meminjam istilahnya, dan saya akan tandai satu tempat di mana saya meregangkan maknanya.
+
+## Prompt engineering tidak salah. Hanya belum lengkap.
+
+Ada tiga tahap. Lebih enak melihat ketiganya dulu sebelum berdebat soal tools.
+
+**Prompt engineering** adalah cara kamu merumuskan permintaan. Masih skill yang nyata, karena permintaan yang samar dapat jawaban yang samar.
+
+Tapi ada batasnya. Prompt yang sempurna tentang situasi yang sama sekali tidak dikenal model tetap menghasilkan jawaban generik, disampaikan dengan percaya diri.
+
+**Context engineering** adalah mengelola apa yang diketahui model sebelum kamu bertanya. Prompt adalah pertanyaannya. Context adalah semua yang sudah ada di ruangan saat pertanyaan itu datang.
+
+Sebagian besar selisih kualitas yang dulu saya salahkan ke prompting ternyata ada di sini.
+
+**Harness engineering** adalah membangun lingkungan supaya AI bisa *mengerjakan* pekerjaannya, bukan cuma menjawab. Tools mana yang bisa dia panggil. File mana yang bisa dia baca dan tulis. Urutan apa yang dia ikuti.
+
+![Tiga kelompok isometrik berjajar, masing-masing lebih lengkap dari sebelumnya: satu bola sendirian, lalu bola dengan lempengan tegak di belakangnya, lalu keduanya dibungkus bingkai ungu dengan lintasan yang melewatinya.](/images/writing/from-prompt-to-harness-engineering/02-progression.webp "Setiap tahap mempertahankan tahap sebelumnya dan menambahkan struktur di sekelilingnya.")
+
+Ini biasanya digambarkan sebagai dua kubu: Claude dan ChatGPT adalah chatbot, Claude Code dan Codex adalah harness.
+
+Berguna sebagai pembeda awal, tapi bukan itu pembedaan yang dibuat Hashimoto. Dalam kerangkanya, yang kamu buka adalah **agent**: LLM yang bisa chat *dan* memanggil perilaku eksternal dalam sebuah loop. Membaca file, menjalankan program, mengirim request.
+
+**Harness** bukan agent-nya. Harness adalah semua yang kamu bangun di sekelilingnya. Menyebut Claude Code sebagai harness berarti mencampur keduanya, dan itu menyembunyikan bagian yang penting: harness itu kamu yang bangun, bukan sesuatu yang dikirim vendor ke kamu.
+
+Lagipula batas antar kubu makin kabur tiap bulan. Aplikasi chat sekarang punya web search, eksekusi kode, dan connector ke tools milikmu sendiri.
+
+Perbedaan yang tetap berlaku bukan soal ada atau tidaknya tools. Melainkan dua hal ini:
+
+1. **Loop-nya.** Harness menjalankan banyak langkah sebelum kembali ke kamu. Panggil tool, baca hasilnya, sadar ternyata gagal, perbaiki, panggil tool lain. Di satu giliran chat, kamulah loop-nya.
+2. **Lingkungannya.** Harness bekerja *di dalam* file system-mu. Dia membuka file-mu dan menulisnya kembali. Chatbot bekerja *di atas* apa pun yang kamu upload.
+
+Jadi bacalah ini sebagai spektrum, bukan perang merek. Pertanyaannya bukan produk mana yang kamu buka. Melainkan seberapa banyak pekerjaan yang bisa dia pikul tanpa kamu harus ada di tengah setiap langkah.
+
+## Tiga lapisan context
+
+"Kasih AI lebih banyak context" adalah saran yang tidak berguna kalau berdiri sendiri. Context ada jenis-jenisnya, dan tiap jenis berperilaku berbeda. Ini tiga yang saya pakai.
+
+| Lapisan | Isinya | Kapan basi | Contoh file |
+|---|---|---|---|
+| Domain knowledge | Cara kerja bidangmu | Per kuartal, kalau pun pernah | `bi-fmcg.md` |
+| Tribal knowledge | Cara kerja *perusahaanmu* | Saat orang atau proses berubah | `team-operations.md` |
+| Data yang sudah diinterpretasi | Posisi bisnis saat ini | Mingguan, kadang harian | `sales-context.md` |
+
+**Domain knowledge** adalah keahlian industri. Sama sekali bukan tentang perusahaanmu.
+
+Buat saya artinya cara kerja tim BI di dalam FMCG. Metrik mana yang diperdebatkan bisnis. Seperti apa weekly sales review. Pertanyaan apa yang diajukan sebelum ada yang percaya pada sebuah angka.
+
+Tulis sekali. Tinjau ulang tiap beberapa bulan.
+
+**Tribal knowledge** adalah lapisan di bawahnya. Spesifik untuk perusahaanmu.
+
+Struktur organisasi. Siapa pegang apa. Bagaimana sebuah proses benar-benar berjalan, bukan seperti yang tertulis di SOP. Jalur komunikasi. Tools apa yang dipakai. Tim diukur berdasarkan apa.
+
+Inilah yang diserap karyawan baru selama tiga bulan, dan yang tidak pernah ditulis siapa pun. Punya saya jadi `team-operations.md`, supaya agent tahu ke siapa deliverable yang sudah jadi dikirim, dan `meeting-notes.md`, yang jadi satu-satunya jalan pengetahuan baru masuk ke sistem.
+
+**Data yang sudah diinterpretasi** adalah kondisi terkini. Performa terbaru, keuangan, campaign yang sedang jalan, tren. `sales-context.md`, `channel-performance.md`, `campaign-learning.md`.
+
+Lapisan ini paling cepat kedaluwarsa. Ini juga yang membedakan jawaban generik dari jawaban yang berguna.
+
+![Tiga lempengan isometrik bertumpuk: lempengan ungu tebal di bawah, lempengan putih di atasnya, dan lempengan tipis paling atas terangkat dengan penggantinya melayang di sampingnya.](/images/writing/from-prompt-to-harness-engineering/03-layers.webp "Bagian dasar tetap. Bagian atas yang diganti.")
+
+**Ketiganya basi dengan kecepatan berbeda. Itulah seluruh batasan desainnya.**
+
+Taruh semuanya di satu file dan kamu akan dapat salah satu dari dua kegagalan. Kamu jarang meng-update-nya, jadi agent bernalar pakai angka kuartal lalu. Atau kamu menulis ulang tiap minggu sampai diam-diam berhenti.
+
+File terpisah, ritme terpisah. Strukturnya ada untuk menyesuaikan dengan seberapa cepat tiap jenis pengetahuan membusuk.
+
+![Tiga jalur di satu timeline yang sama. Domain knowledge punya satu titik, tribal knowledge punya tiga, data yang sudah diinterpretasi punya tiga belas.](/images/writing/from-prompt-to-harness-engineering/04-decay-rates.svg "Frekuensi penulisan ulang per lapisan, satu titik per penulisan ulang.")
+
+Di satu timeline, argumennya selesai dengan sendirinya. Tidak ada satu file pun yang bisa mengikuti ketiga ritme sekaligus.
+
+## Satu flow, dari awal sampai akhir
+
+Ini satu siklus yang benar-benar saya jalankan. Bukan soal coding: siklus konten bulanan untuk Abay Coffee & Listening Bar, bar kopi specialty dan vinyl di Jakarta Selatan.
+
+Saya memilihnya karena pekerjaan kreatif adalah area yang menurut orang tidak bisa dibantu context engineering. Output-nya seharusnya soal penilaian.
+
+Loop-nya tidak ada di dalam satu post. Loop-nya berjalan sebulan sekali.
+
+1. **Analisis penjualan.** Bulan yang baru tutup, dibaca untuk melihat apa yang bergerak dan apa yang tidak. Output-nya laporan penjualan. Di sinilah AI paling banyak bekerja dalam siklus ini.
+2. **Brainstorm dengan stakeholder.** Sebuah meeting, dengan orang di dalamnya. Tidak ada harness yang menggantikan bagian ini, dan tidak ada yang di sini mencoba melakukannya.
+3. **Target bulan depan.** Apa yang keluar dari meeting itu.
+4. **Campaign-nya.** Target itu jadi sebuah campaign. Dari situlah `campaign-<month>.md` berasal: satu file per bulan, menyebutkan apa yang sedang kami kejar dan sedang di tahap mana.
+5. **Konten dan visual.** Campaign menentukan apa yang dibuat. Visual dibuat dari Magnific, tersambung lewat MCP.
+
+Lalu angka bulan depan masuk, dan langkah 1 berjalan lagi atas penjualan yang ikut dihasilkan campaign sebelumnya.
+
+![Lima langkah dalam siklus tertutup: analisis penjualan, brainstorm dengan stakeholder, target, file campaign, konten dan visual, lalu kembali ke analisis penjualan.](/images/writing/from-prompt-to-harness-engineering/05-abay-monthly-cycle.svg "File campaign adalah output dari loop yang memang sudah berjalan.")
+
+### Kenapa saya memilih contoh ini
+
+Perhatikan apa yang membuat `campaign-<month>.md` berbeda dari file yang ditulis untuk memberi makan agent.
+
+Tidak ada yang menambahkan langkah baru di bisnis demi menghasilkannya. Analisis penjualan terjadi. Meeting terjadi. Target terjadi. File itu cuma keputusan tersebut, yang dituliskan.
+
+File ini juga lapisan yang paling cepat kedaluwarsa dari tabel di atas, dan yang menentukan arti "bagus" untuk bulan ini.
+
+Post teaser dan post launch dinilai dengan aturan berbeda. Brand voice memberi tahu agent harus terdengar seperti apa. Campaign memberi tahu apa yang ingin dicapai dengan terdengar seperti itu. Tanpanya, setiap draft cuma tebakan.
+
+Yang **belum** ada di siklus ini adalah langkah pengecekan: sesuatu yang memberi tahu agent apakah sebuah draft cocok dengan campaign sebelum sampai ke saya. Penilaian itu masih di tangan saya, setiap kali.
+
+Dan itulah yang dibahas di bagian berikutnya.
+
+## Harness yang tidak berkembang cuma sebuah folder
+
+Semua di atas adalah setup. Yang mengubahnya jadi sebuah praktik adalah apa yang kamu lakukan saat agent melakukan kesalahan.
+
+Hashimoto merumuskannya paling pas. Saat agent membuat kesalahan, jangan cuma koreksi di chat. Bangun sesuatu supaya dia tidak bisa mengulangi kesalahan itu.
+
+Bentuknya ada dua.
+
+**Instruksi.** Perilaku buruk yang berulang masuk ke file instruksi agent: `AGENTS.md`, `CLAUDE.md`, apa pun yang dibaca setup-mu. Dia menjalankan command yang salah. Dia memakai API yang tidak ada. Dia salah format output lagi.
+
+Koreksi itu tempatnya di file, bukan di pesan yang kamu ketik ulang minggu depan.
+
+**Tools.** Beberapa kesalahan tidak bisa diperbaiki dengan kata-kata. Kalau agent tidak bisa tahu apakah pekerjaannya sendiri benar, tulis script yang memberi tahu dia. Ambil screenshot. Jalankan test yang difilter. Cek bentuk output-nya. Lalu catat di file instruksi bahwa script itu ada.
+
+Yang kedua inilah yang dulu saya remehkan. Kalau dibalik, tujuan sebuah harness adalah **memberi agent cara untuk mengecek pekerjaannya sendiri**, bukan menjadikan kamu pengecek di setiap run.
+
+Context memberi tahu dia apa yang benar tentang duniamu. Tools membuat dia bisa menguji apa yang baru saja dia hasilkan. Harness dengan context yang kaya tapi tanpa pengecekan tetap menaruh kamu di dalam loop untuk setiap output, persis di titik awalmu.
+
+![Kubus isometrik dengan lintasan ungu yang keluar dari satu sisi, melengkung ke luar dan masuk kembali ke kubus yang sama, membawa sebuah bola berputar kembali, sementara ramp terpisah mengeluarkan satu bola yang sudah jadi dari depan.](/images/writing/from-prompt-to-harness-engineering/06-verify-loop.webp "Pekerjaan yang gagal dicek kembali ke mesin. Hanya yang lolos yang keluar.")
+
+Pemicu yang perlu diperhatikan: setiap kali kamu mengoreksi hal yang sama dua kali, koreksi itu tempatnya di harness, bukan di percakapan.
+
+Untuk siklus Abay, itulah langkah pengecekannya. File campaign sudah menyebutkan apa yang dikejar bulan ini, jadi aturan apakah sebuah draft cocok sebenarnya sudah tertulis, tinggal belum diberi nama.
+
+## Di mana context disimpan, dan kenapa file biasa yang menang
+
+Begitu context jadi hal yang kamu rekayasa, pertanyaan berikutnya adalah di mana menyimpannya. Pembagian saya:
+
+- **Obsidian** untuk urusan pribadi. Side project, jalur karier, catatan belajar.
+- **Notion** untuk kerja. Ringkasan project, apa pun yang akan dibaca klien atau rekan tim.
+- **Linear** untuk context level task. Hal besar dipecah sampai ke sini.
+
+Tidak satu pun dari itu wajib. Folder berisi file `.md` dengan struktur yang masuk akal melakukan pekerjaan yang sama. Tools-nya jauh kurang penting dibanding disiplin menjaga file tetap terkini.
+
+Yang saya berhenti pakai adalah Claude Projects dan custom GPT. Bukan karena retrieval-nya jelek, tapi karena **friksi saat update**.
+
+Setiap kali context berubah, saya harus upload ulang. Dengan file di disk, saya edit file-nya, dan run berikutnya membaca versi baru. Tanpa upload, tanpa re-indexing, tanpa bertanya-tanya dia sedang pakai salinan yang mana.
+
+Kedengarannya seperti kemudahan kecil. Padahal bukan. Context yang cuma bisa kamu rawat lewat langkah upload adalah context yang akan berhenti kamu rawat.
+
+## MCP, untuk context yang tidak ada di folder-mu
+
+File menangani context di dalam sistemmu sendiri. Banyak context nyatamu tidak ada di sana. Context itu ada di thread Slack, Gmail, kartu Trello, database Notion, tabel warehouse.
+
+Untuk itulah MCP (Model Context Protocol): cara standar bagi agent untuk bicara dengan tool eksternal, jadi kamu tidak perlu menulis integrasi khusus untuk masing-masing.
+
+Bagian yang tidak saya duga: **koneksi MCP adalah akses, bukan context.**
+
+Agent sekarang bisa membaca Notion-mu. Tapi dia tetap tidak tahu board mana yang jadi sumber kebenaran, apa arti status-statusmu, atau apakah dia boleh menulis sesuatu.
+
+Jadi setiap MCP yang saya pasang mendapat file context di sebelahnya. `notion-context.md` menjelaskan board-nya, proses update-nya, dan apa yang tidak boleh dia sentuh.
+
+### Pertanyaan yang pertama kali ditanyakan orang
+
+Amankah memberi AI akses ke email kerja dan Slack-mu? Sepenuhnya tergantung scope-nya.
+
+Cara saya menanganinya: read-only di mana pun membaca sudah cukup. Tidak ada yang tersambung yang bisa mengirim keluar atau memindahkan uang tanpa langkah manusia. Apa pun yang rahasia klien tetap di luar vault pribadi.
+
+Layak diputuskan sebelum kamu menyambungkan, bukan sesudahnya.
+
+## Kapan harness itu berlebihan
+
+Sepanjang tulisan ini saya membela pendekatan ini. Ini sisi sebaliknya. Tiga biaya nyata.
+
+**Perawatan.** Context sekarang jadi sesuatu yang kamu miliki. File yang tidak pernah di-update jadi kebohongan yang percaya diri. Agent tidak akan memperingatkanmu bahwa sebuah angka sudah tiga bulan. Dia akan langsung memakainya.
+
+Context yang basi lebih buruk daripada tanpa context. Tanpa context, output-nya generik. Context yang basi membuat output-nya salah sambil terdengar spesifik.
+
+**File yang tetap terkini adalah file yang mencatat keputusan yang memang sudah kamu buat.**
+
+File campaign berhasil karena percakapan itu terjadi tiap bulan, entah ada agent yang membaca hasilnya atau tidak. Menuliskannya adalah satu-satunya langkah tambahan.
+
+File yang dibuat semata-mata untuk memberi makan agent, tanpa keputusan di baliknya, basi di minggu ketiga. Jadi sebelum menambah file, cek apakah ada sesuatu *di luar* harness yang memaksamu menjaganya tetap jujur. Kalau tidak ada, kamu sedang mendaftar untuk perawatan yang tidak akan kamu lakukan.
+
+**Overhead setup.** Untuk task sekali jalan, menulis file instruksi lebih mahal daripada mengerjakan task-nya. Harness terbayar di pekerjaan yang berulang: laporan mingguan, riset, dokumen klien yang rutin. Kalau kamu cuma akan mengerjakannya dua kali, cukup simpan di prompt.
+
+**Biaya token dan perhatian.** Lebih banyak context berarti lebih banyak token per run. Folder context yang terus tumbuh tanpa dipangkas mulai merusak output. Context engineering termasuk memutuskan apa yang dihapus.
+
+Aturan yang saya pakai: bangun harness saat pekerjaannya berulang *dan* context-nya cukup stabil untuk dituliskan. Selebihnya, cukup tulis prompt dengan baik.
+
+![Matriks dua kali dua. Sumbu vertikal: apakah ada keputusan di luar harness yang menjaga file tetap terkini. Sumbu horizontal: seberapa sering pekerjaannya berulang. Bangun harness ada di kanan atas.](/images/writing/from-prompt-to-harness-engineering/07-when-to-build.svg "Berulang saja tidak cukup.")
+
+Kuadran kanan bawah yang perlu diwaspadai. Pekerjaan yang berulang terasa seperti alasan paling jelas untuk membangun harness, dan memang begitu, sampai tidak ada lagi yang di luar harness yang memaksa context-nya tetap terkini. Dari situlah setup yang ditinggalkan berasal.
+
+## Mulai dari mana
+
+Jangan rancang seluruh sistemnya dulu. Kamu akan membangun struktur folder yang tidak pernah kamu pakai.
+
+Pilih satu task yang sudah kamu kerjakan tiap minggu. Lalu:
+
+1. Satu folder.
+2. Dua file: `<task>.md` untuk cara kamu ingin task itu dikerjakan, dan `<task>-output.md` untuk bentuk hasil yang kamu mau.
+3. Satu file flow yang menyebutkan urutannya.
+
+Jalankan. Celahnya langsung kelihatan, dan itu bukan celah yang kamu perkirakan. Perbaiki itu, lalu tambahkan file ketiga.
+
+Context yang lebih baik menghasilkan output yang lebih baik, tapi hanya kalau context-nya hidup. Itulah seluruh argumennya.
+
+Satu-satunya cara untuk tahu apakah ini berlaku untuk pekerjaanmu adalah menjalankan satu flow selama dua minggu.

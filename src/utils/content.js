@@ -11,7 +11,7 @@ import { createMdxComponents, slugify } from "@/components/mdx/MDXComponents";
 const CONTENT_DIR = path.join(process.cwd(), "content");
 const SHOW_DRAFTS = process.env.SHOW_DRAFTS === "1";
 const WORDS_PER_MINUTE = 200;
-const DEFAULT_LANG = "en";
+const DEFAULT_LANG = "en"; // a post file without a language suffix is English
 
 const bodyOf = (source) => source.replace(/^---[\s\S]*?---/, "");
 
@@ -47,11 +47,15 @@ function extractHeadings(source) {
   return headings;
 }
 
-async function compileFile(file, source) {
+// <slug>.<lang>.mdx, e.g. rag-mental-models.id.mdx. MDX labels (callouts, copy buttons)
+// follow the file's language, not the page's.
+const langOfFile = (file) => /\.([a-z]{2})\.mdx$/.exec(file)?.[1] || DEFAULT_LANG;
+
+async function compileFile(file, source, lang = langOfFile(file)) {
   const headings = extractHeadings(source);
   const { content, frontmatter } = await compileMDX({
     source,
-    components: createMdxComponents({ headings }),
+    components: createMdxComponents({ headings, lang }),
     options: {
       parseFrontmatter: true,
       // Straight quotes become typographic ones; the display font draws " as a closing quote.
@@ -84,7 +88,8 @@ function readMinutesOf(frontmatter, source) {
 
 function toPost({ file, source, content, frontmatter: fm, headings }) {
   // <slug>.<lang>.mdx, e.g. rag-mental-models.id.mdx
-  const [, slug, lang = DEFAULT_LANG] = /^(.+?)(?:\.([a-z]{2}))?\.mdx$/.exec(file);
+  const [, slug] = /^(.+?)(?:\.([a-z]{2}))?\.mdx$/.exec(file);
+  const lang = langOfFile(file);
   return {
     id: `${slug}.${lang}`,
     slug,
@@ -114,6 +119,7 @@ function toProject({ file, content, frontmatter: fm, headings }) {
   return {
     id: slug,
     slug,
+    lang: fm.lang || DEFAULT_LANG,
     title: smartQuotes(fm.title) || "Untitled Project",
     desc: smartQuotes(fm.description),
     outcome: smartQuotes(fm.outcome),
@@ -164,6 +170,23 @@ export async function getPost(slug, lang = DEFAULT_LANG) {
   return (await getPosts({ lang })).find((post) => post.slug === slug) || null;
 }
 
+// The list a reader of `lang` sees. Indonesian readers get every Indonesian post plus the
+// English posts not yet translated (marked by their own lang); English readers get English
+// posts only. Each post carries the language it will open in.
+export async function getWritingFor(lang) {
+  const all = await loadPosts();
+  if (lang === "en") return all.filter((post) => post.lang === "en");
+  const translated = new Set(all.filter((post) => post.lang === lang).map((post) => post.slug));
+  return all.filter((post) => post.lang === lang || (post.lang === "en" && !translated.has(post.slug)));
+}
+
+// Languages a post slug is published in, e.g. ["id", "en"]. Feeds hreflang and the toggle.
+export async function getPostLanguages() {
+  const map = {};
+  for (const post of await loadPosts()) (map[post.slug] ||= []).push(post.lang);
+  return map;
+}
+
 export async function getProjects() {
   return loadProjects();
 }
@@ -172,7 +195,8 @@ export async function getProject(slug) {
   return (await loadProjects()).find((project) => project.slug === slug) || null;
 }
 
-// content/about.<lang>.mdx holds the owner's own intro paragraph. Missing or draft: nothing renders.
+// content/about.<lang>.mdx holds the owner's own intro paragraph. Missing or draft: nothing
+// renders. Callers fall back to English while the Indonesian intro is a draft.
 export const getAboutIntro = cache(async (lang = DEFAULT_LANG) => {
   let source;
   try {

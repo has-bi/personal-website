@@ -2,13 +2,14 @@ import Image from "next/image";
 import { getAboutIntro, getProjects } from "@/utils/content";
 import { SectionLabel, Tag } from "@/components/ui/primitives";
 import { alternates, sectionNumbers } from "@/lib/site";
-import { CURRENT_ROLE, LEARNING_PATH, SOLUTION_STEPS, TEACHING_ROLE, TEACHING_TOPICS, TOOLS } from "./data";
+import { t } from "@/lib/i18n";
+import { aboutData } from "./data";
 
-export const metadata = {
-  title: "About",
-  description: "About Hasbi Hassadiqin, Solutions Architect at Cekat.AI, who writes notes on AI and automation.",
-  alternates: alternates("/about"),
-};
+export async function generateMetadata({ params }) {
+  const { lang } = await params;
+  const labels = t(lang).about;
+  return { title: labels.title, description: labels.description, alternates: alternates("/about", lang) };
+}
 
 function Band({ children, className = "" }) {
   return <section className={`band border-b border-hairline py-xxxl lg:py-section ${className}`}>{children}</section>;
@@ -24,7 +25,7 @@ function BandHead({ label, title }) {
 }
 
 // A role card beside a numbered list: used for the current role and for teaching.
-function RoleBlock({ label, role, items }) {
+function RoleBlock({ label, role, items, lang }) {
   return (
     <div className="flex flex-col gap-lg lg:flex-row lg:gap-xxl">
       <div className="flex flex-col gap-xs border border-hairline bg-surface p-lg lg:w-[400px] lg:shrink-0">
@@ -37,7 +38,7 @@ function RoleBlock({ label, role, items }) {
           <li key={item.title} className="flex min-h-11 items-center gap-md border-b border-hairline py-sm">
             <span className="t-mono-meta text-faint">{String(index + 1).padStart(2, "0")}</span>
             <span className="t-body-md flex-1 text-ink">{item.title}</span>
-            {item.topic ? <Tag topic={item.topic} /> : null}
+            {item.topic ? <Tag topic={item.topic} lang={lang} /> : null}
           </li>
         ))}
       </ol>
@@ -45,8 +46,14 @@ function RoleBlock({ label, role, items }) {
   );
 }
 
-export default async function AboutPage() {
-  const [intro, projects] = await Promise.all([getAboutIntro(), getProjects()]);
+export default async function AboutPage({ params }) {
+  const { lang } = await params;
+  const labels = t(lang).about;
+  const { CURRENT_ROLE, LEARNING_PATH, SOLUTION_STEPS, TEACHING_ROLE, TEACHING_TOPICS, TOOLS } = aboutData(lang);
+  const [ownIntro, projects] = await Promise.all([getAboutIntro(lang), getProjects()]);
+  // While the owner's intro has no published version in this language, show the English one.
+  const intro = ownIntro || (lang !== "en" ? await getAboutIntro("en") : null);
+  const introLang = !ownIntro && intro ? "en" : undefined;
   const n = sectionNumbers({ hasProjects: projects.length > 0 }).about;
 
   return (
@@ -54,9 +61,13 @@ export default async function AboutPage() {
       <Band>
         <div className="flex flex-col gap-lg lg:flex-row lg:gap-xxl">
           <div className="flex flex-1 flex-col gap-lg">
-            <SectionLabel>§ {n} · About</SectionLabel>
+            <SectionLabel>§ {n} · {labels.title}</SectionLabel>
             <h1 className="t-display-xl text-ink">/about</h1>
-            {intro ? <div className="intro-flow t-intro text-body">{intro}</div> : null}
+            {intro ? (
+              <div lang={introLang} className="intro-flow t-intro text-body">
+                {intro}
+              </div>
+            ) : null}
           </div>
           <div className="relative aspect-4/5 w-full overflow-hidden border border-hairline bg-surface-sunken lg:w-[360px] lg:shrink-0">
             <Image
@@ -73,21 +84,21 @@ export default async function AboutPage() {
 
       <Band>
         <div className="flex flex-col gap-lg lg:gap-xxl">
-          <BandHead label={`§ ${n}.1 · Work`} title="What I do" />
-          <RoleBlock label={`${CURRENT_ROLE.org} · ${CURRENT_ROLE.kind}`} role={CURRENT_ROLE} items={SOLUTION_STEPS} />
+          <BandHead label={`§ ${n}.1 · ${labels.work}`} title={labels.workTitle} />
+          <RoleBlock label={`${CURRENT_ROLE.org} · ${CURRENT_ROLE.kind}`} role={CURRENT_ROLE} items={SOLUTION_STEPS} lang={lang} />
         </div>
       </Band>
 
       <Band>
         <div className="flex flex-col gap-lg lg:gap-xxl">
-          <BandHead label={`§ ${n}.2 · Teaching`} title="What I teach" />
-          <RoleBlock label={`${TEACHING_ROLE.org} · ${TEACHING_ROLE.kind}`} role={TEACHING_ROLE} items={TEACHING_TOPICS} />
+          <BandHead label={`§ ${n}.2 · ${labels.teaching}`} title={labels.teachingTitle} />
+          <RoleBlock label={`${TEACHING_ROLE.org} · ${TEACHING_ROLE.kind}`} role={TEACHING_ROLE} items={TEACHING_TOPICS} lang={lang} />
         </div>
       </Band>
 
       <Band>
         <div className="flex flex-col gap-lg lg:gap-xxl">
-          <BandHead label={`§ ${n}.3 · Learning path`} title="How I learned it" />
+          <BandHead label={`§ ${n}.3 · ${labels.path}`} title={labels.pathTitle} />
           <ol className="border-t border-hairline">
             {LEARNING_PATH.map((item) => (
               <li key={item.title} className="flex flex-col gap-sm border-b border-hairline py-md lg:flex-row lg:items-center lg:gap-lg">
@@ -108,7 +119,7 @@ export default async function AboutPage() {
                   >
                     <Image
                       src={item.certificate}
-                      alt={`${item.title} certificate, ${item.place}`}
+                      alt={labels.certificate(item.title, item.place)}
                       fill
                       sizes="140px"
                       className="object-cover"
@@ -123,7 +134,7 @@ export default async function AboutPage() {
 
       <Band>
         <div className="flex flex-col gap-lg lg:gap-xxl">
-          <BandHead label={`§ ${n}.4 · Tools`} title="What I work with" />
+          <BandHead label={`§ ${n}.4 · ${labels.tools}`} title={labels.toolsTitle} />
           <div className="grid grid-cols-1 border-t border-hairline lg:grid-cols-3">
             {TOOLS.map((group, index) => (
               <div

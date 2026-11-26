@@ -1,6 +1,7 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import { ImageResponse } from "next/og";
+import { t } from "@/lib/i18n";
 
 // Open Graph cards in the lab-notebook style: white page, hairlines, mono label,
 // large title. Fonts are bundled TTFs so the build does not depend on the network.
@@ -9,7 +10,7 @@ export const OG_SIZE = { width: 1200, height: 630 };
 const FONT_DIR = path.join(process.cwd(), "src/lib/og-fonts");
 const LOGO = path.join(process.cwd(), "public/images/brand/logo-mark.svg");
 
-export async function renderOg({ label, title, accent }) {
+export async function renderOg({ label, title, accent, lang, footer = t(lang).site.tagline }) {
   const [sans, mono, logo] = await Promise.all([
     fs.readFile(path.join(FONT_DIR, "FunnelSans-Medium.ttf")),
     fs.readFile(path.join(FONT_DIR, "JetBrainsMono-Medium.ttf")),
@@ -36,7 +37,7 @@ export async function renderOg({ label, title, accent }) {
         <div
           style={{ ...monoText, display: "flex", justifyContent: "space-between", alignItems: "center", height: 80, padding: "0 64px", borderTop: "2px solid #ddd8ed", background: "#f8f6ff", color: "#5f5a72" }}
         >
-          <span>Notes on AI and automation</span>
+          <span>{footer}</span>
           <span style={{ color: "#201936" }}>hasbi.pro</span>
         </div>
       </div>

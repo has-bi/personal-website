@@ -1,8 +1,9 @@
-import { formatDate, SITE_NAME, SITE_URL, TOPICS, TYPES } from "@/lib/site";
+import { formatDate, SITE_NAME, SITE_URL } from "@/lib/site";
+import { localize, t } from "@/lib/i18n";
 
 // Turns a post's MDX into plain Markdown a reader can paste into an AI chat: site
 // components become Markdown, and relative links and images become absolute URLs.
-function toMarkdown(body) {
+function toMarkdown(body, callouts) {
   const absolute = (path) => (path.startsWith("/") ? `${SITE_URL}${path}` : path);
   const out = [];
   let inFence = false;
@@ -17,7 +18,7 @@ function toMarkdown(body) {
     const open = /^\s*<Callout\s+kind="([^"]*)"\s*>\s*(.*)$/.exec(line);
     if (open) {
       inCallout = true;
-      out.push(`> **${open[1]}**`);
+      out.push(`> **${callouts[open[1]] || open[1]}**`);
       if (open[2]) out.push(`> ${open[2].replace(/<\/Callout>\s*$/, "")}`);
       if (/<\/Callout>\s*$/.test(open[2])) inCallout = false;
       continue;
@@ -35,18 +36,21 @@ function toMarkdown(body) {
   return out.join("\n").replace(/\n{3,}/g, "\n\n").trim();
 }
 
+// The brief and labels follow the post's own language.
 export function buildAiContext(post) {
-  const url = `${SITE_URL}/writing/${post.slug}`;
+  const dict = t(post.lang);
+  const labels = dict.ai;
+  const url = `${SITE_URL}${localize(post.lang, `/writing/${post.slug}`)}`;
   const facts = [
-    `Author: ${post.author}`,
-    `Published: ${formatDate(post.date).replace(/ · /g, "-")}`,
-    `Type: ${TYPES[post.type]?.label || post.type}`,
-    post.topic ? `Topic: ${TOPICS[post.topic]?.label || post.topic}` : null,
-    `Source: ${url}`,
+    `${labels.author}: ${post.author}`,
+    `${labels.published}: ${formatDate(post.date).replace(/ · /g, "-")}`,
+    `${labels.type}: ${dict.types[post.type] || post.type}`,
+    post.topic ? `${labels.topic}: ${dict.topics[post.topic] || post.topic}` : null,
+    `${labels.source}: ${url}`,
   ].filter(Boolean);
 
   return [
-    `The article below is from ${SITE_NAME}'s site (${SITE_URL}). Use it as the source for our conversation: answer from what it says, say so when something is not covered, and quote it accurately.`,
+    labels.brief(SITE_NAME, SITE_URL),
     "",
     `# ${post.title}`,
     "",
@@ -55,7 +59,7 @@ export function buildAiContext(post) {
     "",
     "---",
     "",
-    toMarkdown(post.body),
+    toMarkdown(post.body, dict.mdx.callouts),
     "",
   ]
     .filter((line) => line !== null)

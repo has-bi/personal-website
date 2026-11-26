@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { t } from "@/lib/i18n";
 
 // Highlights the heading currently in view.
 function useActiveHeading(ids) {
@@ -50,12 +51,12 @@ function TocList({ headings, active }) {
 // Desktop: a quiet rail of numbered ticks so the body keeps the reader's attention.
 // The current section gets the long ink tick; a heading's title appears in a label
 // beside its tick on hover or keyboard focus.
-export function DesktopToc({ headings, children }) {
+export function DesktopToc({ headings, lang, label = t(lang).article.onThisPage, children }) {
   const active = useActiveHeading(headings.map((heading) => heading.id));
   return (
     <div className="sticky top-[88px] flex flex-col gap-lg">
       {headings.length ? (
-        <nav aria-label="On this page">
+        <nav aria-label={label}>
           <ol className="flex flex-col">
             {headings.map((heading, index) => {
               const current = heading.id === active;
@@ -94,13 +95,13 @@ export function DesktopToc({ headings, children }) {
 }
 
 // Mobile: the TOC collapses into an "ON THIS PAGE · 06 ↓" bar.
-export function MobileToc({ headings }) {
+export function MobileToc({ headings, lang, label = t(lang).article.onThisPage }) {
   if (!headings.length) return null;
   return (
-    <details aria-label="On this page" className="group border-y border-hairline lg:hidden">
+    <details aria-label={label} className="group border-y border-hairline lg:hidden">
       <summary className="band t-mono-label flex min-h-12 cursor-pointer list-none items-center justify-between text-ink [&::-webkit-details-marker]:hidden">
         <span>
-          On this page · {String(headings.length).padStart(2, "0")}
+          {label} · {String(headings.length).padStart(2, "0")}
         </span>
         <span aria-hidden="true" className="transition-transform group-open:rotate-180">
           ↓

@@ -1,0 +1,181 @@
+---
+title: "Masalahnya Sudah Ketemu. Tapi, Perlu AI untuk Menyelesaikannya?"
+date: "2026-10-28"
+type: note
+topic: ai
+lang: id
+excerpt: "Lima pertanyaan yang perlu kamu jawab sebelum membangun apa pun, dibahas lewat program membership sungguhan di sebuah coffee shop. Kadang jawabannya sama sekali bukan AI."
+tags: [AI, Automation, Problem Solving]
+cover: "/images/writing/do-you-even-need-ai/cover.webp"
+coverAlt: "Lintasan conveyor isometrik dengan bola putih di sebuah tikungan, kotak terbuka di satu ujung, dan mesin ungu dengan gantry di atas sabuknya di ujung lain."
+draft: true
+---
+
+Di [tulisan sebelumnya](/writing/where-to-start-learning-ai), kita memakai AI untuk menemukan akar masalah. Terus, sekarang apa?
+
+Kebanyakan orang langsung lompat ke "ayo bikin AI untuk ini." Saya paham. Membangun itu bagian yang paling seru. Tapi dari pengalaman saya, banyak masalah yang sebenarnya tidak butuh AI sama sekali. Kadang solusinya SOP yang lebih baik. Kadang cukup form sederhana. Dan kadang kamu memang perlu membangun sesuatu.
+
+Jadi, bagaimana cara memutuskannya? Saya mengajukan lima pertanyaan, dengan urutan ini. Saya akan membahasnya dengan contoh nyata: program membership yang saya bangun untuk [Abay Coffee and Listening Bar](https://abay-coffee.vercel.app/), coffee shop yang ikut saya kelola. Setiap kali kamu melihat kotak **Di Abay**, itu contohnya. Sisanya berlaku untuk masalah apa pun.
+
+## Masalahnya
+
+Abay punya data penjualan dari **POS** (point of sale): aplikasi kasir yang mencatat setiap pesanan dan pembayaran. Tapi data itu hanya per transaksi. Kami tidak tahu **siapa** yang membeli, berapa biasanya mereka belanja, atau kapan mereka datang lagi. Tanpa itu, kami tidak bisa merencanakan promo atau menu baru berdasarkan pelanggan yang sebenarnya. Itulah akar masalahnya.
+
+Ada juga satu kondisi yang harus kami terima: paket POS yang kami langgani **tidak punya API**. API adalah pintu yang memungkinkan aplikasi lain membaca data secara langsung. Saya tahu teman-teman yang paham teknis sudah berpikir, "Kenapa tidak pakai API saja?" Memang tidak ada. Kondisi ini memengaruhi hampir semua keputusan di bawah.
+
+Jadi tujuannya jelas: mengenal pelanggan kami. Pertanyaannya, bagaimana caranya.
+
+## 1. Bisakah disederhanakan dulu?
+
+Sebelum memikirkan teknologi, tanya dulu apakah ada cara yang lebih sederhana. SOP yang lebih baik, sebuah form, sebuah kebiasaan. Kadang itu saja sudah cukup.
+
+<Callout kind="Di Abay">
+
+Kami melihat dua opsi sederhana:
+
+- **Spreadsheet manual di kasir.** Barista butuh perangkat yang layak, setiap entri bakal berbeda-beda bentuknya, dan mengetik data bukan tugas mereka. Tugas mereka adalah melayani tamu.
+- **Kartu stempel.** Kebanyakan pelanggan lupa membawa kartunya. Juga boros kertas, dan biaya cetaknya tidak murah.
+
+</Callout>
+
+Kedua opsi gagal karena alasan yang sama: **pekerjaannya jatuh ke orang yang salah.** Jadi saat menilai solusi yang "sederhana", jangan cuma tanya "apakah ini mudah?" Tanyakan **"mudah untuk siapa?"**
+
+Kalau tidak ada opsi sederhana yang berhasil, pertanyaan berikutnya adalah apakah masalah ini layak dapat solusi yang lebih besar.
+
+## 2. Apakah layak diselesaikan?
+
+Lihat empat hal:
+
+- **Frekuensi.** Seberapa sering terjadi?
+- **Waktu per kejadian.** Berapa lama setiap kali terjadi?
+- **Jangkauan.** Siapa yang terdampak?
+- **Risiko kalau gagal.** Apa yang terjadi kalau solusimu gagal?
+
+Lalu tanyakan juga kebalikannya: **apa risikonya kalau proses manualnya yang gagal?** Tugas kecil tetap bisa mahal kalau lupa mengerjakannya merugikan seseorang.
+
+<Callout kind="Di Abay">
+
+- **Frekuensi:** setiap hari. Pelanggan selalu ada.
+- **Waktu per kejadian:** sekitar dua menit sehari, untuk mengekspor data pelanggan dari POS dan menggantinya di spreadsheet secara manual.
+- **Jangkauan:** owner dan pelanggan.
+- **Risiko kalau solusinya gagal:** satu transaksi tidak tercatat, dan itu bisa diperbaiki di POS.
+- **Risiko kalau proses manualnya gagal:** update harian tidak boleh terlupa sama sekali. Kalau terlupa, pelanggan tidak bisa menukar poin mereka di kasir.
+
+</Callout>
+
+Empat hal ini juga memberi tahu seperti apa keberhasilan itu, jadi tuliskan sebelum kamu membangun. Mulai dari baseline, seperti daftar tugas dan waktunya dari tulisan pertama. Lalu tentukan apa yang akan kamu ukur.
+
+<Callout kind="Di Abay">
+
+Yang kami putuskan untuk diukur:
+
+- Berapa banyak pelanggan yang terdaftar.
+- Berapa banyak transaksi berulang yang terhubung ke seorang pelanggan.
+- Berapa lama waktu yang dibutuhkan untuk update harian.
+
+</Callout>
+
+Dan atur ekspektasimu. Setiap perubahan pasti menemui penolakan di awal. Itu normal, dan bukan berarti solusimu gagal. Tentukan berapa lama orang butuh waktu untuk terbiasa, dan tingkat keberhasilan berapa yang sudah cukup baik.
+
+Kalau masalahnya layak diselesaikan, langkah berikutnya adalah menjabarkan solusinya.
+
+## 3. Seperti apa solusinya kalau dikerjakan manual?
+
+Lupakan tools sejenak. Kalau satu orang mengerjakan ini secara manual setiap hari, apa yang akan dia lakukan? Tuliskan langkah-langkahnya. Belum ada keputusan teknologi di sana. Justru itu intinya: sekarang kamu tahu persis apa yang harus dikerjakan oleh tool apa pun.
+
+<Callout kind="Di Abay">
+
+1. Ekspor data pelanggan dari POS.
+2. Masukkan ke spreadsheet yang berfungsi sebagai database pelanggan.
+3. Biarkan pelanggan mengecek poin mereka dan barista menukarkannya, berdasarkan spreadsheet itu.
+
+</Callout>
+
+## 4. Bangun sendiri atau beli?
+
+Sekarang cek apakah sudah ada tool yang bisa melakukan ini. Kalau masalahnya personal atau spesifik untukmu, saya cenderung membangun sendiri. Kamu belajar banyak di sepanjang jalan, dan pembelajaran itu terus bertambah nilainya. Kalau masalahnya ada di level tim atau perusahaan, keputusan bangun atau beli perlu dipikirkan jauh lebih hati-hati.
+
+Bahkan untuk masalah personal, luangkan sepuluh menit untuk mengecek apakah sudah ada tool yang menyelesaikannya. Bangunlah karena kamu memilih untuk itu, bukan karena kamu tidak mencari.
+
+<Callout kind="Di Abay">
+
+- Solusinya butuh data dari POS, dan POS tidak punya API di paket kami.
+- Aplikasi loyalty tidak bisa terhubung ke sana.
+- Upgrade POS hanya demi program loyalty tidak masuk akal secara finansial.
+
+Jadi kami membangun sesuatu di sekitar apa yang sudah ada.
+
+</Callout>
+
+## 5. Bentuknya seperti apa?
+
+Lihat lagi langkah-langkah manualnya. Kalau seseorang harus mengerjakannya berulang-ulang, di situlah sebuah solusi berubah bentuk. Bukan sebelumnya.
+
+Untuk memilih bentuknya, ajukan dua pertanyaan tentang langkah-langkah itu:
+
+- **Apakah berulang?** Atau hanya muncul sesekali?
+- **Apakah butuh pertimbangan?** Aturan yang jelas berarti input yang sama selalu menghasilkan tindakan yang sama. Pertimbangan berarti seseorang harus membaca, menafsirkan, atau memutuskan.
+
+![Grid dua kali dua. Jarang dan aturannya jelas: SOP atau checklist. Jarang dan butuh pertimbangan: AI sebagai teman ngobrol. Berulang dan aturannya jelas: automation, ditandai untuk Abay. Berulang dan butuh pertimbangan: AI plus automation. Di bawahnya: kalau seseorang perlu melihat atau menindaklanjuti hasilnya, tambahkan interface.](/images/writing/do-you-even-need-ai/matrix.webp)
+
+Lalu satu pertanyaan lagi: **apakah ada yang perlu melihat hasilnya atau menindaklanjutinya?** Kalau ya, solusinya juga butuh interface, seperti dashboard, halaman, atau notifikasi.
+
+<Callout kind="Di Abay">
+
+- Setiap langkah berulang setiap hari dan mengikuti aturan yang jelas. Jadi bentuknya adalah **automation, bukan AI**.
+- Ada dua kelompok orang yang menindaklanjuti datanya. Jadi ada **dua interface**: halaman member tempat pelanggan mengecek poin, dan halaman staf tempat barista menukarkannya.
+
+</Callout>
+
+Saya tidak langsung melihat itu. Pertanyaan pertama saya ke AI adalah: "Bisakah AI agent login ke POS dan download laporannya untuk saya setiap hari?" Jawabannya mengejutkan saya. Ya, bisa, tapi sebaiknya jangan. AI agent bisa memberi hasil yang sedikit berbeda di setiap run, dan bisa salah klik. Sebuah script menjalankan langkah yang persis sama setiap kali. Jadi sarannya: **pakai AI untuk menulis script-nya, bukan untuk menjalankan tugasnya setiap hari.**
+
+![Sebuah chat saat saya bertanya ke AI, dalam bahasa Indonesia, cara otomatis download laporan dari POS tanpa API lalu upload ke Google Drive. Jawabannya merekomendasikan script Playwright yang berjalan terjadwal, dengan AI dipakai untuk menulis script-nya.](/images/writing/do-you-even-need-ai/pos-initial-chat.webp "Pertanyaan pertama saya ke AI, dalam bahasa Indonesia. Jawaban singkatnya: bisa, tapi pakai script saja.")
+
+Kalau digabungkan, setup akhirnya seperti ini. Sebuah browser automation (Playwright) login ke POS, mengekspor data pelanggan, dan upload ke Google Drive. Setiap pagi sebelum toko buka, Google Apps Script memperbarui spreadsheet pelanggan. Kedua halaman membaca dari spreadsheet itu.
+
+![Setiap pagi: data POS diekspor oleh Playwright, disimpan ke Google Drive, lalu dimuat oleh Apps Script ke spreadsheet pelanggan. Pelanggan mengecek poin mereka di website dan barista menukarkannya di halaman staf.](/images/writing/do-you-even-need-ai/system-flow.webp)
+
+## Setelah diluncurkan
+
+Penolakan yang sudah saya perkirakan di langkah 2 muncul dengan cepat.
+
+<Callout kind="Di Abay">
+
+- **Barista tidak tahu cara menukarkan poin.** Jadi saya buat halaman staf hanya melakukan dua hal: mengecek poin pelanggan, dan menukarkan promo yang tersedia. Promo yang sudah ditukar tidak bisa dipakai lagi.
+- **Sebagian pelanggan tidak mau memberikan nomor HP mereka.** Jadi sekarang mereka bisa mendaftar pakai email.
+
+</Callout>
+
+Tidak satu pun dari masalah itu berarti solusinya gagal. Keduanya tanda bahwa masih ada sesuatu yang terlalu sulit bagi seseorang. Setiap kali, jawabannya adalah membuatnya lebih sederhana.
+
+Setelah satu bulan, ini angka-angka yang sejak awal kami bilang akan kami ukur:
+
+<Callout kind="Di Abay · satu bulan">
+
+- **Semua** transaksi berulang terhubung ke seorang pelanggan.
+- Update harian butuh **0 detik**, bukan lagi 2 menit.
+- **50+** pelanggan terdaftar. Sebelumnya, nol.
+
+</Callout>
+
+Waktu yang dihemat justru kemenangan paling kecil di sini. Yang lebih besar: tidak ada lagi yang harus mengingat tugas harian, dan toko sekarang punya data pelanggan yang sebelumnya memang tidak ada. **Sebagian solusi menghemat waktu. Solusi terbaik membuat sesuatu yang dulu tidak mungkin jadi mungkin.**
+
+![Tiga kemenangan, dari yang terkecil sampai terbesar: hemat dua menit sehari, tidak ada lagi tugas harian yang harus diingat, dan dari nol ke lebih dari 50 pelanggan terdaftar dalam satu bulan.](/images/writing/do-you-even-need-ai/value.webp)
+
+## Jadi, di mana posisi AI?
+
+Lihat lagi setup akhirnya: tidak ada AI di dalamnya. Tapi saya memakai AI di setiap langkah untuk sampai ke sana. AI membantu saya brainstorming masalahnya, mengeksplorasi solusi, membuat prototype cepat, dan menulis kode akhirnya.
+
+Itulah pergeseran yang terus saya lihat. **AI tidak harus ada di dalam solusimu. AI bisa jadi yang membantumu membangunnya.** Hambatan untuk membangun tools sendiri jauh lebih rendah dibanding dulu, jadi menyelesaikan masalahmu sendiri sekarang jadi pilihan yang nyata untuk satu orang, bukan cuma untuk tim engineer.
+
+## Checklist kamu
+
+Sebelum membangun apa pun, tanyakan:
+
+1. Bisakah saya menyederhanakannya dulu? Mudah untuk siapa?
+2. Apakah layak diselesaikan? Apa baseline saya, dan apa yang akan saya ukur?
+3. Seperti apa solusinya kalau saya kerjakan manual?
+4. Bangun sendiri atau beli?
+5. Bentuknya seperti apa? SOP, AI, automation, atau AI + automation? Apakah ada yang butuh interface?
+
+Di tulisan berikutnya, saya akan menulis tentang bagian membangunnya, dan kenapa sebagian besar percobaan awal saya gagal.

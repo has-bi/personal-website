@@ -1,36 +1,33 @@
 import Image from "next/image";
 import Link from "next/link";
-import { getAboutIntro, getPosts, getProjects } from "@/utils/content";
+import { getAboutIntro, getPosts, getProjects, getWritingFor } from "@/utils/content";
 import { ButtonGhost, ButtonPrimary, SectionHead, SectionLabel } from "@/components/ui/primitives";
 import { PostRow, PostTableHeader } from "@/components/ui/PostRow";
 import { ProjectGrid } from "@/components/ui/ProjectCard";
-import { CURRENT_ROLE, LEARNING_PATH, TEACHING_ROLE } from "@/app/about/data";
+import { aboutData } from "@/app/[lang]/about/data";
 import { alternates, sectionNumbers } from "@/lib/site";
+import { localize, otherLocale, t } from "@/lib/i18n";
 
-export const metadata = { alternates: alternates("/") };
+export async function generateMetadata({ params }) {
+  const { lang } = await params;
+  return { alternates: alternates("/", lang) };
+}
 
-// /start router rows. A row is hidden while its destination has no published post.
-const ROUTES = [
-  {
-    you: "New to AI and LLMs",
-    start: "Mental models before code",
-    href: "/writing?topic=ai",
-    has: (posts) => posts.some((post) => post.topic === "ai"),
-  },
-  {
-    you: "Want to automate a real workflow",
-    start: "Step-by-step automation tutorials",
-    href: "/writing?topic=automation",
-    has: (posts) => posts.some((post) => post.topic === "automation"),
-  },
-  {
-    you: "Lebih nyaman baca Bahasa Indonesia",
-    start: "Semua tulisan versi Indonesia",
-    href: "/writing?lang=id",
-    lang: "id",
-    has: (_, idPosts) => idPosts.length > 0,
-  },
-];
+// /start router rows. A row is hidden while its destination has no published post. The
+// last row leads to the other language and is written in that language.
+function routesFor(lang, posts, otherPosts) {
+  const { routes } = t(lang).home;
+  const other = otherLocale(lang);
+  return [
+    { ...routes.ai, href: localize(lang, "/writing?topic=ai"), show: posts.some((post) => post.topic === "ai") },
+    {
+      ...routes.automation,
+      href: localize(lang, "/writing?topic=automation"),
+      show: posts.some((post) => post.topic === "automation"),
+    },
+    { ...routes.other, href: localize(other, "/writing"), lang: other, show: otherPosts.length > 0 },
+  ].filter((route) => route.show);
+}
 
 function HeroGridLines() {
   return (
@@ -44,40 +41,39 @@ function HeroGridLines() {
   );
 }
 
-function Hero() {
+function Hero({ lang, role }) {
+  const labels = t(lang).home;
   return (
     <section className="band relative border-b border-hairline py-xxxl lg:py-section">
       <HeroGridLines />
       <div className="relative flex flex-col gap-lg lg:flex-row lg:gap-xl">
         <div className="flex flex-1 flex-col gap-lg">
-          <SectionLabel>§ 00 · Index</SectionLabel>
+          <SectionLabel>§ 00 · {t(lang).nav.index}</SectionLabel>
           <h1 className="t-display-xl">
-            <span className="block text-ink">Notes on AI</span>
-            <span className="block text-accent">& automation.</span>
+            <span className="block text-ink">{labels.hero[0]}</span>
+            <span className="block text-accent">{labels.hero[1]}</span>
           </h1>
         </div>
         <div className="flex flex-col gap-lg lg:w-[360px] lg:shrink-0 lg:justify-end">
-          <SectionLabel>Abstract</SectionLabel>
-          <p className="t-body-md text-body">
-            Plain-language notes on LLMs, RAG and workflow automation, from finding the real problem to
-            choosing the solution. By Hasbi Hassadiqin, {CURRENT_ROLE.title} at {CURRENT_ROLE.org}.
-          </p>
-          <ButtonPrimary href="/writing">Start reading</ButtonPrimary>
+          <SectionLabel>{labels.abstract}</SectionLabel>
+          <p className="t-body-md text-body">{labels.abstractText(role.title, role.org)}</p>
+          <ButtonPrimary href={localize(lang, "/writing")}>{labels.startReading}</ButtonPrimary>
         </div>
       </div>
     </section>
   );
 }
 
-function StartHere({ routes }) {
+function StartHere({ routes, lang }) {
+  const labels = t(lang).home;
   return (
     <section className="band flex flex-col gap-lg border-b border-hairline py-xxxl lg:gap-xxl lg:py-section">
-      <SectionHead label="§ 00.1 · Start here" heading="/start" />
+      <SectionHead label={`§ 00.1 · ${labels.startHere}`} heading="/start" />
       <div className="border border-hairline bg-surface">
         <div aria-hidden="true" className="hidden gap-lg border-b border-hairline-strong px-lg py-sm lg:flex">
-          <span className="t-mono-label flex-1 text-faint">01 · You are</span>
-          <span className="t-mono-label flex-1 text-faint">02 · Start with</span>
-          <span className="t-mono-label w-[280px] text-faint">03 · Leads to</span>
+          <span className="t-mono-label flex-1 text-faint">01 · {labels.youAre}</span>
+          <span className="t-mono-label flex-1 text-faint">02 · {labels.startWith}</span>
+          <span className="t-mono-label w-[280px] text-faint">03 · {labels.leadsTo}</span>
         </div>
         <ul>
           {routes.map((route) => (
@@ -103,51 +99,55 @@ function StartHere({ routes }) {
   );
 }
 
-function LatestWriting({ posts }) {
+function LatestWriting({ posts, lang }) {
+  const labels = t(lang).home;
+  const href = localize(lang, "/writing");
   return (
     <section className="band flex flex-col gap-lg border-b border-hairline py-xxxl lg:gap-xxl lg:py-section">
       <SectionHead
-        label="§ 01 · Writing"
+        label={`§ 01 · ${t(lang).nav.writing}`}
         heading="/writing"
         more={
-          <ButtonGhost href="/writing" bare>
-            All entries
+          <ButtonGhost href={href} bare>
+            {labels.allEntries}
           </ButtonGhost>
         }
       />
       <div>
-        <PostTableHeader />
+        <PostTableHeader lang={lang} />
         <ul className="border-t border-hairline lg:border-t-0">
           {posts.slice(0, 3).map((post) => (
-            <PostRow key={post.id} post={post} />
+            <PostRow key={post.id} post={post} lang={lang} />
           ))}
         </ul>
       </div>
-      <ButtonGhost href="/writing" className="justify-center lg:hidden">
-        All entries
+      <ButtonGhost href={href} className="justify-center lg:hidden">
+        {labels.allEntries}
       </ButtonGhost>
     </section>
   );
 }
 
-function LatestProjects({ projects }) {
+function LatestProjects({ projects, lang }) {
+  const href = localize(lang, "/projects");
   return (
     <section className="band flex flex-col gap-lg border-b border-hairline py-xxxl lg:gap-xxl lg:py-section">
       <SectionHead
-        label="§ 02 · Projects"
+        label={`§ 02 · ${t(lang).nav.projects}`}
         heading="/projects"
         more={
-          <ButtonGhost href="/projects" bare>
-            All projects
+          <ButtonGhost href={href} bare>
+            {t(lang).home.allProjects}
           </ButtonGhost>
         }
       />
-      <ProjectGrid projects={projects.slice(0, 3)} />
+      <ProjectGrid projects={projects.slice(0, 3)} lang={lang} />
     </section>
   );
 }
 
-function AboutSplit({ intro, number }) {
+function AboutSplit({ intro, introLang, number, lang, about }) {
+  const { CURRENT_ROLE, TEACHING_ROLE, LEARNING_PATH } = about;
   const rows = [
     { when: CURRENT_ROLE.kind, what: CURRENT_ROLE.title, where: CURRENT_ROLE.org },
     { when: TEACHING_ROLE.kind, what: TEACHING_ROLE.title, where: TEACHING_ROLE.org },
@@ -167,8 +167,12 @@ function AboutSplit({ intro, number }) {
           />
         </div>
         <div className="flex flex-1 flex-col gap-lg lg:gap-xl">
-          <SectionLabel>§ {number} · About</SectionLabel>
-          {intro ? <div className="intro-flow t-intro text-ink">{intro}</div> : null}
+          <SectionLabel>§ {number} · {t(lang).nav.about}</SectionLabel>
+          {intro ? (
+            <div lang={introLang !== lang ? introLang : undefined} className="intro-flow t-intro text-ink">
+              {intro}
+            </div>
+          ) : null}
           <ul className="border-t border-hairline">
             {rows.map((row) => (
               <li
@@ -184,8 +188,8 @@ function AboutSplit({ intro, number }) {
               </li>
             ))}
           </ul>
-          <ButtonGhost href="/about" bare className="-ml-lg self-start">
-            Full story
+          <ButtonGhost href={localize(lang, "/about")} bare className="-ml-lg self-start">
+            {t(lang).home.fullStory}
           </ButtonGhost>
         </div>
       </div>
@@ -193,25 +197,35 @@ function AboutSplit({ intro, number }) {
   );
 }
 
-export default async function Home() {
-  const [posts, idPosts, projects, intro] = await Promise.all([
-    getPosts({ lang: "en" }),
-    getPosts({ lang: "id" }),
+export default async function Home({ params }) {
+  const { lang } = await params;
+  const [posts, otherPosts, projects, ownIntro] = await Promise.all([
+    getWritingFor(lang),
+    getPosts({ lang: otherLocale(lang) }),
     getProjects(),
-    getAboutIntro(),
+    getAboutIntro(lang),
   ]);
-  const routes = ROUTES.filter((route) => route.has(posts, idPosts));
+  // The Indonesian intro may still be a draft: show the English one until it is published.
+  const fallback = !ownIntro && lang !== "en" ? await getAboutIntro("en") : null;
+  const routes = routesFor(lang, posts, otherPosts);
   const sections = sectionNumbers({ hasProjects: projects.length > 0 });
+  const about = aboutData(lang);
 
   return (
     <>
-      <Hero />
-      {routes.length ? <StartHere routes={routes} /> : null}
+      <Hero lang={lang} role={about.CURRENT_ROLE} />
+      {routes.length ? <StartHere routes={routes} lang={lang} /> : null}
       {/* The /writing band stays hidden until at least two posts are published. */}
-      {posts.length >= 2 ? <LatestWriting posts={posts} /> : null}
+      {posts.length >= 2 ? <LatestWriting posts={posts} lang={lang} /> : null}
       {/* The /projects band stays hidden while no project is published. */}
-      {projects.length ? <LatestProjects projects={projects} /> : null}
-      <AboutSplit intro={intro} number={sections.about} />
+      {projects.length ? <LatestProjects projects={projects} lang={lang} /> : null}
+      <AboutSplit
+        intro={ownIntro || fallback}
+        introLang={ownIntro ? lang : "en"}
+        number={sections.about}
+        lang={lang}
+        about={about}
+      />
     </>
   );
 }
