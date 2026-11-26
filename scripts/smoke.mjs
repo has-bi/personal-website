@@ -64,6 +64,10 @@ const checks = [
   ["/id/writing", 308],
   ["/this-page-does-not-exist", 404],
   ["/en/this-page-does-not-exist", 404],
+  // Not checked here: a missing slug under a root (Indonesian) dynamic route such as
+  // /writing/nope. Under `next start` it renders Next's bare error shell after the
+  // middleware rewrite; on Vercel it renders the site's 404 (checked 2026-11-26 on the
+  // preview). Check it on the Vercel preview when routing changes.
 ];
 
 // A 404 must be the site's own page (nav, footer, /404 heading), not Next's bare default.
