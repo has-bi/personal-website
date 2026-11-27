@@ -48,49 +48,62 @@ function routesFor(lang, posts, otherPosts) {
   ].filter((route) => route.show);
 }
 
-// hero-band: fits one screen (viewport minus the sticky nav: 56px mobile, 64px from lg)
-// and shows the whole photo. The photo is full width and pinned to the bottom of the
-// hero, behind the text; when it is taller than the hero, only its transparent sky goes
-// above the top edge (clipped), so the hills and both figures always show in full. On
-// short screens the abstract and the call to action overlap the hills (owner's call:
-// the photo fitting one screen comes first). The photo's bottom edge fades into the page.
-// Behind both, an ASCII rain (AsciiRain) falls through the transparent sky.
+// hero-band: fits one screen (viewport minus the sticky nav: 56px mobile, 64px from lg).
+// The photo (a person and a figure with a CRT monitor for a head on green hills; the far
+// hills are still drawn in binary, the world rendering into reality) fills the hero,
+// anchored to its top so the pale sky holds the text and both figures stay in view; its
+// bottom edge fades into the page. The hero is a light surface in both themes
+// (data-surface="light"): the sky is pale, so the text, button and ASCII rain use the
+// light tokens, over a light haze that keeps the text readable where it overlaps the
+// hills. The rain falls over the sky and fades out before the figures.
 const HERO_IMAGE = {
-  src: "/images/hero-archive-v1.webp",
+  src: "/images/hero-render-v2.webp",
   width: 3840,
-  height: 2171,
+  height: 2143,
 };
 
 function Hero({ lang, role }) {
   const labels = t(lang).home;
   return (
-    <section className="relative h-[calc(100svh-3.5rem)] min-h-[560px] overflow-hidden lg:h-[calc(100svh-4rem)] lg:min-h-[640px]">
-      {/* Background: ASCII rain falling into the hills (it shows through the photo's
-          transparent sky). Dimmed behind the headline so the text stays easy to read. */}
-      <AsciiRain className="absolute inset-0 size-full [mask-image:radial-gradient(ellipse_45%_40%_at_50%_28%,rgba(0,0,0,0.15),black)]" />
+    <section
+      data-surface="light"
+      className="relative h-[calc(100svh-3.5rem)] min-h-[560px] overflow-hidden lg:h-[calc(100svh-4rem)] lg:min-h-[640px]"
+    >
       <Image
         src={HERO_IMAGE.src}
-        width={HERO_IMAGE.width}
-        height={HERO_IMAGE.height}
         alt={labels.heroAlt}
+        fill
         priority
         sizes="100vw"
-        className="absolute inset-x-0 bottom-0 block h-auto w-full [mask-image:linear-gradient(to_bottom,black_80%,transparent)]"
+        className="object-cover object-top [mask-image:linear-gradient(to_bottom,black_82%,transparent)]"
       />
+      {/* Light haze behind the text: the photo's sky is only its top fifth, so the abstract
+          would sit on the hills. 92% canvas at the top, 75% at 40%, clear by 62%, before the
+          figures. Measured: headline 5.2:1, abstract 8.3:1 or better at 375 to 1903px. */}
+      <div
+        aria-hidden="true"
+        className="absolute inset-0 bg-[linear-gradient(to_bottom,color-mix(in_srgb,var(--color-canvas)_92%,transparent),color-mix(in_srgb,var(--color-canvas)_75%,transparent)_40%,transparent_62%)]"
+      />
+      {/* ASCII rain over the sky: faded out by 55% of the height, before the figures, and
+          dimmed behind the headline. */}
+      <div className="absolute inset-0 [mask-image:linear-gradient(to_bottom,black_25%,transparent_55%)]">
+        <AsciiRain className="size-full [mask-image:radial-gradient(ellipse_45%_40%_at_50%_28%,rgba(0,0,0,0.15),black)]" />
+      </div>
 
       <div className="band relative z-10 flex flex-col items-center gap-md pt-xl text-center lg:gap-lg lg:pt-xxl">
         <h1 className="t-hero">
           <span className="block text-faint">{labels.hero[0]}</span>
           <span className="block text-ink">{labels.hero[1]}</span>
         </h1>
-        <p className="t-body-md max-w-[70ch] text-muted">
+        <p className="t-body-md max-w-[70ch] text-body">
           {labels.abstractText(role.title, role.org)}
         </p>
         <div className="flex flex-col items-center gap-xs pt-xs">
           <ButtonPrimary href={localize(lang, "/writing")}>
             {labels.startReading}
           </ButtonPrimary>
-          <p className="t-meta flex items-center gap-xs text-muted">
+          {/* Its own light pill: on small screens the note sits below the haze, on the hills. */}
+          <p className="t-meta flex items-center gap-xs rounded-pill bg-canvas/80 px-sm py-xxs text-body">
             <span aria-hidden="true">•</span>
             {labels.heroNote}
           </p>

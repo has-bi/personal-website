@@ -50,7 +50,7 @@ const en = {
     // Two tones: [muted, ink]. Placeholder until the owner writes the new headline.
     hero: ["Notes on", "AI & automation."],
     heroNote: "Free to read, no sign-up",
-    heroAlt: "A person sits cross-legged on a green hill next to a figure made of ASCII characters.",
+    heroAlt: "A person and a figure with an old computer monitor for a head sit side by side on green hills, looking at distant hills still drawn in binary code.",
     abstract: "Abstract",
     abstractText: (role, org) =>
       `Plain-language notes on LLMs, RAG and workflow automation, from finding the real problem to choosing the solution. By Hasbi Hassadiqin, ${role} at ${org}.`,
@@ -231,7 +231,7 @@ const id = {
     // Two tones: [muted, ink]. Placeholder until the owner writes the new headline.
     hero: ["Catatan tentang", "AI & otomasi."],
     heroNote: "Gratis dibaca, tanpa daftar",
-    heroAlt: "Seseorang duduk bersila di bukit hijau, di samping sosok yang tersusun dari karakter ASCII.",
+    heroAlt: "Seseorang dan sosok berkepala monitor komputer lama duduk berdampingan di bukit hijau, memandang bukit di kejauhan yang masih tergambar dalam kode biner.",
     abstract: "Abstrak",
     abstractText: (role, org) =>
       `Catatan berbahasa sederhana tentang LLM, RAG, dan otomasi alur kerja, dari menemukan masalah yang sebenarnya sampai memilih solusinya. Oleh Hasbi Hassadiqin, ${role} di ${org}.`,

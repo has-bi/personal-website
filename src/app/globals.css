@@ -48,6 +48,28 @@
   --container-content: 1280px;
 }
 
+/* Light scope: a surface that stays light in both themes, such as the hero photo with its
+   pale sky. Inside it the light tokens apply even when the page is dark. Keep in step
+   with @theme above. */
+[data-surface="light"] {
+  color-scheme: light;
+  --color-primary: #201936;
+  --color-primary-active: #140f24;
+  --color-accent: #6840c8;
+  --color-accent-active: #5333a0;
+  --color-ink: #201936;
+  --color-body: #403954;
+  --color-muted: #5f5a72;
+  --color-faint: #6c667e;
+  --color-canvas: #ffffff;
+  --color-surface: #f8f6ff;
+  --color-surface-sunken: #e6e3f3;
+  --color-hairline: #ddd8ed;
+  --color-on-primary: #ffffff;
+  --color-focus-ring: #6840c8;
+  color: var(--color-ink);
+}
+
 /* Dark theme: the default (redesign v2, 2026-11-27). <html data-theme="dark"> is set on the
    server; the theme toggle switches to "light" and remembers it. Only the colour tokens
    change, so every utility (bg-canvas, text-ink, ...) follows. Contrast on canvas: ink

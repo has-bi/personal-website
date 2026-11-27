@@ -6,7 +6,7 @@ import { useEffect, useRef } from "react";
 // The glyphs are the ones the hero photo's ASCII figure is made of. Each column is a drop
 // with a bright head (ink) and a tail that fades out (faint); characters belong to grid
 // cells, so a tail reads as a steady streak rather than flicker. Colours come from the
-// theme tokens and follow the theme toggle. The animation pauses when the hero is off
+// theme tokens at the canvas (so a light scope applies) and follow the theme toggle. The animation pauses when the hero is off
 // screen or the tab is hidden, and draws one still frame for prefers-reduced-motion.
 const GLYPHS = "@#%XxOo0*+=-:.";
 const CELL = 16; // px per character cell (width and height)
@@ -39,7 +39,8 @@ export default function AsciiRain({ className = "" }) {
     let onScreen = true;
 
     const readColors = () => {
-      const styles = getComputedStyle(document.documentElement);
+      // From the canvas itself, so a [data-surface="light"] scope around it applies.
+      const styles = getComputedStyle(canvas);
       colors = {
         tail: styles.getPropertyValue("--color-faint").trim() || colors.tail,
         head: styles.getPropertyValue("--color-ink").trim() || colors.head,
