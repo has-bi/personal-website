@@ -12,7 +12,7 @@ export default function NotFoundShell({ lang, sections, postLanguages }) {
     <>
       <a
         href="#main"
-        className="t-mono-nav sr-only bg-primary px-md py-sm text-on-primary focus:not-sr-only focus:fixed focus:left-md focus:top-md focus:z-50"
+        className="t-nav sr-only bg-primary px-md py-sm text-on-primary focus:not-sr-only focus:fixed focus:left-md focus:top-md focus:z-50"
       >
         {t(lang).skip}
       </a>
@@ -20,7 +20,7 @@ export default function NotFoundShell({ lang, sections, postLanguages }) {
       <main id="main">
         <NotFoundBody lang={lang} />
       </main>
-      <SiteFooter lang={lang} number={sections.elsewhere} />
+      <SiteFooter lang={lang} />
     </>
   );
 }

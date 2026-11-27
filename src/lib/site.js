@@ -21,8 +21,9 @@ export const NAV_ITEMS = [
   { key: "about", href: "/about" },
 ];
 
-// Section numbers follow the visible order, so they stay consecutive: while no project
-// is published, Projects drops out and About becomes 02. Nav items and § labels share them.
+// Which sections are visible, in order: while no project is published, Projects drops
+// out of the nav. (The numbers it returns were shown as § labels before redesign v2;
+// callers now only test whether a key is present.)
 export function sectionNumbers({ hasProjects }) {
   const order = ["index", "writing", ...(hasProjects ? ["projects"] : []), "about", "elsewhere"];
   return Object.fromEntries(order.map((key, index) => [key, String(index).padStart(2, "0")]));

@@ -1,7 +1,7 @@
 ---
 version: alpha.3
 name: Hasbi-personal-site
-description: A solutions engineer's lab notebook on a white page. Bilingual (EN / ID) tutorials and notes on AI and automation, plus personal projects. Near-violet ink, one purple accent carried over from the old site and the logo, hairline rules and zero radius, where a monospace label system does most of the talking and a large Funnel Sans headline carries the hierarchy. Two topic colours (AI purple, automation green) appear only on tags and card header strips. Everything is light; the only dark surface is a code block. Structure borrowed from itsua.com, storytelling from jithinrp.com, grid restraint from boostlab.
+description: (Superseded in part by Direction v2, 2026-11-27: one sans typeface, pills and soft corners, light headlines.) A solutions engineer's lab notebook on a white page. Bilingual (EN / ID) tutorials and notes on AI and automation, plus personal projects. Near-violet ink, one purple accent carried over from the old site and the logo, hairline rules and zero radius, where a monospace label system does most of the talking and a large Funnel Sans headline carries the hierarchy. Two topic colours (AI purple, automation green) appear only on tags and card header strips. Everything is light; the only dark surface is a code block. Structure borrowed from itsua.com, storytelling from jithinrp.com, grid restraint from boostlab.
 
 colors:
   primary: "#201936"
@@ -17,7 +17,6 @@ colors:
   surface-sunken: "#e6e3f3"
   hairline: "#ddd8ed"
   hairline-strong: "#201936"
-  grid-line: "#efecf9"
   surface-dark-elevated: "#2d2642"
   on-primary: "#ffffff"
   on-dark: "#f3f0ff"
@@ -196,7 +195,7 @@ components:
     backgroundColor: "{colors.canvas}"
     textColor: "{colors.ink}"
     typography: "{typography.display-xl}"
-    padding: 96px 32px
+    padding: 120px 0 0
   hero-accent-line:
     backgroundColor: "{colors.canvas}"
     textColor: "{colors.accent}"
@@ -205,7 +204,6 @@ components:
     backgroundColor: "{colors.canvas}"
     textColor: "{colors.body}"
     typography: "{typography.body-md}"
-    width: 360px
   button-primary:
     backgroundColor: "{colors.primary}"
     textColor: "{colors.on-primary}"
@@ -421,10 +419,19 @@ components:
   divider-strong:
     backgroundColor: "{colors.hairline-strong}"
     height: 1px
-  hero-grid-line:
-    backgroundColor: "{colors.grid-line}"
-    width: 1px
 ---
+
+## Direction v2 (redesign, 2026-11-27)
+
+The owner redesigned the whole site after a reference (a modern AI landing page: wordmark left, centred pill nav, light two-tone headline over a landscape photo, white pill call to action). **Where an older section of this file conflicts with this one, this section wins**; the older sections are being rewritten to match (see Known Gaps).
+
+- **One typeface for the interface.** Funnel Sans for everything; JetBrains Mono only inside code blocks and inline code. Furniture (labels, nav, meta, tags, buttons) is small sans in sentence case: utilities `t-label`, `t-nav`, `t-meta`, `t-tag`, `t-button`. No uppercase, no letter-spaced labels.
+- **No numbering furniture.** No `§ NN ·` section labels, no `[ 01 ]` nav brackets, no slash-path headings (`/writing`). Headings use the localized words. Content numbering (article headings, lesson brief) stays.
+- **Headlines are light.** `t-hero` (Funnel Sans 300, `clamp(36px, min(5vw, 7svh), 72px)`) for page titles and the home hero; `t-display-lg font-light` for section headings. The home hero is two-tone: first part `{colors.faint}`, key part `{colors.ink}`. The accent purple is not used in headlines.
+- **Shapes.** Interactive furniture (buttons, nav links, filter chips, tags, toggles, copy buttons) is a pill (`rounded-pill`). Cards, panels, callouts, empty states and code blocks use `rounded-card` (20px) on `{colors.surface}`, mostly without borders. Images use `rounded-media` (16px). Hairline dividers between list rows stay. Shadows: still none.
+- **Buttons.** Primary: solid pill, `{colors.primary}` with white text, or `tone="light"` (white pill, ink text) on photos. Ghost: hairline pill.
+- **Nav.** Wordmark left, the page links as a centred group of pills (current page = solid ink pill), the `ID / EN` toggle as a pill on the right. Mobile: wordmark, toggle pill and a `Menu` pill opening full-screen rounded cards.
+- **Colours: light is the default theme** (owner, 2026-11-27, after the light hero photo; it was dark earlier the same day). `<html data-theme="light">` is rendered on the server; a theme pill in the nav switches to the dark theme and remembers it in the browser (`src/lib/theme.js` applies it before the first paint). Only the colour tokens change (`:root[data-theme="dark"]` in `globals.css`): canvas `#0e0b17`, surface `#17131f`, surface-sunken `#221c2e`, hairline `#2c2539`, ink `#f3f0ff`, body `#cdc7dd`, muted `#a8a2b8`, faint `#8e88a0`, accent `#a98bf5` (lighter, for links and focus on dark), primary `#f3f0ff` with on-primary `#0e0b17` (solid pills invert to light), topic tints `#251c3d` / `#0d2a21` with `#c4b2fb` / `#6fdcb0` text. Contrast on canvas: ink 17.4, body 11.9, muted 7.9, faint 5.7, accent 7.1. The home hero stays a light surface in both themes (`data-surface="light"`), because its photo has a pale sky.
 
 ## Overview
 
@@ -491,7 +498,6 @@ Content lives in the repository, not in Notion. The site is **read-only by desig
 - **Surface Dark Elevated** (`{colors.surface-dark-elevated}`, #2D2642): Code blocks only. The one dark surface on the site.
 - **Hairline** (`{colors.hairline}`, #DDD8ED): Every 1px rule: card borders, table dividers, nav bottom edge, stat-cell separators.
 - **Hairline Strong** (`{colors.hairline-strong}`, #201936): Card border on hover/focus and the ghost button outline. Replaces shadow as the "lift" signal.
-- **Grid Line** (`{colors.grid-line}`, #EFECF9): Decorative vertical lines behind the hero. Never used elsewhere. (Under review, see Known Gaps.)
 
 ### Text
 - **Ink** (`{colors.ink}`, #201936): Headlines, card titles, active nav. 16.75:1 on white.
@@ -565,7 +571,7 @@ All three are self-hosted, subset to Latin, `font-display: swap`. Paid fonts see
 
 ### Grid & Container
 - 12-column grid, max content width 1280px, centred.
-- **Hero:** headline spans columns 1–8; `{component.hero-abstract}` spans 10–12 (no divider rule; the column gap separates them).
+- **Hero:** centered headline over the full-bleed photo; `{component.hero-abstract}` sits below the photo, or on its grass at the lower left from 2xl (see Hero).
 - **Stat strip:** full width, equal cells divided by 1px vertical hairlines.
 - **Project grid:** 2-up desktop and tablet (3-up once there are 3+ projects), 1-up mobile. Cards are equal height on purpose: this is a spec sheet, and uniformity is the point.
 - **Case study:** single centred column at `{component.case-study-body}` width, with a sticky meta column on the left at desktop.
@@ -574,7 +580,7 @@ All three are self-hosted, subset to Latin, `font-display: swap`. Paid fonts see
 ```
 [logo] HASBI HASSADIQIN  [ 00 ] INDEX  [ 01 ] WRITING  [ 02 ] PROJECTS  [ 03 ] ABOUT            EN / ID
 
-§ 00 · INDEX                 hero-band ("Notes on AI / & automation." | abstract + START READING)
+§ 00 · INDEX                 hero-band (one screen: two-tone headline, abstract, START READING over the full photo pinned to the bottom)
 § 00.1 · START HERE  /start  router table: YOU ARE · START WITH · LEADS TO (3 rows)
 § 01 · WRITING  /writing     latest post-rows (band hidden until ≥ 2 posts are published)
 § 02 · PROJECTS  /projects   project-card grid (personal projects only)
@@ -613,7 +619,7 @@ Whitespace is structured, not airy: it is bounded by hairlines. Every band has a
 There are **no box-shadows** in the system. Depth comes from tone steps and border weight.
 
 ### Decorative Depth
-- **Hero grid lines:** vertical 1px lines in `{colors.grid-line}` at every other column, hero only. (Under review, see Known Gaps.)
+- **Hero photo:** the one full-bleed image on the site, home hero only (see Hero), shown in full within one screen, its bottom edge fading into the page.
 - **Line-art illustrations** (optional, Loop/boostlab pattern): isometric flat vector, thick uniform `{colors.ink}` outlines, white objects, flat solid `{colors.accent}` fills on key surfaces, hard-edged solid `{colors.ink}` shadows, thin wireframe guide lines. No gradients, no text inside the image. Used as section art instead of stock imagery.
 - **Real screenshots and photos** of the owner's own builds are the main depth source on article and project pages.
 
@@ -658,9 +664,9 @@ There are **no box-shadows** in the system. Depth comes from tone steps and bord
 
 ### Hero
 
-**`hero-band`**: `{colors.canvas}` with grid lines, headline in `{typography.display-xl}`. The second line uses `{component.hero-accent-line}` (`{colors.accent}`).
+**`hero-band`**: fits one screen: height `100svh` minus the sticky nav (56px mobile, 64px from `lg`), at least 560px (640px from `lg`). A **light surface in both themes** (`data-surface="light"` in `globals.css` re-applies the light tokens inside it). The photo (`/images/hero-render-v2.webp`, Seedream 5.5 + Nano Banana 2.1 edit, Magnific upscale: a person and a figure with a CRT monitor for a head, both in plain white, sit on green hills; the far hills are still drawn in binary, the world rendering into reality) fills the hero with `object-cover`, anchored to its top, and its bottom edge fades into the page. A light haze (canvas 92% at the top, 75% at 40%, clear by 62%) keeps the text readable where it overlaps the hills. Centred at the top: the light two-tone headline in `t-hero` (`{colors.faint}` then `{colors.ink}`), the abstract in `{colors.body}`, the primary pill and a small note on its own light pill. Measured contrast: headline 5.2:1, abstract 8.3:1 or better from 375 to 1903px.
 
-**`hero-abstract`**: right column: an `ABSTRACT` `{component.section-label}`, 2–3 sentences in `{typography.body-md}` (what is taught, by whom). Mention both languages only once at least one Indonesian post is published, then one `{component.button-primary}` labelled `START READING`.
+**`hero-abstract`**: the abstract and call to action above; nothing sits on the photo.
 
 ### Buttons
 
@@ -857,7 +863,7 @@ Not allowed: intro loaders, WebGL backgrounds, sound, scroll-hijacking, "best vi
 
 | Name | Width | Key Changes |
 |---|---|---|
-| Mobile | < 768px | Nav collapses to `EN / ID` + the `[ MENU ]` button opening a full-screen numbered list; hero stacks (headline, then abstract); router rows stack as cards; post rows stack (meta line, title, language · read); project grid 1-up; article meta moves above the title |
+| Mobile | < 768px | Nav collapses to `EN / ID` + the `[ MENU ]` button opening a full-screen numbered list; hero stacks (headline, photo, then abstract); router rows stack as cards; post rows stack (meta line, title, language · read); project grid 1-up; article meta moves above the title |
 | Tablet | 768–1024px | Nav stays horizontal with labels shortened to `[ 01 ]`; project grid 2-up |
 | Desktop | 1024–1440px | Full layout as specified |
 | Wide | > 1440px | Content caps at 1280px; outer margin grows, type does not |
@@ -868,7 +874,7 @@ Not allowed: intro loaders, WebGL backgrounds, sound, scroll-hijacking, "best vi
 
 ### Collapsing Strategy
 - Reduce columns, never scale cards down.
-- Display type is fluid via `clamp()`; the hero must fit in 3 lines at 375px.
+- Display type is fluid via `clamp()`; the hero headline must fit in 3 lines at 375px. The hero fits one screen; its text may overlap the photo's hills on short screens.
 - Mono labels never go below 11px.
 
 ### Image Behavior
@@ -910,6 +916,16 @@ Logged decisions:
 - 2026-11-25: articles drop the breadcrumb, share links and tags; the meta strip becomes one thin line. The meta line carries **COPY CONTEXT FOR AI**: it copies the post as Markdown (brief on top, absolute links, callouts as blockquotes) so a reader can discuss it with their own AI.
 - 2026-11-26, market: the site is **Indonesian first**. Indonesian lives at the root (`/writing`), English under `/en` (`/en/writing`); URLs stay English words in both. All interface text is translated, mono labels included (`MULAI MEMBACA`, `SALIN KONTEKS UNTUK AI`, `DI HALAMAN INI`); slash headings (`/writing`) stay as they are because they are paths. Reader is "kamu", author "saya". Until a post's Indonesian version is published, the Indonesian list shows the English post with its `EN` code and links to `/en/writing/<slug>`; the old English URL redirects there (307). The language toggle (`ID / EN`) is always shown. The Indonesian UI copy and the three post translations are agent drafts awaiting the owner's review (posts stay `draft: true` until then).
 - 2026-11-26, owner: the profile picture is a pixel-art portrait (`/images/me-pixelated.webp`) on a lavender ground, rendered with `image-rendering: pixelated` so the blocks stay sharp.
+- 2026-11-27, redesign (landing page, step 1): the home hero becomes a centered headline over a full-bleed photo (`/images/hero-archive-v1.webp`), composition taken from the owner's reference; nav, buttons, mono labels and zero radius stay as they are (the reference's pill nav and rounded buttons are **not** adopted). The hero grid lines are dropped (closes audit #12). The abstract and `START READING` sit on the grass at the lower left from `2xl` (1536px); narrower screens show them under the photo, because the grass there is too short to hold them legibly. The current headline stays as a placeholder until the owner writes the new one.
+- 2026-11-27, redesign (whole site, owner's call): the reference's visual language applies site-wide, not only its composition: centred pill nav, pill buttons and chips, soft-cornered cards and images, one sans typeface with sentence-case furniture, no `§` / `[ 01 ]` numbering or slash headings, light two-tone hero headline (muted then ink), the call to action under the abstract, the whole hero fitting one screen (owner, 2026-11-27). Replaces the zero-radius rule, the mono label system, the uppercase furniture and the numbered section labels. See **Direction v2**.
+- 2026-11-27, theme (owner's call): **dark mode is the default** for every reader, regardless of system setting; the light theme stays available from a theme pill in the nav and is remembered per browser. Reverses audit 001's "keep the page light" (dark closing band entry above) for the page as a whole. The hero photo's transparent sky now reads as a night sky over the green hills, close to the reference. Palette in **Direction v2**.
+- 2026-11-27, hero (owner): the home hero fits one screen. The call to action moves from under the photo to under the abstract; the photo fills the remaining height (cover, bottom centre) with a fade at its top edge.
+- 2026-11-27, hero (owner): the photo shows in full at the page's width, with no fade at the top and a fade at its bottom edge. This takes priority over fitting one screen: on wide screens the faded grass runs below the fold.
+- 2026-11-27, hero (owner): the whole photo fits one screen; the text may overlap it. The photo is pinned to the bottom of a screen-high hero (only its transparent sky is clipped), and the abstract and button sit over the hills on short screens.
+- 2026-11-27, hero photo (owner): upscaled with Magnific (Precision "sublime", 2x to 5376x3040, grain 0 and low sharpness: the owner found grain made it look cheap), resized to 3840x2171 for the site, transparent sky restored from the original alpha. Sharper ASCII figure, hair and grass; a few ASCII glyphs changed shape slightly in the upscale.
+- 2026-11-27, hero motion (owner): an ASCII "waterfall" animates the hero background, falling through the photo's sky into the hills. Home hero only; still frame for reduced motion. See **Direction v2**, Motion.
+- 2026-11-27, hero photo (owner): "Human meets Hacks". A person and a figure with a CRT monitor for a head, both in plain white, on green hills whose far side is still binary (the world rendering). Simple figures, no Greek costume; the owner chose this over oil paintings and object studies. The hero is a light surface in both themes with dark text on the pale sky (owner's call), over a light haze.
+- 2026-11-27, theme and motion (owner): **light mode is the default again** (the dark theme stays available from the nav pill), and the ASCII rain animation is **removed** from the hero.
 
 ## Iteration Guide
 
@@ -922,8 +938,10 @@ Logged decisions:
 
 ## Known Gaps
 
+**Redesign v2 (2026-11-27):** the component, layout and responsive sections below still describe parts of the v1 system (mono labels, zero radius, `§` numbering). Direction v2 wins where they conflict; rewrite them section by section.
+
 **Owner decisions pending (antislop audit 001):**
-- **#12 Hero grid lines.** A background grid is a named pattern; on white the lines are also almost invisible (1.23:1). Keep (with the reason logged) or drop.
+- **#12 Hero grid lines.** Resolved 2026-11-27: dropped, replaced by the hero photo.
 - **#13 Fonts.** Resolved 2026-10-31: the owner chose Funnel Sans for display and body; JetBrains Mono stays for labels and data.
 
 **Open audit items (not yet approved):**

@@ -8,6 +8,7 @@ import { isLocale, LOCALES, t } from "@/lib/i18n";
 import { CURRENT_ROLE } from "@/app/[lang]/about/data";
 import { getPostLanguages, getProjects } from "@/utils/content";
 import { funnelSans, jetbrainsMono } from "@/lib/fonts";
+import { DEFAULT_THEME, themeScript } from "@/lib/theme";
 
 
 // Each language is its own root layout, so <html lang> is right from the first byte.
@@ -89,6 +90,7 @@ export async function generateMetadata({ params }) {
 }
 
 export const viewport = {
+  // The light canvas (DESIGN.md, Direction v2); the dark theme is opt-in.
   themeColor: "#ffffff",
   width: "device-width",
   initialScale: 1,
@@ -116,7 +118,15 @@ export default async function RootLayout({ children, params }) {
   const sections = sectionNumbers({ hasProjects: projects.length > 0 });
 
   return (
-    <html lang={lang} className={`${funnelSans.variable} ${jetbrainsMono.variable}`}>
+    <html
+      lang={lang}
+      data-theme={DEFAULT_THEME}
+      suppressHydrationWarning
+      className={`${funnelSans.variable} ${jetbrainsMono.variable}`}
+    >
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+      </head>
       <body id="top">
         <script
           type="application/ld+json"
@@ -124,14 +134,14 @@ export default async function RootLayout({ children, params }) {
         />
         <a
           href="#main"
-          className="t-mono-nav sr-only bg-primary px-md py-sm text-on-primary focus:not-sr-only focus:fixed focus:left-md focus:top-md focus:z-50"
+          className="t-nav sr-only bg-primary px-md py-sm text-on-primary focus:not-sr-only focus:fixed focus:left-md focus:top-md focus:z-50"
         >
           {t(lang).skip}
         </a>
         <ClientRuntimeGuards />
         <SiteNav lang={lang} postLanguages={postLanguages} sections={sections} />
         <main id="main">{children}</main>
-        <SiteFooter lang={lang} number={sections.elsewhere} />
+        <SiteFooter lang={lang} />
       </body>
     </html>
   );

@@ -15,7 +15,6 @@
   --color-surface-sunken: #e6e3f3;
   --color-hairline: #ddd8ed;
   --color-hairline-strong: #201936;
-  --color-grid-line: #efecf9;
   --color-surface-dark-elevated: #2d2642;
   --color-on-primary: #ffffff;
   --color-on-dark: #f3f0ff;
@@ -40,10 +39,74 @@
   --spacing-section: 96px;
   --spacing-tap: 44px;
 
+  /* Radius (redesign 2026-11-27): pills for interactive furniture, soft corners for
+     cards and media. */
+  --radius-pill: 9999px;
+  --radius-card: 20px;
+  --radius-media: 16px;
+
   --container-content: 1280px;
 }
 
+/* Light scope: a surface that stays light in both themes, such as the hero photo with its
+   pale sky. Inside it the light tokens apply even when the page is dark. Keep in step
+   with @theme above. */
+[data-surface="light"] {
+  color-scheme: light;
+  --color-primary: #201936;
+  --color-primary-active: #140f24;
+  --color-accent: #6840c8;
+  --color-accent-active: #5333a0;
+  --color-ink: #201936;
+  --color-body: #403954;
+  --color-muted: #5f5a72;
+  --color-faint: #6c667e;
+  --color-canvas: #ffffff;
+  --color-surface: #f8f6ff;
+  --color-surface-sunken: #e6e3f3;
+  --color-hairline: #ddd8ed;
+  --color-on-primary: #ffffff;
+  --color-focus-ring: #6840c8;
+  color: var(--color-ink);
+}
+
+/* Dark theme: opt-in from the nav's theme pill (light is the default, see src/lib/theme.js);
+   the choice is remembered. Only the colour tokens
+   change, so every utility (bg-canvas, text-ink, ...) follows. Contrast on canvas: ink
+   17.4, body 11.9, muted 7.9, faint 5.7, accent 7.1. */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --color-primary: #f3f0ff;
+  --color-primary-active: #d9d3ee;
+  --color-accent: #a98bf5;
+  --color-accent-active: #c4b2fb;
+  --color-ink: #f3f0ff;
+  --color-body: #cdc7dd;
+  --color-muted: #a8a2b8;
+  --color-faint: #8e88a0;
+  --color-canvas: #0e0b17;
+  --color-surface: #17131f;
+  --color-surface-sunken: #221c2e;
+  --color-hairline: #2c2539;
+  --color-surface-dark-elevated: #1c1727;
+  --color-on-primary: #0e0b17;
+  --color-domain-ai: #c4b2fb;
+  --color-domain-automation: #6fdcb0;
+  --color-tint-ai: #251c3d;
+  --color-tint-automation: #0d2a21;
+  --color-focus-ring: #a98bf5;
+}
+
 /* Type scale. Mobile sizes come from the 390px Figma frames. */
+@utility t-hero {
+  font-family: var(--font-sans);
+  /* Width-based, but never more than 7% of the screen height, so the one-screen home hero
+     keeps room for its photo on short laptops. Smaller since 2026-11-27 (owner). */
+  font-size: clamp(36px, min(5vw, 7svh), 72px);
+  font-weight: 300;
+  line-height: 1.05;
+  letter-spacing: -0.035em;
+}
 @utility t-display-xl {
   font-family: var(--font-sans);
   font-size: clamp(52px, 9vw, 120px);
@@ -148,47 +211,45 @@
   line-height: 1.45;
   letter-spacing: -0.22px;
 }
-@utility t-mono-label {
-  font-family: var(--font-mono);
-  font-size: 12px;
-  font-weight: 500;
-  line-height: 1.4;
-  letter-spacing: 0.72px;
-  text-transform: uppercase;
-}
-@utility t-mono-nav {
-  font-family: var(--font-mono);
+/* Furniture text (labels, nav, meta): small sans, sentence case. Redesign 2026-11-27
+   replaced the uppercase mono label system; JetBrains Mono now sets code only. */
+@utility t-label {
+  font-family: var(--font-sans);
   font-size: 13px;
-  font-weight: 500;
-  line-height: 1;
-  letter-spacing: 0.52px;
-  text-transform: uppercase;
+  font-weight: 400;
+  line-height: 1.4;
+  letter-spacing: 0;
 }
-@utility t-mono-meta {
-  font-family: var(--font-mono);
-  font-size: 12px;
+@utility t-nav {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: -0.01em;
+}
+@utility t-meta {
+  font-family: var(--font-sans);
+  font-size: 13px;
   font-weight: 400;
   line-height: 1.5;
-  letter-spacing: 0.26px;
+  letter-spacing: 0;
   @media (width >= 64rem) {
-    font-size: 13px;
+    font-size: 14px;
   }
 }
 @utility t-button {
-  font-family: var(--font-mono);
-  font-size: 13px;
+  font-family: var(--font-sans);
+  font-size: 15px;
   font-weight: 500;
   line-height: 1;
-  letter-spacing: 0.78px;
-  text-transform: uppercase;
+  letter-spacing: -0.01em;
 }
 @utility t-tag {
-  font-family: var(--font-mono);
-  font-size: 11px;
+  font-family: var(--font-sans);
+  font-size: 12px;
   font-weight: 500;
   line-height: 1.2;
-  letter-spacing: 0.66px;
-  text-transform: uppercase;
+  letter-spacing: 0;
 }
 @utility t-code {
   font-family: var(--font-mono);
@@ -230,7 +291,6 @@
   :focus-visible {
     outline: 2px solid var(--color-focus-ring);
     outline-offset: 2px;
-    border-radius: 0;
   }
 
   [id] {

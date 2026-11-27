@@ -17,7 +17,7 @@ export default function CodeCopyButton({ code, labels }) {
           setCopied(false);
         }
       }}
-      className="t-mono-label flex min-h-11 items-center text-on-dark hover:text-on-dark-muted"
+      className="t-label flex min-h-11 items-center rounded-pill px-md text-on-dark hover:text-on-dark-muted"
     >
       <span aria-live="polite">{copied ? labels.copiedShort : labels.copy}</span>
     </button>

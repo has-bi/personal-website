@@ -6,8 +6,8 @@ export default function NotFoundBody({ lang }) {
   const labels = t(lang).notFound;
   return (
     <section className="band flex flex-col gap-lg border-b border-hairline py-xxxl lg:py-section">
-      <SectionLabel>§ 404 · {labels.label}</SectionLabel>
-      <h1 className="t-display-xl text-ink">/404</h1>
+      <SectionLabel>404</SectionLabel>
+      <h1 className="t-hero text-ink">{labels.label}</h1>
       <p className="t-display-md max-w-[760px] text-muted">{labels.text}</p>
       <div className="flex flex-wrap gap-md">
         <ButtonPrimary href={localize(lang, "/writing")}>{labels.writing}</ButtonPrimary>

@@ -2,6 +2,7 @@ import "./globals.css";
 import { headers } from "next/headers";
 import NotFoundShell from "@/components/site/NotFoundShell";
 import { funnelSans, jetbrainsMono } from "@/lib/fonts";
+import { DEFAULT_THEME, themeScript } from "@/lib/theme";
 import { sectionNumbers } from "@/lib/site";
 import { isLocale, DEFAULT_LOCALE } from "@/lib/i18n";
 import { getPostLanguages, getProjects } from "@/utils/content";
@@ -18,7 +19,15 @@ export default async function GlobalNotFound() {
   const sections = sectionNumbers({ hasProjects: projects.length > 0 });
 
   return (
-    <html lang={lang} className={`${funnelSans.variable} ${jetbrainsMono.variable}`}>
+    <html
+      lang={lang}
+      data-theme={DEFAULT_THEME}
+      suppressHydrationWarning
+      className={`${funnelSans.variable} ${jetbrainsMono.variable}`}
+    >
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+      </head>
       <body id="top">
         <NotFoundShell lang={lang} sections={sections} postLanguages={postLanguages} />
       </body>

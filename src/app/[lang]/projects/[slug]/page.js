@@ -34,10 +34,10 @@ const hostOf = (url) => url.replace(/^https?:\/\/(www\.)?/, "").replace(/\/$/, "
 
 function ProjectLinks({ project, labels }) {
   if (!project.liveUrl && !project.sourceUrl) return null;
-  const link = "t-mono-meta flex min-h-11 items-center uppercase text-accent hover:text-accent-active";
+  const link = "t-meta flex min-h-11 items-center text-accent hover:text-accent-active";
   return (
     <div className="flex flex-col gap-xs">
-      <p className="t-mono-label text-faint">{labels.links}</p>
+      <p className="t-label text-faint">{labels.links}</p>
       {project.liveUrl ? (
         <a href={project.liveUrl} target="_blank" rel="noopener noreferrer" className={link}>
           {labels.live}
@@ -71,7 +71,7 @@ export default async function ProjectPage({ params }) {
     project.liveUrl && {
       label: labels.link,
       value: (
-        <a href={project.liveUrl} target="_blank" rel="noopener noreferrer" className="text-accent normal-case hover:text-accent-active">
+        <a href={project.liveUrl} target="_blank" rel="noopener noreferrer" className="text-accent hover:text-accent-active">
           {hostOf(project.liveUrl)} ↗
         </a>
       ),
@@ -103,7 +103,7 @@ export default async function ProjectPage({ params }) {
               href={project.liveUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="t-mono-nav hidden min-h-11 shrink-0 items-center text-accent hover:text-accent-active sm:flex"
+              className="t-nav hidden min-h-11 shrink-0 items-center text-accent hover:text-accent-active sm:flex"
             >
               {hostOf(project.liveUrl)} ↗
             </a>
@@ -113,10 +113,10 @@ export default async function ProjectPage({ params }) {
 
       <header className="band flex flex-col gap-lg pb-xl pt-xxl lg:gap-xl lg:pb-xxl lg:pt-section">
         <SectionLabel>
-          § 02 · {labels.title}{topic ? ` / ${topic}` : ""}
+          {labels.title}{topic ? ` · ${topic}` : ""}
         </SectionLabel>
         <div className="flex max-w-[1040px] flex-col gap-lg">
-          <h1 className="t-article-title text-ink">{project.title}</h1>
+          <h1 className="t-article-title font-light text-ink">{project.title}</h1>
           {project.desc ? <p className="t-dek text-muted">{project.desc}</p> : null}
         </div>
         <MetaStrip items={meta} />
@@ -124,7 +124,7 @@ export default async function ProjectPage({ params }) {
 
       {project.coverImage ? (
         <div className="lg:band">
-          <div className="relative aspect-video w-full overflow-hidden border-y border-hairline bg-surface-sunken lg:border">
+          <div className="relative aspect-video w-full overflow-hidden bg-surface-sunken lg:rounded-media">
             <Image
               src={project.coverImage}
               alt={labels.cover(project.title)}
@@ -155,12 +155,12 @@ export default async function ProjectPage({ params }) {
 
       <nav aria-label={labels.more} className="band flex flex-col-reverse gap-md border-t border-hairline pb-xxxl pt-xl lg:flex-row lg:gap-xl lg:pb-section lg:pt-xxl">
         <div className="flex flex-1 flex-col items-start gap-md">
-          <p className="t-mono-label text-faint">{labels.back}</p>
+          <p className="t-label text-faint">{labels.back}</p>
           <ButtonGhost href={localize(lang, "/projects")}>{dict.home.allProjects}</ButtonGhost>
         </div>
         {next ? (
-          <div className="flex flex-1 flex-col items-start gap-md border border-hairline bg-surface p-lg">
-            <p className="t-mono-label text-muted">{labels.next} · {dict.topics[next.topic] || next.topic}</p>
+          <div className="flex flex-1 flex-col items-start gap-md rounded-card bg-surface p-lg">
+            <p className="t-label text-muted">{labels.next} · {dict.topics[next.topic] || next.topic}</p>
             <p className="t-title-lg text-ink">{next.title}</p>
             <ButtonGhost href={localize(lang, `/projects/${next.slug}`)}>{labels.open}</ButtonGhost>
           </div>

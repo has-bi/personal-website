@@ -9,5 +9,5 @@ export default async function Image({ params }) {
   const { lang } = await params;
   const dict = t(lang);
   const [title, accent] = dict.home.hero;
-  return renderOg({ label: `§ 00 · ${dict.nav.index}`, title, accent, lang });
+  return renderOg({ label: dict.nav.index, title, accent, lang });
 }

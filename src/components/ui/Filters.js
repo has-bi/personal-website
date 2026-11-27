@@ -20,7 +20,7 @@ function hrefFor(pathname, current, key, value) {
   return query ? `${pathname}?${query}` : pathname;
 }
 
-// filter-chip: 32px visual inside a 44px hit area. Active = ink block.
+// filter-chip: 32px visual inside a 44px hit area. Active = ink pill.
 function FilterChip({ href, active, children }) {
   return (
     <Link
@@ -28,11 +28,11 @@ function FilterChip({ href, active, children }) {
       scroll={false}
       replace
       aria-current={active ? "true" : undefined}
-      className="group flex h-11 shrink-0 items-center"
+      className="group flex h-11 shrink-0 items-center rounded-pill"
     >
       <span
-        className={`t-tag flex h-8 items-center px-sm transition-colors ${
-          active ? "bg-primary text-on-primary" : "border border-hairline bg-canvas text-ink group-hover:border-hairline-strong"
+        className={`t-tag flex h-8 items-center rounded-pill px-md transition-colors ${
+          active ? "bg-primary text-on-primary" : "border border-hairline bg-canvas text-ink group-hover:bg-surface"
         }`}
       >
         {children}
@@ -44,7 +44,7 @@ function FilterChip({ href, active, children }) {
 export function FilterGroup({ pathname, current, name, label, options, allLabel = "All" }) {
   return (
     <div role="group" aria-label={label} className="no-scrollbar flex items-center gap-xs overflow-x-auto">
-      <span className="t-tag w-[76px] shrink-0 text-faint lg:t-mono-label lg:w-auto">{label}</span>
+      <span className="t-tag w-[76px] shrink-0 text-faint lg:t-label lg:w-auto">{label}</span>
       {[{ value: "all", label: allLabel }, ...options].map((option) => (
         <FilterChip key={option.value} href={hrefFor(pathname, current, name, option.value)} active={current[name] === option.value}>
           {option.label}

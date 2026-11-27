@@ -23,19 +23,18 @@ export default async function WritingPage({ params }) {
       <section className="band pb-xl pt-xxxl lg:pb-xxl lg:pt-section">
         <div className="flex flex-col gap-lg lg:flex-row lg:gap-xl">
           <div className="flex flex-1 flex-col gap-lg">
-            <SectionLabel>§ 01 · {labels.title}</SectionLabel>
-            <h1 className="t-display-xl text-ink">/writing</h1>
+            <h1 className="t-display-lg font-light text-ink">{labels.title}</h1>
             <p className="t-display-md text-muted">{labels.dek}</p>
           </div>
           <div className="flex flex-col gap-md lg:w-[360px] lg:shrink-0 lg:justify-end">
             <SectionLabel>{labels.kinds}</SectionLabel>
             <dl className="flex flex-col gap-sm">
               <div className="flex gap-md">
-                <dt className="t-mono-label w-[88px] shrink-0 text-ink">{dict.types.tutorial}</dt>
+                <dt className="t-label w-[88px] shrink-0 text-ink">{dict.types.tutorial}</dt>
                 <dd className="t-body-sm text-body">{labels.tutorial}</dd>
               </div>
               <div className="flex gap-md">
-                <dt className="t-mono-label w-[88px] shrink-0 text-ink">{dict.types.note}</dt>
+                <dt className="t-label w-[88px] shrink-0 text-ink">{dict.types.note}</dt>
                 <dd className="t-body-sm text-body">{labels.note}</dd>
               </div>
             </dl>

@@ -52,13 +52,13 @@ export async function generateMetadata({ params }) {
 function LessonBrief({ post, labels }) {
   const rowText = "t-body-md flex-1 text-ink";
   return (
-    <div className="wide border border-hairline bg-surface">
+    <div className="wide overflow-hidden rounded-card bg-surface">
       <div className="flex flex-col gap-sm px-lg py-md">
-        <p className="t-mono-label text-muted">{labels.learn}</p>
+        <p className="t-label text-muted">{labels.learn}</p>
         <ol className="flex flex-col gap-sm">
           {post.headings.map((heading, index) => (
             <li key={heading.id} className="flex gap-md">
-              <span className="t-mono-meta pt-[2px] text-faint">{heading.number || String(index + 1).padStart(2, "0")}</span>
+              <span className="t-meta pt-[2px] text-faint">{heading.number || String(index + 1).padStart(2, "0")}</span>
               <span className={rowText}>{heading.text}</span>
             </li>
           ))}
@@ -66,11 +66,11 @@ function LessonBrief({ post, labels }) {
       </div>
       {post.prerequisites.length ? (
         <div className="flex flex-col gap-sm border-t border-hairline px-lg py-md">
-          <p className="t-mono-label text-muted">{labels.before}</p>
+          <p className="t-label text-muted">{labels.before}</p>
           <ol className="flex flex-col gap-sm">
             {post.prerequisites.map((item, index) => (
               <li key={item} className="flex gap-md">
-                <span className="t-mono-meta pt-[2px] text-faint">{String(index + 1).padStart(2, "0")}</span>
+                <span className="t-meta pt-[2px] text-faint">{String(index + 1).padStart(2, "0")}</span>
                 <span className={rowText}>{item}</span>
               </li>
             ))}
@@ -131,7 +131,7 @@ export default async function ArticlePage({ params }) {
 
       <header className="band flex flex-col gap-lg pb-xl pt-xxl lg:gap-xl lg:pb-xxl lg:pt-section">
         <SectionLabel>
-          § 01 · {dict.writing.title} / {type}
+          {dict.writing.title} · {type}
         </SectionLabel>
         <div className="flex max-w-[1040px] flex-col gap-lg">
           <h1 className="t-article-title text-ink">{post.title}</h1>
@@ -142,7 +142,7 @@ export default async function ArticlePage({ params }) {
 
       {post.coverImage ? (
         <div className="lg:band">
-          <div className="relative aspect-video w-full overflow-hidden border-y border-hairline bg-surface-sunken lg:border">
+          <div className="relative aspect-video w-full overflow-hidden rounded-media bg-surface-sunken">
             <Image src={post.coverImage} alt={post.coverAlt || post.title} fill priority sizes="(min-width: 1024px) 1280px, 100vw" className="object-cover" />
           </div>
         </div>
@@ -169,12 +169,12 @@ export default async function ArticlePage({ params }) {
 
       <nav aria-label={labels.more} className="band flex flex-col-reverse gap-md border-t border-hairline pb-xxxl pt-xl lg:flex-row lg:gap-xl lg:pb-section lg:pt-xxl">
         <div className="flex flex-1 flex-col items-start gap-md">
-          <p className="t-mono-label text-faint">{labels.back}</p>
+          <p className="t-label text-faint">{labels.back}</p>
           <ButtonGhost href={localize(lang, "/writing")}>{labels.allWriting}</ButtonGhost>
         </div>
         {next ? (
-          <div className="flex flex-1 flex-col items-start gap-md border border-hairline bg-surface p-lg">
-            <p className="t-mono-label text-muted">
+          <div className="flex flex-1 flex-col items-start gap-md rounded-card bg-surface p-lg">
+            <p className="t-label text-muted">
               {labels.next} · {dict.topics[next.topic] || next.topic} · {dict.types[next.type] || next.type}
             </p>
             <p className="t-title-lg text-ink">{next.title}</p>

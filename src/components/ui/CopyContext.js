@@ -20,7 +20,7 @@ export default function CopyContext({ context, labels }) {
         }
         setTimeout(() => setState("idle"), 2000);
       }}
-      className="t-mono-meta flex min-h-11 shrink-0 items-center gap-xs uppercase text-accent hover:text-accent-active"
+      className="t-meta flex min-h-11 shrink-0 items-center gap-xs rounded-pill px-md text-accent hover:text-accent-active"
     >
       <span aria-live="polite">
         {state === "copied" ? labels.copied : state === "failed" ? labels.failed : labels.context}

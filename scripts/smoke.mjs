@@ -70,8 +70,9 @@ const checks = [
   // preview). Check it on the Vercel preview when routing changes.
 ];
 
-// A 404 must be the site's own page (nav, footer, /404 heading), not Next's bare default.
-const isSite404 = (html) => html.includes(">/404<") && html.includes('id="main"');
+// A 404 must be the site's own page (main landmark and its "404" label), not Next's bare
+// default, which has neither.
+const isSite404 = (html) => html.includes(">404<") && html.includes('id="main"');
 
 let failed = 0;
 for (const [route, expected] of checks) {
