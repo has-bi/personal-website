@@ -62,6 +62,22 @@ const en = {
     },
     allEntries: "All entries",
   },
+  series: {
+    heading: "Series",
+    comingSoon: "Coming soon",
+    count: (n) => `${n} ${n === 1 ? "guide" : "guides"}`,
+    // Descriptions: draft, owner to approve.
+    items: {
+      normal: "Everyday life: using AI for daily tasks without being technical.",
+      creative: "Writing, design, content and other creative work, with AI beside you.",
+      worker: "Office work, business and automation at work.",
+    },
+    alt: {
+      normal: "A person and a figure with an old computer monitor for a head sit on a picnic blanket on a misty green hill, looking at a phone; the far hills are drawn in binary.",
+      creative: "A person paints at a wooden easel on a grassy hill while a figure with an old monitor for a head holds the palette; the canvas is half landscape, half binary code.",
+      worker: "A person works on a laptop at a small wooden desk in a misty meadow while a figure with an old monitor for a head stands beside them holding a folder.",
+    },
+  },
   writing: {
     title: "Writing",
     description:
@@ -187,6 +203,22 @@ const id = {
       other: { you: "Prefer reading in English", start: "All writing in English" },
     },
     allEntries: "Semua tulisan",
+  },
+  series: {
+    heading: "Seri",
+    comingSoon: "Segera",
+    count: (n) => `${n} panduan`,
+    // Descriptions: draft, owner to approve.
+    items: {
+      normal: "Kehidupan sehari-hari: memakai AI untuk urusan harian tanpa perlu jadi orang teknis.",
+      creative: "Menulis, desain, konten dan kerja kreatif lainnya, dengan AI di sisimu.",
+      worker: "Kerja kantoran, bisnis dan otomasi di tempat kerja.",
+    },
+    alt: {
+      normal: "Seseorang dan sosok berkepala monitor komputer lama duduk di atas tikar piknik di bukit hijau berkabut, melihat ponsel; bukit di kejauhan tergambar dalam kode biner.",
+      creative: "Seseorang melukis di easel kayu di bukit berumput, ditemani sosok berkepala monitor lama yang memegang palet; kanvasnya setengah pemandangan, setengah kode biner.",
+      worker: "Seseorang bekerja dengan laptop di meja kayu kecil di padang berkabut, sementara sosok berkepala monitor lama berdiri di sampingnya memegang map.",
+    },
   },
   writing: {
     title: "Tulisan",

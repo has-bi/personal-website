@@ -21,6 +21,7 @@ const keysOf = (name) => {
 const TOPICS = keysOf("TOPICS");
 const TYPES = keysOf("TYPES");
 const LANGS = keysOf("LANGS");
+const SERIES_KEYS = [...fs.readFileSync(path.join(ROOT, "src/lib/series.js"), "utf8").matchAll(/^\s+key: "([a-z]+)"/gm)].map((m) => m[1]);
 
 // Components registered in createMdxComponents (src/components/mdx/MDXComponents.js).
 const mdxSource = fs.readFileSync(path.join(ROOT, "src/components/mdx/MDXComponents.js"), "utf8");
@@ -93,6 +94,7 @@ function checkPost(file, source) {
   if (fm.date && !/^\d{4}-\d{2}-\d{2}(T[\d:.]+Z?)?$/.test(String(fm.date))) err(file, `date "${fm.date}" must be "YYYY-MM-DD" (quoted)`);
   if (fm.type && !TYPES.includes(fm.type)) err(file, `type "${fm.type}" must be one of ${TYPES.join(" | ")}`);
   if (fm.topic && !TOPICS.includes(fm.topic)) err(file, `topic "${fm.topic}" must be one of ${TOPICS.join(" | ")}`);
+  if (fm.series !== undefined && !SERIES_KEYS.includes(fm.series)) err(file, `series "${fm.series}" must be one of ${SERIES_KEYS.join(" | ")}`);
   if (fm.lang && !LANGS.includes(fm.lang)) err(file, `lang "${fm.lang}" must be one of ${LANGS.join(" | ")}`);
   if (nameMatch && fm.lang && fm.lang !== nameMatch[2]) err(file, `lang "${fm.lang}" does not match the file name (.${nameMatch[2]}.mdx)`);
   if (fm.tags !== undefined && !Array.isArray(fm.tags)) err(file, "tags must be a list");

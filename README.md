@@ -31,6 +31,7 @@ title: "Where Should You Start Learning AI?"
 date: "2025-06-15"
 type: tutorial          # tutorial | note
 topic: ai               # ai | automation | web
+series: normal          # optional; normal | creative | worker (see src/lib/series.js)
 lang: en                # en | id (must match the file name)
 readTime: 4             # optional; estimated from word count if missing
 excerpt: "One or two sentences."

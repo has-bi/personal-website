@@ -589,6 +589,9 @@ footer         credit line, © year + site name, back to top
 ```
 `{component.stat-strip}` stays in the system for real numbers later.
 
+### Series cards (Home, 2026-11-27)
+Directly under the hero, above "Start here": heading "Series" / "Seri", three cards in a row from `lg` (stacked on mobile). Each card is `rounded-card` on `{colors.surface}` with a 4:3 `rounded-media` illustration on top, the series title (`t-title-lg`), a one-sentence description (`t-body-sm`, muted) and the post count. The whole card links to `/series/<slug>`. A series with no posts in the reader's list shows a "Segera" / "Coming soon" pill instead, is not a link (`aria-disabled`, muted image, no hover state). Series pages reuse the writing index rows.
+
 ### Routes that must exist when Home ships
 Every destination on Home must be a real page: `/writing`, `/writing?topic=ai`, `/writing?topic=automation`, `/projects`, `/about`, `/id`, `mailto:` and the external profiles. A row or link whose page is empty is removed, not left dead.
 
@@ -851,6 +854,7 @@ Not allowed: intro loaders, WebGL backgrounds, sound, scroll-hijacking, "best vi
 This file is the **direction**. The antislop plugin (`antislop@anti-slop`, enabled in `.claude/settings.json`) is the **filter** applied on top of it. Audits and fix reports live in `anti-slop/`. When this file asks for a pattern antislop names as slop, the agent asks the owner to keep or drop it and records the answer here.
 
 Logged decisions:
+- 2026-11-27, series (owner): three series cards under the hero, AI for Normal Human, AI for Creative Human, AI for Worker Human; each links to /series/<slug>; a series without posts shows "Segera" and is not a link; posts join with front matter `series`. Card illustrations in the hero's style.
 - 2026-10-26, audit 001: em dash in section labels → **dropped** (now ` · `).
 - 2026-10-26, audit 001: "BUILDING IN PUBLIC" status pill → **dropped** (now `JAKARTA · UTC+7`).
 - 2026-10-26, audit 001: left-edge domain markers → **dropped**.

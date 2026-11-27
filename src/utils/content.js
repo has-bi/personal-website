@@ -109,6 +109,7 @@ function toPost({ file, source, content, frontmatter: fm, headings }) {
     published: !fm.draft,
     type: fm.type || "note",
     topic: fm.topic || "",
+    series: fm.series || "",
     headings,
     body: bodyOf(source).trim(),
     content,
@@ -145,6 +146,16 @@ export async function getWritingFor(lang) {
   if (lang === "en") return all.filter((post) => post.lang === "en");
   const translated = new Set(all.filter((post) => post.lang === lang).map((post) => post.slug));
   return all.filter((post) => post.lang === lang || (post.lang === "en" && !translated.has(post.slug)));
+}
+
+// Posts of one series in the list a reader of `lang` sees (same fallback as getWritingFor).
+export async function getSeriesPosts(lang, key) {
+  return (await getWritingFor(lang)).filter((post) => post.series === key);
+}
+
+// Series keys that have at least one post in any language, for static params and the sitemap.
+export async function getSeriesWithPosts() {
+  return [...new Set((await loadPosts()).map((post) => post.series).filter(Boolean))];
 }
 
 // Languages a post slug is published in, e.g. ["id", "en"]. Feeds hreflang and the toggle.
