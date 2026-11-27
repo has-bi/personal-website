@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { DEFAULT_THEME, THEME_KEY } from "@/lib/theme";
 
-// theme-toggle: a round pill beside the language pill. Dark is the default; the choice is
+// theme-toggle: a round pill beside the language pill. Light is the default; the choice is
 // remembered in this browser (src/lib/theme.js applies it before the first paint).
 export default function ThemeToggle({ labels, className = "" }) {
   const [theme, setTheme] = useState(DEFAULT_THEME);

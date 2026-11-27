@@ -14,7 +14,6 @@ import {
 import { PostRow, PostTableHeader } from "@/components/ui/PostRow";
 import { ProjectGrid } from "@/components/ui/ProjectCard";
 import { aboutData } from "@/app/[lang]/about/data";
-import AsciiRain from "@/components/site/AsciiRain";
 import { alternates } from "@/lib/site";
 import { localize, otherLocale, t } from "@/lib/i18n";
 
@@ -53,9 +52,8 @@ function routesFor(lang, posts, otherPosts) {
 // hills are still drawn in binary, the world rendering into reality) fills the hero,
 // anchored to its top so the pale sky holds the text and both figures stay in view; its
 // bottom edge fades into the page. The hero is a light surface in both themes
-// (data-surface="light"): the sky is pale, so the text, button and ASCII rain use the
-// light tokens, over a light haze that keeps the text readable where it overlaps the
-// hills. The rain falls over the sky and fades out before the figures.
+// (data-surface="light"): the sky is pale, so the text and button use the light tokens, over a light haze that keeps the text readable where it overlaps the
+// hills.
 const HERO_IMAGE = {
   src: "/images/hero-render-v2.webp",
   width: 3840,
@@ -84,11 +82,6 @@ function Hero({ lang, role }) {
         aria-hidden="true"
         className="absolute inset-0 bg-[linear-gradient(to_bottom,color-mix(in_srgb,var(--color-canvas)_92%,transparent),color-mix(in_srgb,var(--color-canvas)_75%,transparent)_40%,transparent_62%)]"
       />
-      {/* ASCII rain over the sky: faded out by 55% of the height, before the figures, and
-          dimmed behind the headline. */}
-      <div className="absolute inset-0 [mask-image:linear-gradient(to_bottom,black_25%,transparent_55%)]">
-        <AsciiRain className="size-full [mask-image:radial-gradient(ellipse_45%_40%_at_50%_28%,rgba(0,0,0,0.15),black)]" />
-      </div>
 
       <div className="band relative z-10 flex flex-col items-center gap-md pt-xl text-center lg:gap-lg lg:pt-xxl">
         <h1 className="t-hero">

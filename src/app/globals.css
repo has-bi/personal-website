@@ -70,8 +70,8 @@
   color: var(--color-ink);
 }
 
-/* Dark theme: the default (redesign v2, 2026-11-27). <html data-theme="dark"> is set on the
-   server; the theme toggle switches to "light" and remembers it. Only the colour tokens
+/* Dark theme: opt-in from the nav's theme pill (light is the default, see src/lib/theme.js);
+   the choice is remembered. Only the colour tokens
    change, so every utility (bg-canvas, text-ink, ...) follows. Contrast on canvas: ink
    17.4, body 11.9, muted 7.9, faint 5.7, accent 7.1. */
 :root[data-theme="dark"] {

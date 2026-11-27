@@ -90,8 +90,8 @@ export async function generateMetadata({ params }) {
 }
 
 export const viewport = {
-  // The dark canvas (DESIGN.md, Direction v2); the light theme is opt-in.
-  themeColor: "#0e0b17",
+  // The light canvas (DESIGN.md, Direction v2); the dark theme is opt-in.
+  themeColor: "#ffffff",
   width: "device-width",
   initialScale: 1,
 };
