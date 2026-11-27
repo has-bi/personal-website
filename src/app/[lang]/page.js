@@ -1,7 +1,16 @@
 import Image from "next/image";
 import Link from "next/link";
-import { getAboutIntro, getPosts, getProjects, getWritingFor } from "@/utils/content";
-import { ButtonGhost, ButtonPrimary, SectionHead } from "@/components/ui/primitives";
+import {
+  getAboutIntro,
+  getPosts,
+  getProjects,
+  getWritingFor,
+} from "@/utils/content";
+import {
+  ButtonGhost,
+  ButtonPrimary,
+  SectionHead,
+} from "@/components/ui/primitives";
 import { PostRow, PostTableHeader } from "@/components/ui/PostRow";
 import { ProjectGrid } from "@/components/ui/ProjectCard";
 import { aboutData } from "@/app/[lang]/about/data";
@@ -19,44 +28,41 @@ function routesFor(lang, posts, otherPosts) {
   const { routes } = t(lang).home;
   const other = otherLocale(lang);
   return [
-    { ...routes.ai, href: localize(lang, "/writing?topic=ai"), show: posts.some((post) => post.topic === "ai") },
+    {
+      ...routes.ai,
+      href: localize(lang, "/writing?topic=ai"),
+      show: posts.some((post) => post.topic === "ai"),
+    },
     {
       ...routes.automation,
       href: localize(lang, "/writing?topic=automation"),
       show: posts.some((post) => post.topic === "automation"),
     },
-    { ...routes.other, href: localize(other, "/writing"), lang: other, show: otherPosts.length > 0 },
+    {
+      ...routes.other,
+      href: localize(other, "/writing"),
+      lang: other,
+      show: otherPosts.length > 0,
+    },
   ].filter((route) => route.show);
 }
 
-// hero-band: the light two-tone headline, the abstract and the call to action sit in the
-// photo's sky; the photo shows in full at the page's width. The sky is transparent, so the
-// photo is pulled up under the text by a negative top margin. A percentage margin is
-// measured against the width, like the sky's own height (about 24% of the width), so the
-// text stays clear of the grass at every width (12% below lg, where the text wraps to more
-// lines; from lg 20%, capped at 384px so very wide screens keep the photo below the nav).
-// The photo's bottom edge fades into the page.
-const HERO_IMAGE = { src: "/images/hero-archive-v1.webp", width: 2688, height: 1520 };
+// hero-band: fits one screen (viewport minus the sticky nav: 56px mobile, 64px from lg)
+// and shows the whole photo. The photo is full width and pinned to the bottom of the
+// hero, behind the text; when it is taller than the hero, only its transparent sky goes
+// above the top edge (clipped), so the hills and both figures always show in full. On
+// short screens the abstract and the call to action overlap the hills (owner's call:
+// the photo fitting one screen comes first). The photo's bottom edge fades into the page.
+const HERO_IMAGE = {
+  src: "/images/hero-archive-v1.webp",
+  width: 2688,
+  height: 1520,
+};
 
 function Hero({ lang, role }) {
   const labels = t(lang).home;
   return (
-    <section className="relative">
-      <div className="band relative z-10 flex flex-col items-center gap-md pt-xl text-center lg:gap-lg lg:pt-xxl">
-        <h1 className="t-hero">
-          <span className="block text-faint">{labels.hero[0]}</span>
-          <span className="block text-ink">{labels.hero[1]}</span>
-        </h1>
-        <p className="t-body-md max-w-[70ch] text-muted">{labels.abstractText(role.title, role.org)}</p>
-        <div className="flex flex-col items-center gap-xs pt-xs">
-          <ButtonPrimary href={localize(lang, "/writing")}>{labels.startReading}</ButtonPrimary>
-          <p className="t-meta flex items-center gap-xs text-muted">
-            <span aria-hidden="true">•</span>
-            {labels.heroNote}
-          </p>
-        </div>
-      </div>
-
+    <section className="relative h-[calc(100svh-3.5rem)] min-h-[560px] overflow-hidden lg:h-[calc(100svh-4rem)] lg:min-h-[640px]">
       <Image
         src={HERO_IMAGE.src}
         width={HERO_IMAGE.width}
@@ -64,8 +70,27 @@ function Hero({ lang, role }) {
         alt={labels.heroAlt}
         priority
         sizes="100vw"
-        className="-mt-[12%] block h-auto w-full [mask-image:linear-gradient(to_bottom,black_72%,transparent)] lg:-mt-[min(20%,384px)]"
+        className="absolute inset-x-0 bottom-0 block h-auto w-full [mask-image:linear-gradient(to_bottom,black_80%,transparent)]"
       />
+
+      <div className="band relative z-10 flex flex-col items-center gap-md pt-xl text-center lg:gap-lg lg:pt-xxl">
+        <h1 className="t-hero">
+          <span className="block text-faint">{labels.hero[0]}</span>
+          <span className="block text-ink">{labels.hero[1]}</span>
+        </h1>
+        <p className="t-body-md max-w-[70ch] text-muted">
+          {labels.abstractText(role.title, role.org)}
+        </p>
+        <div className="flex flex-col items-center gap-xs pt-xs">
+          <ButtonPrimary href={localize(lang, "/writing")}>
+            {labels.startReading}
+          </ButtonPrimary>
+          <p className="t-meta flex items-center gap-xs text-muted">
+            <span aria-hidden="true">•</span>
+            {labels.heroNote}
+          </p>
+        </div>
+      </div>
     </section>
   );
 }
@@ -76,14 +101,20 @@ function StartHere({ routes, lang }) {
     <section className="band flex flex-col gap-lg py-xxxl lg:gap-xxl lg:py-section">
       <SectionHead heading={labels.startHere} />
       <div className="overflow-hidden rounded-card bg-surface">
-        <div aria-hidden="true" className="hidden gap-lg border-b border-hairline px-lg py-sm lg:flex">
+        <div
+          aria-hidden="true"
+          className="hidden gap-lg border-b border-hairline px-lg py-sm lg:flex"
+        >
           <span className="t-label flex-1 text-faint">{labels.youAre}</span>
           <span className="t-label flex-1 text-faint">{labels.startWith}</span>
           <span className="t-label w-[280px] text-faint">{labels.leadsTo}</span>
         </div>
         <ul>
           {routes.map((route) => (
-            <li key={route.href} className="border-b border-hairline last:border-b-0">
+            <li
+              key={route.href}
+              className="border-b border-hairline last:border-b-0"
+            >
               <Link
                 href={route.href}
                 hrefLang={route.lang}
@@ -92,10 +123,15 @@ function StartHere({ routes, lang }) {
                 <span lang={route.lang} className="t-body-md flex-1 text-ink">
                   {route.you}
                 </span>
-                <span lang={route.lang} className="t-body-sm flex-1 text-body lg:text-[17px] lg:leading-[1.6]">
+                <span
+                  lang={route.lang}
+                  className="t-body-sm flex-1 text-body lg:text-[17px] lg:leading-[1.6]"
+                >
                   {route.start}
                 </span>
-                <span className="t-meta text-accent lg:w-[280px]">{route.href}</span>
+                <span className="t-meta text-accent lg:w-[280px]">
+                  {route.href}
+                </span>
               </Link>
             </li>
           ))}
@@ -153,9 +189,21 @@ function LatestProjects({ projects, lang }) {
 function AboutSplit({ intro, introLang, lang, about }) {
   const { CURRENT_ROLE, TEACHING_ROLE, LEARNING_PATH } = about;
   const rows = [
-    { when: CURRENT_ROLE.kind, what: CURRENT_ROLE.title, where: CURRENT_ROLE.org },
-    { when: TEACHING_ROLE.kind, what: TEACHING_ROLE.title, where: TEACHING_ROLE.org },
-    ...LEARNING_PATH.map((item) => ({ when: item.period, what: item.title, where: item.place })),
+    {
+      when: CURRENT_ROLE.kind,
+      what: CURRENT_ROLE.title,
+      where: CURRENT_ROLE.org,
+    },
+    {
+      when: TEACHING_ROLE.kind,
+      what: TEACHING_ROLE.title,
+      where: TEACHING_ROLE.org,
+    },
+    ...LEARNING_PATH.map((item) => ({
+      when: item.period,
+      what: item.title,
+      where: item.place,
+    })),
   ];
 
   return (
@@ -171,9 +219,14 @@ function AboutSplit({ intro, introLang, lang, about }) {
           />
         </div>
         <div className="flex flex-1 flex-col gap-lg lg:gap-xl">
-          <h2 className="t-display-lg font-light text-ink">{t(lang).nav.about}</h2>
+          <h2 className="t-display-lg font-light text-ink">
+            {t(lang).nav.about}
+          </h2>
           {intro ? (
-            <div lang={introLang !== lang ? introLang : undefined} className="intro-flow t-intro text-ink">
+            <div
+              lang={introLang !== lang ? introLang : undefined}
+              className="intro-flow t-intro text-ink"
+            >
               {intro}
             </div>
           ) : null}
@@ -185,14 +238,22 @@ function AboutSplit({ intro, introLang, lang, about }) {
               >
                 <span className="t-meta text-muted lg:w-[120px] lg:shrink-0">
                   {row.when}
-                  {row.where ? <span className="lg:hidden"> · {row.where}</span> : null}
+                  {row.where ? (
+                    <span className="lg:hidden"> · {row.where}</span>
+                  ) : null}
                 </span>
                 <span className="t-body-md flex-1 text-ink">{row.what}</span>
-                <span className="t-meta hidden text-muted lg:block">{row.where}</span>
+                <span className="t-meta hidden text-muted lg:block">
+                  {row.where}
+                </span>
               </li>
             ))}
           </ul>
-          <ButtonGhost href={localize(lang, "/about")} bare className="-ml-lg self-start">
+          <ButtonGhost
+            href={localize(lang, "/about")}
+            bare
+            className="-ml-lg self-start"
+          >
             {t(lang).home.fullStory}
           </ButtonGhost>
         </div>
@@ -210,7 +271,8 @@ export default async function Home({ params }) {
     getAboutIntro(lang),
   ]);
   // The Indonesian intro may still be a draft: show the English one until it is published.
-  const fallback = !ownIntro && lang !== "en" ? await getAboutIntro("en") : null;
+  const fallback =
+    !ownIntro && lang !== "en" ? await getAboutIntro("en") : null;
   const routes = routesFor(lang, posts, otherPosts);
   const about = aboutData(lang);
 
@@ -221,7 +283,9 @@ export default async function Home({ params }) {
       {/* The /writing band stays hidden until at least two posts are published. */}
       {posts.length >= 2 ? <LatestWriting posts={posts} lang={lang} /> : null}
       {/* The /projects band stays hidden while no project is published. */}
-      {projects.length ? <LatestProjects projects={projects} lang={lang} /> : null}
+      {projects.length ? (
+        <LatestProjects projects={projects} lang={lang} />
+      ) : null}
       <AboutSplit
         intro={ownIntro || fallback}
         introLang={ownIntro ? lang : "en"}

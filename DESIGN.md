@@ -580,7 +580,7 @@ All three are self-hosted, subset to Latin, `font-display: swap`. Paid fonts see
 ```
 [logo] HASBI HASSADIQIN  [ 00 ] INDEX  [ 01 ] WRITING  [ 02 ] PROJECTS  [ 03 ] ABOUT            EN / ID
 
-§ 00 · INDEX                 hero-band (two-tone headline, abstract, START READING in the photo's sky; full photo, bottom fades)
+§ 00 · INDEX                 hero-band (one screen: two-tone headline, abstract, START READING over the full photo pinned to the bottom)
 § 00.1 · START HERE  /start  router table: YOU ARE · START WITH · LEADS TO (3 rows)
 § 01 · WRITING  /writing     latest post-rows (band hidden until ≥ 2 posts are published)
 § 02 · PROJECTS  /projects   project-card grid (personal projects only)
@@ -619,7 +619,7 @@ Whitespace is structured, not airy: it is bounded by hairlines. Every band has a
 There are **no box-shadows** in the system. Depth comes from tone steps and border weight.
 
 ### Decorative Depth
-- **Hero photo:** the one full-bleed image on the site, home hero only (see Hero), shown in full with its bottom edge fading into the page.
+- **Hero photo:** the one full-bleed image on the site, home hero only (see Hero), shown in full within one screen, its bottom edge fading into the page.
 - **Line-art illustrations** (optional, Loop/boostlab pattern): isometric flat vector, thick uniform `{colors.ink}` outlines, white objects, flat solid `{colors.accent}` fills on key surfaces, hard-edged solid `{colors.ink}` shadows, thin wireframe guide lines. No gradients, no text inside the image. Used as section art instead of stock imagery.
 - **Real screenshots and photos** of the owner's own builds are the main depth source on article and project pages.
 
@@ -664,7 +664,7 @@ There are **no box-shadows** in the system. Depth comes from tone steps and bord
 
 ### Hero
 
-**`hero-band`**: centred at the top: the light two-tone headline in `t-hero` (first part `{colors.faint}`, key part `{colors.ink}`), the abstract in `{typography.body-md}` `{colors.muted}` (max 70ch), then the primary pill (`START READING`) with a small note under it. Below, the photo (`/images/hero-archive-v1.webp`: a person on a green hill beside a figure made of ASCII characters) in full, at the page's width. Its sky is transparent, and the photo is pulled up under the text by a negative top margin measured against the width (12% below `lg`, `min(20%, 384px)` from `lg`; the sky is about 24% of the width), so the text sits in the sky and stays at least about 40px clear of the grass at every width. No fade at the top; the photo's bottom edge fades into the page (mask from 72%). On wide screens the hero is taller than the screen; the faded grass runs below the fold.
+**`hero-band`**: fits one screen: height `100svh` minus the sticky nav (56px mobile, 64px from `lg`), at least 560px (640px from `lg`). The photo (`/images/hero-archive-v1.webp`: a person on a green hill beside a figure made of ASCII characters) is full width and pinned to the bottom of the hero, behind the text; when it is taller than the hero only its transparent sky is clipped, so the hills and both figures always show in full. Its bottom edge fades into the page (mask from 80%). Centred at the top, in front: the light two-tone headline in `t-hero` (first part `{colors.faint}`, key part `{colors.ink}`), the abstract in `{typography.body-md}` `{colors.muted}` (max 70ch), the primary pill (`START READING`) and a small note. On short screens the abstract and the button overlap the hills (owner's call, 2026-11-27: the photo fitting one screen comes first).
 
 **`hero-abstract`**: the abstract and call to action above; nothing sits on the photo.
 
@@ -874,7 +874,7 @@ Not allowed: intro loaders, WebGL backgrounds, sound, scroll-hijacking, "best vi
 
 ### Collapsing Strategy
 - Reduce columns, never scale cards down.
-- Display type is fluid via `clamp()`; the hero headline must fit in 3 lines at 375px and, with the abstract and call to action, stay in the photo's sky.
+- Display type is fluid via `clamp()`; the hero headline must fit in 3 lines at 375px. The hero fits one screen; its text may overlap the photo's hills on short screens.
 - Mono labels never go below 11px.
 
 ### Image Behavior
@@ -921,6 +921,7 @@ Logged decisions:
 - 2026-11-27, theme (owner's call): **dark mode is the default** for every reader, regardless of system setting; the light theme stays available from a theme pill in the nav and is remembered per browser. Reverses audit 001's "keep the page light" (dark closing band entry above) for the page as a whole. The hero photo's transparent sky now reads as a night sky over the green hills, close to the reference. Palette in **Direction v2**.
 - 2026-11-27, hero (owner): the home hero fits one screen. The call to action moves from under the photo to under the abstract; the photo fills the remaining height (cover, bottom centre) with a fade at its top edge.
 - 2026-11-27, hero (owner): the photo shows in full at the page's width, with no fade at the top and a fade at its bottom edge. This takes priority over fitting one screen: on wide screens the faded grass runs below the fold.
+- 2026-11-27, hero (owner): the whole photo fits one screen; the text may overlap it. The photo is pinned to the bottom of a screen-high hero (only its transparent sky is clipped), and the abstract and button sit over the hills on short screens.
 
 ## Iteration Guide
 
