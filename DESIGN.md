@@ -1,7 +1,7 @@
 ---
 version: alpha.3
-name: Hasbi-personal-site
-description: (Superseded in part by Direction v2, 2026-11-27: one sans typeface, pills and soft corners, light headlines.) A solutions engineer's lab notebook on a white page. Bilingual (EN / ID) tutorials and notes on AI and automation, plus personal projects. Near-violet ink, one purple accent carried over from the old site and the logo, hairline rules and zero radius, where a monospace label system does most of the talking and a large Funnel Sans headline carries the hierarchy. Two topic colours (AI purple, automation green) appear only on tags and card header strips. Everything is light; the only dark surface is a code block. Structure borrowed from itsua.com, storytelling from jithinrp.com, grid restraint from boostlab.
+name: Human-meets-Hack
+description: (Superseded in part by Direction v2, 2026-11-27: one sans typeface, pills and soft corners, light headlines.) A publication of guides on using AI across domains, on a white page. Bilingual (EN / ID) tutorials and notes on AI and automation. Near-violet ink, one purple accent carried over from the old site and the logo, hairline rules and zero radius, where a monospace label system does most of the talking and a large Funnel Sans headline carries the hierarchy. Two topic colours (AI purple, automation green) appear only on tags and card header strips. Everything is light; the only dark surface is a code block. Structure borrowed from itsua.com, storytelling from jithinrp.com, grid restraint from boostlab.
 
 colors:
   primary: "#201936"
@@ -425,6 +425,7 @@ components:
 
 The owner redesigned the whole site after a reference (a modern AI landing page: wordmark left, centred pill nav, light two-tone headline over a landscape photo, white pill call to action). **Where an older section of this file conflicts with this one, this section wins**; the older sections are being rewritten to match (see Known Gaps).
 
+- **Positioning (2026-11-27).** The site is **Human meets Hack**, a publication of guides on using AI across domains, not a personal site. The owner appears only in the footer credit. About, Projects, personal links, role and portrait are removed. Older sections below that mention them are historical.
 - **One typeface for the interface.** Funnel Sans for everything; JetBrains Mono only inside code blocks and inline code. Furniture (labels, nav, meta, tags, buttons) is small sans in sentence case: utilities `t-label`, `t-nav`, `t-meta`, `t-tag`, `t-button`. No uppercase, no letter-spaced labels.
 - **No numbering furniture.** No `§ NN ·` section labels, no `[ 01 ]` nav brackets, no slash-path headings (`/writing`). Headings use the localized words. Content numbering (article headings, lesson brief) stays.
 - **Headlines are light.** `t-hero` (Funnel Sans 300, `clamp(36px, min(5vw, 7svh), 72px)`) for page titles and the home hero; `t-display-lg font-light` for section headings. The home hero is two-tone: first part `{colors.faint}`, key part `{colors.ink}`. The accent purple is not used in headlines.
@@ -577,17 +578,16 @@ All three are self-hosted, subset to Latin, `font-display: swap`. Paid fonts see
 - **Case study:** single centred column at `{component.case-study-body}` width, with a sticky meta column on the left at desktop.
 
 ### Page Composition (Home)
+Updated 2026-11-27 (positioning). Home order: hero (headline, abstract, call to action over the photo), start here (router), latest writing. No Projects band, no About split, no Elsewhere table.
 ```
-[logo] HASBI HASSADIQIN  [ 00 ] INDEX  [ 01 ] WRITING  [ 02 ] PROJECTS  [ 03 ] ABOUT            EN / ID
+[logo] Human meets Hack      Writing                                 EN / ID
 
-§ 00 · INDEX                 hero-band (one screen: two-tone headline, abstract, START READING over the full photo pinned to the bottom)
-§ 00.1 · START HERE  /start  router table: YOU ARE · START WITH · LEADS TO (3 rows)
-§ 01 · WRITING  /writing     latest post-rows (band hidden until ≥ 2 posts are published)
-§ 02 · PROJECTS  /projects   project-card grid (personal projects only)
-§ 03 · ABOUT                 split: about-photo | owner's paragraph + teaching & learning line
-§ 04 · ELSEWHERE             footer-band: EMAIL · LINKEDIN · GITHUB, © + back to top
+hero-band      one screen: two-tone headline, abstract, call to action over the photo
+start here     router table: YOU ARE · START WITH · LEADS TO (3 rows)
+latest writing post-rows (band hidden until ≥ 2 posts are published)
+footer         credit line, © year + site name, back to top
 ```
-Section numbers match the nav numbers. There is no stat strip: the only numbers available came from NDA work. `{component.stat-strip}` stays in the system for real teaching numbers later (e.g. published tutorials, learners taught, with a source).
+`{component.stat-strip}` stays in the system for real numbers later.
 
 ### Routes that must exist when Home ships
 Every destination on Home must be a real page: `/writing`, `/writing?topic=ai`, `/writing?topic=automation`, `/projects`, `/about`, `/id`, `mailto:` and the external profiles. A row or link whose page is empty is removed, not left dead.
@@ -753,49 +753,8 @@ footer-band
 - **Images**: the author's own screenshots and diagrams only. The current Notion posts hot-link third-party images (game screenshots, other blogs); those are replaced before migration.
 - Mobile: meta moves above the title as a 2-column grid; the TOC collapses into an `ON THIS PAGE · 06 ↓` bar; cover and figures go full-bleed; the pager stacks (next-lesson card, then `ALL WRITING`).
 
-### Projects Index (`/projects`)
-
-```
-§ 02 · PROJECTS  /projects (display-xl) + dek | ABOUT THIS LIST: "Personal and bootcamp projects only. Client and employer work is under NDA and is not listed here."
-filter bar       TOPIC [ALL][AI][AUTOMATION][WEB]                                02 PROJECTS · NEWEST FIRST
-grid             project-cards, 2-up (3-up from 3+ projects), 1-up mobile
-footer-band
-```
-The NDA line is part of the page on purpose: it answers "where is your work?" before a visitor has to ask.
-
-### Project Page (`/projects/<slug>`)
-
-```
-breadcrumb       ← /projects / slug                                               live link ↗ (if one exists)
-header           § 02 · PROJECTS / TOPIC → title (display-lg) → the owner's description as dek
-meta strip       TOPIC · YEAR · ROLE · TEAM · LINK
-cover            16:9, the owner's own screenshot
-body             sticky TOC + LINKS (live app, source code if public) | 680 column:
-                   01 What it does · 02 What I built (numbered feature rows + screenshots)
-                   03 How it works (architecture spec table: FRONTEND / BACKEND / AUTH / DEPLOY)
-                   04 What was hard (PROBLEM / WHAT WORKED pairs) · 05 What I learned · 06 What I'd do next
-                   callout NOTE for caveats (e.g. "the live app may be unavailable")
-pager            BACK [ALL PROJECTS] | next project card (button-ghost OPEN PROJECT)
-footer-band
-```
-- This replaces the earlier seven-heading case-study order; "What was hard" carries the "wrong obvious fix" idea as PROBLEM / WHAT WORKED pairs, which matches how the owner already writes project notes.
-- `WHAT WORKED` labels use `{colors.accent}`; it is the one accent moment in the section.
-- Only links that exist are shown. "Source code" appears only for a public repo.
-- Mobile: meta becomes a 2-column grid above the title; the TOC collapses; feature rows and the architecture table stack key over value.
-
-### About (`/about`)
-
-```
-header (split)   § 03 · ABOUT /about + owner paragraph [YOUR WORDS] | about-photo 4:5
-§ 03.1 TEACHING  "What I teach": role card (REVOU · FREELANCE, AI & Data Analytics Instructor) | numbered topic rows with tags
-§ 03.2 LEARNING  "How I learned it": year · programme · institution, certificate thumbnails where they exist
-§ 03.3 TOOLS     "What I teach with": three columns AI / AUTOMATION / WEB & DATA, each with a topic dot
-footer-band
-```
-- About deliberately uses `{typography.title-lg}` sub-headings instead of slash-headings (RHYTHM 2 break for a personal page).
-- No employer history: the page is about teaching and learning. Day-job roles stay off the site (NDA and rebrand); the owner can link a CV later if needed.
-- Certificate thumbnails come from `public/images/about/` (Devscale, RevoU).
-- Topic rows are 44px minimum; they become links to `/writing?topic=…` only once posts exist for that topic.
+### Projects and About (removed, 2026-11-27)
+The Projects index, Project page and About page (with project cards, about split and about photo) are removed. `/about`, `/projects` and `/contact` redirect to the language home. The sections that described them were deleted; see Logged decisions.
 
 **`case-study-header`**: title in `{typography.display-lg}`, one-line outcome below in `{typography.display-md}` `{colors.muted}`, then `{component.project-meta}` as a key-value block.
 
@@ -803,13 +762,9 @@ footer-band
 
 **`code-block`**: `{colors.surface-dark-elevated}`, `{typography.code}`, `{rounded.none}`, filename label on top in `{typography.mono-label}`.
 
-### Footer ("Elsewhere")
+### Footer
 
-**`footer-band`**: full-bleed `{colors.surface}` with a top hairline, opened by `§ 04 · ELSEWHERE`. No headline and no sales CTA: the site is for reading.
-
-**`contact-spec-row`**: key-value rows in `{typography.mono-meta}`, min height 44px: `EMAIL · LINKEDIN ↗ · GITHUB ↗`. Keys in `{colors.muted}`, values in `{colors.ink}`.
-
-**`footer`**: last row of the band. `© YEAR NAME` left, an optional one-line personal note centre (owner's own words only), `BACK TO TOP ↑` right in a 44px hit area, all in `{typography.mono-label}`.
+**`footer`**: the credit line "This website is managed by Hasbi Hassadiqin", then `© year Human meets Hack` and a back to top link in a 44px hit area. No contact rows, no personal links, no `footer-band` table (the old "Elsewhere" band is removed).
 
 ## Motion
 
@@ -927,6 +882,7 @@ Logged decisions:
 - 2026-11-27, hero photo (owner): "Human meets Hacks". A person and a figure with a CRT monitor for a head, both in plain white, on green hills whose far side is still binary (the world rendering). Simple figures, no Greek costume; the owner chose this over oil paintings and object studies. The hero is a light surface in both themes with dark text on the pale sky (owner's call), over a light haze.
 - 2026-11-27, theme and motion (owner): **light mode is the default again** (the dark theme stays available from the nav pill), and the ASCII rain animation is **removed** from the hero.
 - 2026-11-27, hero copy (owner): the headline is **"Human meets Hack"** (both languages; two tones: "Human meets" faint, "Hack" ink). The abstract below it describes a collection of ways to use AI across domains (agent draft from the owner's brief, awaiting the owner's wording); the RAG mention is gone (audit 002 #7).
+- 2026-11-27, positioning (owner): the site is **Human meets Hack**, a collection of guides on using AI across domains, no longer a personal site. The owner is credited only in the footer ("This website is managed by Hasbi Hassadiqin"). About, Projects, personal links, role and portrait are removed; articles are authored by Human meets Hack; /about, /projects and /contact redirect home.
 
 ## Iteration Guide
 

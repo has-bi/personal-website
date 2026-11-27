@@ -11,7 +11,7 @@
     "check:content": "node scripts/check-content.mjs",
     "check": "npm run check:content && npm run lint",
     "smoke": "node scripts/smoke.mjs",
-    "verify": "npm run check && npm run build && npm run smoke"
+    "verify": "npm run check && NEXT_DIST_DIR=.next-verify next build && NEXT_DIST_DIR=.next-verify node scripts/smoke.mjs"
   },
   "dependencies": {
     "next": "^15.5.15",

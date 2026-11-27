@@ -135,7 +135,7 @@ export function MetaLine({ items, action }) {
   );
 }
 
-// Numbered section heading used inside articles and project write-ups.
+// Numbered section heading used inside articles.
 export function NumberedHeading({ number, id, children }) {
   return (
     <div className="flex flex-col gap-xs pt-lg first:pt-0">
@@ -143,26 +143,6 @@ export function NumberedHeading({ number, id, children }) {
       <h2 id={id} className="t-title-lg text-ink">
         {children}
       </h2>
-    </div>
-  );
-}
-
-// `parent` is the path shown ("/projects"); `href` is where it links in this language.
-export function Breadcrumb({ parent, href = parent, slug, aside }) {
-  return (
-    <div className="band flex min-h-11 items-center justify-between gap-sm border-b border-hairline lg:min-h-12">
-      <nav aria-label="Breadcrumb" className="t-nav flex min-w-0 items-center gap-sm">
-        <Link href={href} className="flex min-h-11 shrink-0 items-center text-ink hover:text-accent">
-          ← {parent}
-        </Link>
-        <span aria-hidden="true" className="text-faint">
-          /
-        </span>
-        <span aria-current="page" className="truncate text-faint">
-          {slug}
-        </span>
-      </nav>
-      {aside}
     </div>
   );
 }

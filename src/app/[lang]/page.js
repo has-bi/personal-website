@@ -1,19 +1,12 @@
 import Image from "next/image";
 import Link from "next/link";
-import {
-  getAboutIntro,
-  getPosts,
-  getProjects,
-  getWritingFor,
-} from "@/utils/content";
+import { getPosts, getWritingFor } from "@/utils/content";
 import {
   ButtonGhost,
   ButtonPrimary,
   SectionHead,
 } from "@/components/ui/primitives";
 import { PostRow, PostTableHeader } from "@/components/ui/PostRow";
-import { ProjectGrid } from "@/components/ui/ProjectCard";
-import { aboutData } from "@/app/[lang]/about/data";
 import { alternates } from "@/lib/site";
 import { localize, otherLocale, t } from "@/lib/i18n";
 
@@ -60,7 +53,7 @@ const HERO_IMAGE = {
   height: 2143,
 };
 
-function Hero({ lang, role }) {
+function Hero({ lang }) {
   const labels = t(lang).home;
   return (
     <section
@@ -89,7 +82,7 @@ function Hero({ lang, role }) {
           <span className="block text-ink">{labels.hero[1]}</span>
         </h1>
         <p className="t-body-md max-w-[70ch] text-body">
-          {labels.abstractText(role.title, role.org)}
+          {labels.abstractText}
         </p>
         <div className="flex flex-col items-center gap-xs pt-xs">
           <ButtonPrimary href={localize(lang, "/writing")}>
@@ -180,129 +173,20 @@ function LatestWriting({ posts, lang }) {
   );
 }
 
-function LatestProjects({ projects, lang }) {
-  const href = localize(lang, "/projects");
-  return (
-    <section className="band flex flex-col gap-lg py-xxxl lg:gap-xxl lg:py-section">
-      <SectionHead
-        heading={t(lang).nav.projects}
-        more={
-          <ButtonGhost href={href} bare>
-            {t(lang).home.allProjects}
-          </ButtonGhost>
-        }
-      />
-      <ProjectGrid projects={projects.slice(0, 3)} lang={lang} />
-    </section>
-  );
-}
-
-function AboutSplit({ intro, introLang, lang, about }) {
-  const { CURRENT_ROLE, TEACHING_ROLE, LEARNING_PATH } = about;
-  const rows = [
-    {
-      when: CURRENT_ROLE.kind,
-      what: CURRENT_ROLE.title,
-      where: CURRENT_ROLE.org,
-    },
-    {
-      when: TEACHING_ROLE.kind,
-      what: TEACHING_ROLE.title,
-      where: TEACHING_ROLE.org,
-    },
-    ...LEARNING_PATH.map((item) => ({
-      when: item.period,
-      what: item.title,
-      where: item.place,
-    })),
-  ];
-
-  return (
-    <section className="band py-xxxl lg:py-section">
-      <div className="flex flex-col gap-lg lg:flex-row lg:gap-xxl">
-        <div className="relative aspect-4/5 w-full overflow-hidden rounded-media bg-surface-sunken lg:w-[360px] lg:shrink-0">
-          <Image
-            src="/images/me-pixelated.webp"
-            alt={t(lang).about.portraitAlt}
-            fill
-            sizes="(min-width: 1024px) 360px, 100vw"
-            className="object-cover [image-rendering:pixelated]"
-          />
-        </div>
-        <div className="flex flex-1 flex-col gap-lg lg:gap-xl">
-          <h2 className="t-display-lg font-light text-ink">
-            {t(lang).nav.about}
-          </h2>
-          {intro ? (
-            <div
-              lang={introLang !== lang ? introLang : undefined}
-              className="intro-flow t-intro text-ink"
-            >
-              {intro}
-            </div>
-          ) : null}
-          <ul className="border-t border-hairline">
-            {rows.map((row) => (
-              <li
-                key={`${row.when}-${row.what}`}
-                className="flex flex-col gap-xxs border-b border-hairline py-sm lg:flex-row lg:items-center lg:gap-lg"
-              >
-                <span className="t-meta text-muted lg:w-[120px] lg:shrink-0">
-                  {row.when}
-                  {row.where ? (
-                    <span className="lg:hidden"> · {row.where}</span>
-                  ) : null}
-                </span>
-                <span className="t-body-md flex-1 text-ink">{row.what}</span>
-                <span className="t-meta hidden text-muted lg:block">
-                  {row.where}
-                </span>
-              </li>
-            ))}
-          </ul>
-          <ButtonGhost
-            href={localize(lang, "/about")}
-            bare
-            className="-ml-lg self-start"
-          >
-            {t(lang).home.fullStory}
-          </ButtonGhost>
-        </div>
-      </div>
-    </section>
-  );
-}
-
 export default async function Home({ params }) {
   const { lang } = await params;
-  const [posts, otherPosts, projects, ownIntro] = await Promise.all([
+  const [posts, otherPosts] = await Promise.all([
     getWritingFor(lang),
     getPosts({ lang: otherLocale(lang) }),
-    getProjects(),
-    getAboutIntro(lang),
   ]);
-  // The Indonesian intro may still be a draft: show the English one until it is published.
-  const fallback =
-    !ownIntro && lang !== "en" ? await getAboutIntro("en") : null;
   const routes = routesFor(lang, posts, otherPosts);
-  const about = aboutData(lang);
 
   return (
     <>
-      <Hero lang={lang} role={about.CURRENT_ROLE} />
+      <Hero lang={lang} />
       {routes.length ? <StartHere routes={routes} lang={lang} /> : null}
       {/* The /writing band stays hidden until at least two posts are published. */}
       {posts.length >= 2 ? <LatestWriting posts={posts} lang={lang} /> : null}
-      {/* The /projects band stays hidden while no project is published. */}
-      {projects.length ? (
-        <LatestProjects projects={projects} lang={lang} />
-      ) : null}
-      <AboutSplit
-        intro={ownIntro || fallback}
-        introLang={ownIntro ? lang : "en"}
-        lang={lang}
-        about={about}
-      />
     </>
   );
 }

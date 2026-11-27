@@ -1,6 +1,6 @@
 # hasbi.pro
 
-Personal site of Hasbi Hassadiqin: bilingual tutorials and notes on AI and automation, plus personal projects. Next.js 15 (App Router) + Tailwind + MDX, deployed on Vercel. Design direction lives in [`DESIGN.md`](DESIGN.md).
+Human meets Hack: a bilingual publication of guides on using AI across domains (by Hasbi Hassadiqin, credited in the footer only). Next.js 15 (App Router) + Tailwind + MDX, deployed on Vercel. Design direction lives in [`DESIGN.md`](DESIGN.md).
 
 ## Run it
 
@@ -18,11 +18,9 @@ No environment variables are needed. Content is read from the repository at buil
 ```
 content/
   writing/<slug>.<lang>.mdx    # posts, e.g. do-you-even-need-ai.en.mdx
-  projects/<slug>.mdx          # personal projects only (client and employer work is under NDA)
-  about.<lang>.mdx             # your own intro paragraph for /about and Home (the English one shows until about.id.mdx is published)
 ```
 
-Routes: `/`, `/writing` (filters: `?type=tutorial&topic=ai&lang=id`), `/writing/<slug>`, `/projects` (`?topic=`), `/projects/<slug>`, `/about`. Old `/blog/*` and `/contact` URLs redirect.
+Routes: `/`, `/writing` (filters: `?type=tutorial&topic=ai&lang=id`), `/writing/<slug>`. Old `/blog/*` URLs redirect to `/writing`; `/about`, `/projects` and `/contact` redirect to the language home.
 
 Languages: Indonesian is the default and lives at the root; English lives under `/en` (`/en/writing/<slug>`). A post exists in a language when `<slug>.<lang>.mdx` is published. Until the Indonesian version of a post is published, the Indonesian list shows the English post and `/writing/<slug>` redirects to `/en/writing/<slug>`. Interface text lives in `src/lib/i18n.js`; `src/middleware.js` maps the root onto the `[lang]` routes in `src/app/[lang]/`.
 
@@ -46,11 +44,8 @@ draft: true             # drafts never reach the live site
 
 Every `## Heading` is numbered and listed in "On this page". If you number headings yourself (`## 1. Can you simplify it?`), automatic numbers are switched off for that post. Tutorials open with a lesson brief built from those headings. Straight quotes are turned into typographic ones at build time.
 
-Project front matter: `title`, `year`, `topic`, `stack`, `description` (the dek), `outcome` (one line on the card), `role`, `team`, `cover`, `gallery` (up to 3 card thumbnails), `liveUrl`, `sourceUrl`, `featured`, `draft`.
-
 - Drafts are hidden in every build. Preview them locally with `SHOW_DRAFTS=1 npm run dev`.
 - Images go in `public/images/...` and are referenced with an absolute path. Use your own screenshots and diagrams.
 - MDX components available in content: `<YouTube id="..." title="..." />` and `<Callout kind="Tip">...</Callout>` (kinds: Note, Tip, Rules, Warning, Check your work).
-- Project write-up blocks (one line each, string props only): `<Features><Feature name="...">...</Feature></Features>`, `<Spec><SpecRow label="...">...</SpecRow></Spec>`, `<Problems><Problem problem="...">what worked</Problem></Problems>`, `<Learned label="...">...</Learned>`, `<Screenshots><Shot src="..." alt="..." /></Screenshots>`. See `content/projects/mental-wellness-app-nextjs.mdx`.
 - Publishing = commit the file and push; Vercel rebuilds the site.
 - Every article has a **Copy context for AI** button. It copies the post as Markdown, built by `src/lib/ai-context.js`; teach it any new MDX component you add so the copy stays readable.

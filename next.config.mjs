@@ -26,6 +26,9 @@ function englishOnlyPostRedirects() {
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // `npm run verify` builds into its own dir so a running `next dev` cannot overwrite the build it serves.
+  distDir: process.env.NEXT_DIST_DIR || ".next",
+
   images: {
     formats: ["image/avif", "image/webp"],
   },
@@ -34,12 +37,15 @@ const nextConfig = {
   // URLs that match no route. src/app/global-not-found.js renders that page instead.
   experimental: { globalNotFound: true },
 
-  // The blog became /writing; /contact was folded into the footer and /about.
+  // The blog became /writing; /about, /projects and /contact were removed; they go to the language home.
   async redirects() {
     return [
       { source: "/blog", destination: "/writing", permanent: true },
       { source: "/blog/:slug", destination: "/writing/:slug", permanent: true },
-      { source: "/contact", destination: "/about", permanent: true },
+      ...["/about", "/projects", "/projects/:slug", "/contact"].flatMap((source) => [
+        { source, destination: "/", permanent: true },
+        { source: `/en${source}`, destination: "/en", permanent: true },
+      ]),
       ...englishOnlyPostRedirects(),
     ];
   },

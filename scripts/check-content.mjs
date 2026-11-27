@@ -106,26 +106,10 @@ function checkPost(file, source) {
   checkBody(file, body, true);
 }
 
-function checkProject(file, source) {
-  const parsed = parse(file, source);
-  if (!parsed) return;
-  const { fm, body } = parsed;
-  for (const key of ["title", "year", "topic", "description"]) {
-    if (fm[key] === undefined || fm[key] === "") err(file, `front matter "${key}" is required`);
-  }
-  if (fm.topic && !TOPICS.includes(fm.topic)) err(file, `topic "${fm.topic}" must be one of ${TOPICS.join(" | ")}`);
-  if (fm.stack !== undefined && !Array.isArray(fm.stack)) err(file, "stack must be a list");
-  if (Array.isArray(fm.gallery) && fm.gallery.length > 3) err(file, "gallery holds at most 3 images");
-  checkImage(file, fm.cover, "cover");
-  for (const src of fm.gallery || []) checkImage(file, typeof src === "string" ? src : src?.src, "gallery");
-  checkBody(file, body, false);
-}
-
 function checkFile(abs) {
   const rel = path.relative(ROOT, abs);
   const source = fs.readFileSync(abs, "utf8");
   if (rel.startsWith(`content${path.sep}writing${path.sep}`)) checkPost(rel, source);
-  else if (rel.startsWith(`content${path.sep}projects${path.sep}`)) checkProject(rel, source);
   else {
     const parsed = parse(rel, source);
     if (parsed) checkBody(rel, parsed.body, false);

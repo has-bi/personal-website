@@ -4,6 +4,7 @@ import { cache } from "react";
 import { compileMDX } from "next-mdx-remote/rsc";
 import remarkGfm from "remark-gfm";
 import remarkSmartypants from "remark-smartypants";
+import { SITE_NAME } from "@/lib/site";
 import { createMdxComponents, slugify } from "@/components/mdx/MDXComponents";
 
 // Content lives in /content as MDX (see DESIGN.md, "Content Model").
@@ -100,7 +101,7 @@ function toPost({ file, source, content, frontmatter: fm, headings }) {
     tags: fm.tags || [],
     coverImage: fm.cover || "",
     coverAlt: smartQuotes(fm.coverAlt) || "",
-    author: fm.author || "Hasbi Hassadiqin",
+    author: fm.author || SITE_NAME,
     readMinutes: readMinutesOf(fm, source),
     level: fm.level || "",
     prerequisites: fm.prerequisites || [],
@@ -114,33 +115,6 @@ function toPost({ file, source, content, frontmatter: fm, headings }) {
   };
 }
 
-function toProject({ file, content, frontmatter: fm, headings }) {
-  const slug = file.replace(/\.mdx$/, "");
-  return {
-    id: slug,
-    slug,
-    lang: fm.lang || DEFAULT_LANG,
-    title: smartQuotes(fm.title) || "Untitled Project",
-    desc: smartQuotes(fm.description),
-    outcome: smartQuotes(fm.outcome),
-    coverImage: fm.cover || "",
-    gallery: fm.gallery || [],
-    date: fm.year ? String(fm.year) : "",
-    client: fm.client || "",
-    category: fm.category || "",
-    role: fm.role || "",
-    team: fm.team || "",
-    technologies: fm.stack || [],
-    topic: fm.topic || "",
-    liveUrl: fm.liveUrl || "",
-    sourceUrl: fm.sourceUrl || "",
-    featured: Boolean(fm.featured),
-    published: !fm.draft,
-    headings,
-    content,
-  };
-}
-
 const visible = (entry) => entry.published || SHOW_DRAFTS;
 
 const loadPosts = cache(async () =>
@@ -148,13 +122,6 @@ const loadPosts = cache(async () =>
     .map(toPost)
     .filter(visible)
     .sort((a, b) => new Date(b.date) - new Date(a.date))
-);
-
-const loadProjects = cache(async () =>
-  (await compileSection("projects"))
-    .map(toProject)
-    .filter(visible)
-    .sort((a, b) => b.date.localeCompare(a.date) || Number(b.featured) - Number(a.featured) || a.title.localeCompare(b.title))
 );
 
 // Every language, newest first. The /writing filters work on this list.
@@ -186,26 +153,3 @@ export async function getPostLanguages() {
   for (const post of await loadPosts()) (map[post.slug] ||= []).push(post.lang);
   return map;
 }
-
-export async function getProjects() {
-  return loadProjects();
-}
-
-export async function getProject(slug) {
-  return (await loadProjects()).find((project) => project.slug === slug) || null;
-}
-
-// content/about.<lang>.mdx holds the owner's own intro paragraph. Missing or draft: nothing
-// renders. Callers fall back to English while the Indonesian intro is a draft.
-export const getAboutIntro = cache(async (lang = DEFAULT_LANG) => {
-  let source;
-  try {
-    source = await fs.readFile(path.join(CONTENT_DIR, `about.${lang}.mdx`), "utf8");
-  } catch (error) {
-    if (error.code === "ENOENT") return null;
-    throw error;
-  }
-  const { content, frontmatter } = await compileFile(`about.${lang}.mdx`, source);
-  if (frontmatter.draft && !SHOW_DRAFTS) return null;
-  return bodyOf(source).trim() ? content : null;
-});

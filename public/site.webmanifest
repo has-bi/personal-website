@@ -1,7 +1,7 @@
 {
-  "name": "Hasbi Hassadiqin",
-  "short_name": "Hasbi",
-  "description": "Tutorials and notes on AI and automation.",
+  "name": "Human meets Hack",
+  "short_name": "Human meets Hack",
+  "description": "A collection of guides on using AI across different domains, from everyday work to business and automation, in plain language.",
   "start_url": "/",
   "icons": [
     { "src": "/android-chrome-192x192.png", "sizes": "192x192", "type": "image/png" },

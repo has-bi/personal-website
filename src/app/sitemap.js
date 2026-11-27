@@ -1,4 +1,4 @@
-import { getPostLanguages, getPosts, getProjects } from "@/utils/content";
+import { getPostLanguages, getPosts } from "@/utils/content";
 import { SITE_URL } from "@/lib/site";
 import { DEFAULT_LOCALE, LOCALES, localize } from "@/lib/i18n";
 
@@ -16,10 +16,9 @@ const entry = (path, langs, extra = {}) =>
   }));
 
 export default async function sitemap() {
-  const [posts, languages, projects] = await Promise.all([
+  const [posts, languages] = await Promise.all([
     Promise.all(LOCALES.map((lang) => getPosts({ lang }))).then((lists) => lists.flat()),
     getPostLanguages(),
-    getProjects(),
   ]);
   const newest = posts.map((post) => post.date).sort().pop();
   const latest = newest ? new Date(newest) : new Date();
@@ -27,7 +26,6 @@ export default async function sitemap() {
   const pages = [
     ...entry("/", LOCALES, { lastModified: latest, changeFrequency: "weekly", priority: 1 }),
     ...entry("/writing", LOCALES, { lastModified: latest, changeFrequency: "weekly", priority: 0.9 }),
-    ...entry("/about", LOCALES, { changeFrequency: "monthly", priority: 0.7 }),
   ];
 
   // One entry per slug; its languages become the URLs and alternates.
@@ -40,13 +38,5 @@ export default async function sitemap() {
     });
   });
 
-  // /projects is listed only once a project is published.
-  const projectPages = projects.length
-    ? [
-        ...entry("/projects", LOCALES, { changeFrequency: "monthly", priority: 0.8 }),
-        ...projects.flatMap((project) => entry(`/projects/${project.slug}`, LOCALES, { changeFrequency: "yearly", priority: 0.6 })),
-      ]
-    : [];
-
-  return [...pages, ...postPages, ...projectPages];
+  return [...pages, ...postPages];
 }
