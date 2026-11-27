@@ -124,14 +124,14 @@ export default async function RootLayout({ children, params }) {
         />
         <a
           href="#main"
-          className="t-mono-nav sr-only bg-primary px-md py-sm text-on-primary focus:not-sr-only focus:fixed focus:left-md focus:top-md focus:z-50"
+          className="t-nav sr-only bg-primary px-md py-sm text-on-primary focus:not-sr-only focus:fixed focus:left-md focus:top-md focus:z-50"
         >
           {t(lang).skip}
         </a>
         <ClientRuntimeGuards />
         <SiteNav lang={lang} postLanguages={postLanguages} sections={sections} />
         <main id="main">{children}</main>
-        <SiteFooter lang={lang} number={sections.elsewhere} />
+        <SiteFooter lang={lang} />
       </body>
     </html>
   );

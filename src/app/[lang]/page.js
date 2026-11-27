@@ -1,11 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
 import { getAboutIntro, getPosts, getProjects, getWritingFor } from "@/utils/content";
-import { ButtonGhost, ButtonPrimary, SectionHead, SectionLabel } from "@/components/ui/primitives";
+import { ButtonGhost, ButtonPrimary, SectionHead } from "@/components/ui/primitives";
 import { PostRow, PostTableHeader } from "@/components/ui/PostRow";
 import { ProjectGrid } from "@/components/ui/ProjectCard";
 import { aboutData } from "@/app/[lang]/about/data";
-import { alternates, sectionNumbers } from "@/lib/site";
+import { alternates } from "@/lib/site";
 import { localize, otherLocale, t } from "@/lib/i18n";
 
 export async function generateMetadata({ params }) {
@@ -29,35 +29,48 @@ function routesFor(lang, posts, otherPosts) {
   ].filter((route) => route.show);
 }
 
-function HeroGridLines() {
-  return (
-    <div aria-hidden="true" className="band pointer-events-none absolute inset-0 hidden lg:block">
-      <div className="grid h-full grid-cols-6 border-r border-grid-line">
-        {Array.from({ length: 6 }, (_, i) => (
-          <div key={i} className="border-l border-grid-line" />
-        ))}
-      </div>
-    </div>
-  );
-}
+// hero-band (reference layout): a light two-tone headline and a short abstract, centred
+// in the photo's sky; the photo; then the call to action centred at the bottom. The sky
+// is transparent, so the photo is pulled up under the text by a negative top margin; a
+// percentage margin is measured against the width, like the sky's own height (about 24%
+// of the width), so the text never reaches the grass (12% below lg, where the text wraps
+// to more lines; capped at 384px so very wide screens do not pull the photo under the
+// nav). From 1700px the button and its note sit on the darkest strip of grass at the
+// bottom centre, below the two figures (white text there measures 5:1 or better); below
+// that the strip is too short, so they follow the photo on the white page.
+const HERO_IMAGE = { src: "/images/hero-archive-v1.webp", width: 2688, height: 1520 };
 
 function Hero({ lang, role }) {
   const labels = t(lang).home;
   return (
-    <section className="band relative border-b border-hairline py-xxxl lg:py-section">
-      <HeroGridLines />
-      <div className="relative flex flex-col gap-lg lg:flex-row lg:gap-xl">
-        <div className="flex flex-1 flex-col gap-lg">
-          <SectionLabel>§ 00 · {t(lang).nav.index}</SectionLabel>
-          <h1 className="t-display-xl">
-            <span className="block text-ink">{labels.hero[0]}</span>
-            <span className="block text-accent">{labels.hero[1]}</span>
-          </h1>
-        </div>
-        <div className="flex flex-col gap-lg lg:w-[360px] lg:shrink-0 lg:justify-end">
-          <SectionLabel>{labels.abstract}</SectionLabel>
-          <p className="t-body-md text-body">{labels.abstractText(role.title, role.org)}</p>
-          <ButtonPrimary href={localize(lang, "/writing")}>{labels.startReading}</ButtonPrimary>
+    <section className="relative">
+      <div className="band relative z-10 flex flex-col items-center gap-lg pt-xxxl text-center lg:pt-xxl">
+        <h1 className="t-hero">
+          <span className="block text-faint">{labels.hero[0]}</span>
+          <span className="block text-ink">{labels.hero[1]}</span>
+        </h1>
+        <p className="t-body-md max-w-[46ch] text-muted">{labels.abstractText(role.title, role.org)}</p>
+      </div>
+
+      <div className="relative -mt-[12%] lg:-mt-[min(20%,384px)]">
+        <Image
+          src={HERO_IMAGE.src}
+          width={HERO_IMAGE.width}
+          height={HERO_IMAGE.height}
+          alt={labels.heroAlt}
+          priority
+          sizes="100vw"
+          className="block h-auto w-full"
+        />
+        {/* On the grass the button turns white and so does the focus ring: purple is too dark on green. */}
+        <div className="flex flex-col items-center gap-xs pb-xxl pt-lg min-[1700px]:absolute min-[1700px]:inset-x-0 min-[1700px]:bottom-[2%] min-[1700px]:p-0 min-[1700px]:[&_a:focus-visible]:outline-on-primary">
+          <ButtonPrimary href={localize(lang, "/writing")} className="min-[1700px]:bg-canvas min-[1700px]:text-ink min-[1700px]:hover:bg-surface">
+            {labels.startReading}
+          </ButtonPrimary>
+          <p className="t-meta flex items-center gap-xs text-muted min-[1700px]:text-on-primary">
+            <span aria-hidden="true">•</span>
+            {labels.heroNote}
+          </p>
         </div>
       </div>
     </section>
@@ -67,13 +80,13 @@ function Hero({ lang, role }) {
 function StartHere({ routes, lang }) {
   const labels = t(lang).home;
   return (
-    <section className="band flex flex-col gap-lg border-b border-hairline py-xxxl lg:gap-xxl lg:py-section">
-      <SectionHead label={`§ 00.1 · ${labels.startHere}`} heading="/start" />
-      <div className="border border-hairline bg-surface">
-        <div aria-hidden="true" className="hidden gap-lg border-b border-hairline-strong px-lg py-sm lg:flex">
-          <span className="t-mono-label flex-1 text-faint">01 · {labels.youAre}</span>
-          <span className="t-mono-label flex-1 text-faint">02 · {labels.startWith}</span>
-          <span className="t-mono-label w-[280px] text-faint">03 · {labels.leadsTo}</span>
+    <section className="band flex flex-col gap-lg py-xxxl lg:gap-xxl lg:py-section">
+      <SectionHead heading={labels.startHere} />
+      <div className="overflow-hidden rounded-card bg-surface">
+        <div aria-hidden="true" className="hidden gap-lg border-b border-hairline px-lg py-sm lg:flex">
+          <span className="t-label flex-1 text-faint">{labels.youAre}</span>
+          <span className="t-label flex-1 text-faint">{labels.startWith}</span>
+          <span className="t-label w-[280px] text-faint">{labels.leadsTo}</span>
         </div>
         <ul>
           {routes.map((route) => (
@@ -89,7 +102,7 @@ function StartHere({ routes, lang }) {
                 <span lang={route.lang} className="t-body-sm flex-1 text-body lg:text-[17px] lg:leading-[1.6]">
                   {route.start}
                 </span>
-                <span className="t-mono-meta text-accent lg:w-[280px]">{route.href}</span>
+                <span className="t-meta text-accent lg:w-[280px]">{route.href}</span>
               </Link>
             </li>
           ))}
@@ -103,10 +116,9 @@ function LatestWriting({ posts, lang }) {
   const labels = t(lang).home;
   const href = localize(lang, "/writing");
   return (
-    <section className="band flex flex-col gap-lg border-b border-hairline py-xxxl lg:gap-xxl lg:py-section">
+    <section className="band flex flex-col gap-lg py-xxxl lg:gap-xxl lg:py-section">
       <SectionHead
-        label={`§ 01 · ${t(lang).nav.writing}`}
-        heading="/writing"
+        heading={t(lang).nav.writing}
         more={
           <ButtonGhost href={href} bare>
             {labels.allEntries}
@@ -131,10 +143,9 @@ function LatestWriting({ posts, lang }) {
 function LatestProjects({ projects, lang }) {
   const href = localize(lang, "/projects");
   return (
-    <section className="band flex flex-col gap-lg border-b border-hairline py-xxxl lg:gap-xxl lg:py-section">
+    <section className="band flex flex-col gap-lg py-xxxl lg:gap-xxl lg:py-section">
       <SectionHead
-        label={`§ 02 · ${t(lang).nav.projects}`}
-        heading="/projects"
+        heading={t(lang).nav.projects}
         more={
           <ButtonGhost href={href} bare>
             {t(lang).home.allProjects}
@@ -146,7 +157,7 @@ function LatestProjects({ projects, lang }) {
   );
 }
 
-function AboutSplit({ intro, introLang, number, lang, about }) {
+function AboutSplit({ intro, introLang, lang, about }) {
   const { CURRENT_ROLE, TEACHING_ROLE, LEARNING_PATH } = about;
   const rows = [
     { when: CURRENT_ROLE.kind, what: CURRENT_ROLE.title, where: CURRENT_ROLE.org },
@@ -155,9 +166,9 @@ function AboutSplit({ intro, introLang, number, lang, about }) {
   ];
 
   return (
-    <section className="band border-b border-hairline py-xxxl lg:py-section">
+    <section className="band py-xxxl lg:py-section">
       <div className="flex flex-col gap-lg lg:flex-row lg:gap-xxl">
-        <div className="relative aspect-4/5 w-full overflow-hidden border border-hairline bg-surface-sunken lg:w-[360px] lg:shrink-0">
+        <div className="relative aspect-4/5 w-full overflow-hidden rounded-media bg-surface-sunken lg:w-[360px] lg:shrink-0">
           <Image
             src="/images/me-pixelated.webp"
             alt={t(lang).about.portraitAlt}
@@ -167,7 +178,7 @@ function AboutSplit({ intro, introLang, number, lang, about }) {
           />
         </div>
         <div className="flex flex-1 flex-col gap-lg lg:gap-xl">
-          <SectionLabel>§ {number} · {t(lang).nav.about}</SectionLabel>
+          <h2 className="t-display-lg font-light text-ink">{t(lang).nav.about}</h2>
           {intro ? (
             <div lang={introLang !== lang ? introLang : undefined} className="intro-flow t-intro text-ink">
               {intro}
@@ -179,12 +190,12 @@ function AboutSplit({ intro, introLang, number, lang, about }) {
                 key={`${row.when}-${row.what}`}
                 className="flex flex-col gap-xxs border-b border-hairline py-sm lg:flex-row lg:items-center lg:gap-lg"
               >
-                <span className="t-mono-meta uppercase text-muted lg:w-[120px] lg:shrink-0">
+                <span className="t-meta text-muted lg:w-[120px] lg:shrink-0">
                   {row.when}
                   {row.where ? <span className="lg:hidden"> · {row.where}</span> : null}
                 </span>
                 <span className="t-body-md flex-1 text-ink">{row.what}</span>
-                <span className="t-mono-meta hidden uppercase text-muted lg:block">{row.where}</span>
+                <span className="t-meta hidden text-muted lg:block">{row.where}</span>
               </li>
             ))}
           </ul>
@@ -208,7 +219,6 @@ export default async function Home({ params }) {
   // The Indonesian intro may still be a draft: show the English one until it is published.
   const fallback = !ownIntro && lang !== "en" ? await getAboutIntro("en") : null;
   const routes = routesFor(lang, posts, otherPosts);
-  const sections = sectionNumbers({ hasProjects: projects.length > 0 });
   const about = aboutData(lang);
 
   return (
@@ -222,7 +232,6 @@ export default async function Home({ params }) {
       <AboutSplit
         intro={ownIntro || fallback}
         introLang={ownIntro ? lang : "en"}
-        number={sections.about}
         lang={lang}
         about={about}
       />

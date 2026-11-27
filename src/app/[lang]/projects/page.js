@@ -21,8 +21,7 @@ export default async function ProjectsPage({ params }) {
       <section className="band pb-xl pt-xxxl lg:pb-xxl lg:pt-section">
         <div className="flex flex-col gap-lg lg:flex-row lg:gap-xl">
           <div className="flex flex-1 flex-col gap-lg">
-            <SectionLabel>§ 02 · {labels.title}</SectionLabel>
-            <h1 className="t-display-xl text-ink">/projects</h1>
+            <h1 className="t-hero text-ink">{labels.title}</h1>
             <p className="t-display-md text-muted">{labels.dek}</p>
           </div>
           <div className="flex flex-col gap-md lg:w-[360px] lg:shrink-0 lg:justify-end">

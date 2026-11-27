@@ -4,7 +4,7 @@ import { t } from "@/lib/i18n";
 const cx = (...classes) => classes.filter(Boolean).join(" ");
 
 export function SectionLabel({ children, className }) {
-  return <p className={cx("t-mono-label text-faint", className)}>{children}</p>;
+  return <p className={cx("t-label text-faint", className)}>{children}</p>;
 }
 
 // Topic tag: AI and automation carry their hue, web is the neutral archive.
@@ -16,7 +16,7 @@ const TAG_STYLES = {
 export function Tag({ topic, lang, children, className }) {
   const style = TAG_STYLES[topic] || "bg-surface-sunken text-muted";
   return (
-    <span className={cx("t-tag inline-flex shrink-0 px-xs py-xxs", style, className)}>
+    <span className={cx("t-tag inline-flex shrink-0 rounded-pill px-sm py-xxs", style, className)}>
       {children || t(lang).topics[topic] || topic}
     </span>
   );
@@ -38,28 +38,20 @@ function ActionLink({ href, className, children, ...props }) {
   );
 }
 
-// button-primary: accent arrow square + ink label block. One per viewport.
-export function ButtonPrimary({ href, children }) {
-  return (
-    <ActionLink href={href} className="group inline-flex h-12 shrink-0 items-stretch">
-      <span aria-hidden="true" className="t-button flex w-12 items-center justify-center bg-accent text-on-primary">
-        →
-      </span>
-      <span className="t-button flex items-center bg-primary px-lg text-on-primary transition-[padding] duration-150 group-hover:pl-7 group-active:bg-primary-active">
-        {children}
-      </span>
-    </ActionLink>
-  );
-}
+// button-primary: a solid pill. One per viewport. `tone="light"` is the white pill for
+// photos and dark grounds (the hero's grass), like the reference's "Launch now".
+const PRIMARY_TONES = {
+  dark: "bg-primary text-on-primary hover:bg-primary-active",
+  light: "bg-canvas text-ink hover:bg-surface",
+};
 
-// button-ghost: hairline-strong outline. `bare` drops the outline for "more" links beside headings.
-export function ButtonGhost({ href, children, bare = false, className }) {
+export function ButtonPrimary({ href, children, tone = "dark", className }) {
   return (
     <ActionLink
       href={href}
       className={cx(
-        "t-button inline-flex h-12 shrink-0 items-center bg-canvas px-lg text-ink transition-colors hover:bg-surface active:bg-surface-sunken",
-        !bare && "border border-hairline-strong",
+        "t-button inline-flex h-12 shrink-0 items-center rounded-pill px-xl transition-colors",
+        PRIMARY_TONES[tone],
         className
       )}
     >
@@ -68,13 +60,30 @@ export function ButtonGhost({ href, children, bare = false, className }) {
   );
 }
 
-// Section head: section label over a slash-heading, optional "more" link on the right (desktop).
+// button-ghost: a hairline pill. `bare` drops the outline for "more" links beside headings.
+export function ButtonGhost({ href, children, bare = false, className }) {
+  return (
+    <ActionLink
+      href={href}
+      className={cx(
+        "t-button inline-flex h-12 shrink-0 items-center rounded-pill bg-canvas px-xl text-ink transition-colors hover:bg-surface active:bg-surface-sunken",
+        !bare && "border border-hairline",
+        className
+      )}
+    >
+      {children}
+    </ActionLink>
+  );
+}
+
+// Section head: a light heading with an optional small label above it, and an optional
+// "more" link on the right (desktop).
 export function SectionHead({ label, heading, as: Heading = "h2", more }) {
   return (
     <div className="flex items-end justify-between gap-lg">
-      <div className="flex flex-col gap-lg">
-        <SectionLabel>{label}</SectionLabel>
-        <Heading className="t-display-lg text-ink">{heading}</Heading>
+      <div className="flex flex-col gap-sm">
+        {label ? <SectionLabel>{label}</SectionLabel> : null}
+        <Heading className="t-display-lg font-light text-ink">{heading}</Heading>
       </div>
       {more ? <div className="hidden lg:block">{more}</div> : null}
     </div>
@@ -83,8 +92,8 @@ export function SectionHead({ label, heading, as: Heading = "h2", more }) {
 
 export function EmptyState({ title, children, action }) {
   return (
-    <div className="flex flex-col items-start gap-md border border-hairline bg-surface p-xl">
-      <p className="t-mono-label text-muted">{title}</p>
+    <div className="flex flex-col items-start gap-md rounded-card bg-surface p-xl">
+      <p className="t-label text-muted">{title}</p>
       <p className="t-body-md text-body">{children}</p>
       {action ? <ButtonGhost href={action.href}>{action.label}</ButtonGhost> : null}
     </div>
@@ -94,14 +103,14 @@ export function EmptyState({ title, children, action }) {
 // Meta strip: equal cells divided by hairlines. 2-column grid on mobile.
 export function MetaStrip({ items }) {
   return (
-    <dl className="grid w-full grid-cols-2 border-l border-t border-hairline bg-surface lg:flex lg:border-l-0 lg:border-t-0 lg:border [&>div:last-child:nth-child(odd)]:col-span-2">
+    <dl className="grid w-full grid-cols-2 overflow-hidden rounded-card bg-surface lg:flex [&>div:last-child:nth-child(odd)]:col-span-2">
       {items.map((item) => (
         <div
           key={item.label}
-          className="flex min-w-0 flex-col gap-xs border-b border-r border-hairline px-md py-sm lg:flex-1 lg:border-b-0 lg:px-lg lg:py-md lg:last:border-r-0"
+          className="flex min-w-0 flex-col gap-xs px-md py-sm lg:flex-1 lg:px-lg lg:py-md"
         >
-          <dt className="t-mono-label text-faint">{item.label}</dt>
-          <dd className="t-mono-meta uppercase text-ink">{item.value}</dd>
+          <dt className="t-label text-faint">{item.label}</dt>
+          <dd className="t-meta text-ink">{item.value}</dd>
         </div>
       ))}
     </dl>
@@ -114,7 +123,7 @@ export function MetaStrip({ items }) {
 export function MetaLine({ items, action }) {
   return (
     <div className="flex w-full flex-wrap items-center justify-between gap-x-lg border-y border-hairline">
-      <dl className="t-mono-meta flex flex-wrap items-center gap-x-sm gap-y-xs py-sm uppercase text-muted">
+      <dl className="t-meta flex flex-wrap items-center gap-x-sm gap-y-xs py-sm text-muted">
         {items.map((item, index) => (
           <div key={item.label} className="flex items-center gap-sm">
             {index > 0 ? (
@@ -136,7 +145,7 @@ export function MetaLine({ items, action }) {
 export function NumberedHeading({ number, id, children }) {
   return (
     <div className="flex flex-col gap-xs pt-lg first:pt-0">
-      {number ? <span className="t-mono-label text-faint">{number}</span> : null}
+      {number ? <span className="t-label text-faint">{number}</span> : null}
       <h2 id={id} className="t-title-lg text-ink">
         {children}
       </h2>
@@ -148,7 +157,7 @@ export function NumberedHeading({ number, id, children }) {
 export function Breadcrumb({ parent, href = parent, slug, aside }) {
   return (
     <div className="band flex min-h-11 items-center justify-between gap-sm border-b border-hairline lg:min-h-12">
-      <nav aria-label="Breadcrumb" className="t-mono-nav flex min-w-0 items-center gap-sm">
+      <nav aria-label="Breadcrumb" className="t-nav flex min-w-0 items-center gap-sm">
         <Link href={href} className="flex min-h-11 shrink-0 items-center text-ink hover:text-accent">
           ← {parent}
         </Link>

@@ -26,7 +26,7 @@ function useActiveHeading(ids) {
 
 function TocList({ headings, active }) {
   return (
-    <ol className="t-mono-meta flex flex-col">
+    <ol className="t-meta flex flex-col">
       {headings.map((heading) => {
         const current = heading.id === active;
         return (
@@ -35,7 +35,7 @@ function TocList({ headings, active }) {
               href={`#${heading.id}`}
               aria-current={current ? "location" : undefined}
               className={`flex min-h-9 items-center gap-sm py-xxs pl-sm ${
-                current ? "border-l-2 border-accent" : "border-l border-hairline hover:border-hairline-strong"
+                current ? "border-l-2 border-accent" : "border-l border-hairline hover:border-faint"
               }`}
             >
               {heading.number ? <span className={current ? "text-accent" : "text-faint"}>{heading.number}</span> : null}
@@ -74,7 +74,7 @@ export function DesktopToc({ headings, lang, label = t(lang).article.onThisPage,
                         current ? "w-8 bg-ink" : "w-5 bg-faint group-hover:w-8 group-hover:bg-ink group-focus-visible:w-8"
                       }`}
                     />
-                    <span className={`t-mono-meta ${current ? "text-ink" : "text-faint group-hover:text-ink"}`}>{number}</span>
+                    <span className={`t-meta ${current ? "text-ink" : "text-faint group-hover:text-ink"}`}>{number}</span>
                     <span className="sr-only">{heading.text}</span>
                     <span
                       aria-hidden="true"
@@ -94,12 +94,12 @@ export function DesktopToc({ headings, lang, label = t(lang).article.onThisPage,
   );
 }
 
-// Mobile: the TOC collapses into an "ON THIS PAGE · 06 ↓" bar.
+// Mobile: the TOC collapses into an "On this page · 06" bar.
 export function MobileToc({ headings, lang, label = t(lang).article.onThisPage }) {
   if (!headings.length) return null;
   return (
     <details aria-label={label} className="group border-y border-hairline lg:hidden">
-      <summary className="band t-mono-label flex min-h-12 cursor-pointer list-none items-center justify-between text-ink [&::-webkit-details-marker]:hidden">
+      <summary className="band t-label flex min-h-12 cursor-pointer list-none items-center justify-between text-ink [&::-webkit-details-marker]:hidden">
         <span>
           {label} · {String(headings.length).padStart(2, "0")}
         </span>

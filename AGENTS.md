@@ -41,7 +41,7 @@ Do not say a change works until `npm run verify` passes. If it fails, report the
 - Images live in `public/images/<section>/<slug>/` and are referenced with absolute paths and real alt text.
 
 **Design and code**
-- Follow `DESIGN.md`: tokens via the Tailwind classes in `src/app/globals.css`, zero radius (the TOC pill is the one exception), hairlines before shadows, mono for furniture (labels, nav, tables), grotesk for content. Do not add hex colours inline.
+- Follow `DESIGN.md`, starting with **Direction v2** (it overrides older sections): tokens via the Tailwind classes in `src/app/globals.css`; one sans typeface (mono only in code); sentence-case furniture (`t-label`, `t-nav`, `t-meta`, `t-tag`, `t-button`); pills (`rounded-pill`) for interactive furniture, `rounded-card` for cards and panels, `rounded-media` for images; no shadows; no `§` / `[ 01 ]` numbering. Do not add hex colours inline.
 - When `DESIGN.md` asks for a pattern antislop flags, or you change a design decision, ask the owner, then append the answer to **Logged decisions** with the date. Do not decide silently.
 - Hide empty things instead of showing empty states (see logged decisions: Projects nav, language toggle). Every link must lead to a page that exists at build time.
 - Keep focus states, 44px tap targets on mobile, and 4.5:1 text contrast.

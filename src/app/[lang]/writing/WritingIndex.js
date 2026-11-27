@@ -3,7 +3,7 @@
 import { FilterGroup, useFilters } from "@/components/ui/Filters";
 import { PostRow, PostTableHeader } from "@/components/ui/PostRow";
 import { EmptyState } from "@/components/ui/primitives";
-import { LANGS, pad2 } from "@/lib/site";
+import { LANGS } from "@/lib/site";
 import { localize, t } from "@/lib/i18n";
 
 const FILTER_KEYS = ["type", "topic", "lang"];
@@ -50,8 +50,8 @@ export function WritingList({ posts, lang, filters = { type: "all", topic: "all"
               />
             ) : null}
           </div>
-          <p className="t-mono-meta hidden shrink-0 uppercase text-muted lg:block" aria-live="polite">
-            {pad2(shown.length)} {labels.count(shown.length)} · {labels.newest}
+          <p className="t-meta hidden shrink-0 text-muted lg:block" aria-live="polite">
+            {shown.length} {labels.count(shown.length)} · {labels.newest}
           </p>
         </div>
       </div>
@@ -76,7 +76,7 @@ export function WritingList({ posts, lang, filters = { type: "all", topic: "all"
                 {years.length > 1 ? (
                   <div className="flex items-baseline justify-between py-sm">
                     <h2 className="t-title-lg text-ink">{group.year}</h2>
-                    <p className="t-mono-label text-muted">
+                    <p className="t-label text-muted">
                       {group.posts.length} {labels.count(group.posts.length)}
                     </p>
                   </div>

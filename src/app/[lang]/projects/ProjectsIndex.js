@@ -3,7 +3,6 @@
 import { FilterGroup, useFilters } from "@/components/ui/Filters";
 import { ProjectGrid } from "@/components/ui/ProjectCard";
 import { EmptyState } from "@/components/ui/primitives";
-import { pad2 } from "@/lib/site";
 import { localize, t } from "@/lib/i18n";
 
 export function ProjectsList({ projects, lang, filters = { topic: "all" } }) {
@@ -18,8 +17,8 @@ export function ProjectsList({ projects, lang, filters = { topic: "all" } }) {
       <div className="band border-b border-t border-hairline py-sm">
         <div className="flex flex-col gap-xs lg:flex-row lg:items-center lg:justify-between">
           <FilterGroup pathname={pathname} current={filters} name="topic" label={dict.writing.topic} options={topicOptions} allLabel={dict.writing.all} />
-          <p className="t-mono-meta hidden uppercase text-muted lg:block" aria-live="polite">
-            {pad2(shown.length)} {labels.count(shown.length)} · {dict.writing.newest}
+          <p className="t-meta hidden text-muted lg:block" aria-live="polite">
+            {shown.length} {labels.count(shown.length)} · {dict.writing.newest}
           </p>
         </div>
       </div>

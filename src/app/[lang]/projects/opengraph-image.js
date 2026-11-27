@@ -7,5 +7,5 @@ export const contentType = "image/png";
 
 export default async function Image({ params }) {
   const { lang } = await params;
-  return renderOg({ label: `§ 02 · ${t(lang).nav.projects}`, title: "/projects", lang });
+  return renderOg({ title: t(lang).projects.title, lang });
 }

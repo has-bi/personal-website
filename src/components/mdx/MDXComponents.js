@@ -25,8 +25,8 @@ function CodeBlock({ children, lang }) {
   const language = /language-(\w+)/.exec(codeProps.className || "")?.[1];
 
   return (
-    <div className="wide bg-surface-dark-elevated">
-      <div className="t-mono-label flex min-h-11 items-center justify-between border-b border-on-dark-muted/40 px-md text-on-dark-muted lg:px-lg">
+    <div className="wide overflow-hidden rounded-card bg-surface-dark-elevated">
+      <div className="t-label flex min-h-11 items-center justify-between border-b border-on-dark-muted/40 px-md text-on-dark-muted lg:px-lg">
         <span>{language || copy.code}</span>
         <CodeCopyButton code={code} labels={copy} />
       </div>
@@ -40,17 +40,17 @@ function CodeBlock({ children, lang }) {
 // Images are the author's own screenshots and diagrams; a markdown title becomes the caption.
 function Figure({ src, alt = "", title }) {
   return (
-    <figure className="wide -mx-md flex flex-col gap-xs lg:mx-0">
+    <figure className="wide flex flex-col gap-xs">
       {/* eslint-disable-next-line @next/next/no-img-element -- MDX images come from mixed hosts and sizes */}
-      <img src={src} alt={alt} loading="lazy" className="w-full border-y border-hairline bg-surface-sunken lg:border" />
-      {title ? <figcaption className="t-mono-meta px-md uppercase text-muted lg:px-0">{title}</figcaption> : null}
+      <img src={src} alt={alt} loading="lazy" className="w-full rounded-media bg-surface-sunken" />
+      {title ? <figcaption className="t-meta text-muted">{title}</figcaption> : null}
     </figure>
   );
 }
 
 export function YouTube({ id, title }) {
   return (
-    <div className="wide -mx-md aspect-video border-y border-hairline bg-surface-sunken lg:mx-0 lg:border">
+    <div className="wide aspect-video overflow-hidden rounded-media bg-surface-sunken">
       <iframe
         src={`https://www.youtube-nocookie.com/embed/${id}`}
         title={title || "Video"}
@@ -67,8 +67,8 @@ export function YouTube({ id, title }) {
 // `kind` is always written in English in MDX; the label shows in the post's language.
 export function Callout({ kind = "Note", children, lang }) {
   return (
-    <div role="note" className="wide flex flex-col gap-xs border border-hairline bg-surface px-lg py-md">
-      <p className="t-mono-label text-muted">{t(lang).mdx.callouts[kind] || kind}</p>
+    <div role="note" className="wide flex flex-col gap-xs rounded-card bg-surface px-lg py-md">
+      <p className="t-label text-muted">{t(lang).mdx.callouts[kind] || kind}</p>
       <div className="t-body-md flex flex-col gap-xs text-ink [&_p]:m-0 [&_p]:text-[17px] [&_p]:text-ink">{children}</div>
     </div>
   );
@@ -82,7 +82,7 @@ export function Features({ children }) {
       {items.map((child, index) => (
         <li key={child.props.name} className="flex flex-col gap-xs border-b border-hairline py-sm lg:flex-row lg:gap-lg">
           <span className="flex gap-sm lg:w-[220px] lg:shrink-0">
-            <span className="t-mono-meta text-faint">{String(index + 1).padStart(2, "0")}</span>
+            <span className="t-meta text-faint">{String(index + 1).padStart(2, "0")}</span>
             <span className="t-body-md text-ink">{child.props.name}</span>
           </span>
           <span className="t-body-sm flex-1 text-body">{child.props.children}</span>
@@ -99,14 +99,14 @@ export function Feature() {
 export function Spec({ children }) {
   const rows = Children.toArray(children).filter((child) => child?.props?.label);
   return (
-    <dl className="wide border border-hairline bg-surface">
+    <dl className="wide overflow-hidden rounded-card bg-surface">
       {rows.map((child) => (
         <div
           key={child.props.label}
           className="flex flex-col gap-xxs border-b border-hairline px-md py-sm last:border-b-0 lg:flex-row lg:gap-lg"
         >
-          <dt className="t-mono-label text-muted lg:w-[120px] lg:shrink-0">{child.props.label}</dt>
-          <dd className="t-mono-meta flex-1 text-ink">{child.props.children}</dd>
+          <dt className="t-label text-muted lg:w-[120px] lg:shrink-0">{child.props.label}</dt>
+          <dd className="t-meta flex-1 text-ink">{child.props.children}</dd>
         </div>
       ))}
     </dl>
@@ -125,11 +125,11 @@ export function Problems({ children, lang }) {
       {items.map((child) => (
         <li key={child.props.problem} className="flex flex-col gap-xs border-b border-hairline py-md">
           <p className="flex flex-col gap-xxs lg:flex-row lg:gap-md">
-            <span className="t-mono-label text-faint lg:w-[120px] lg:shrink-0">{labels.problem}</span>
+            <span className="t-label text-faint lg:w-[120px] lg:shrink-0">{labels.problem}</span>
             <span className="t-body-md flex-1 text-ink">{child.props.problem}</span>
           </p>
           <p className="flex flex-col gap-xxs lg:flex-row lg:gap-md">
-            <span className="t-mono-label text-accent lg:w-[120px] lg:shrink-0">{labels.worked}</span>
+            <span className="t-label text-accent lg:w-[120px] lg:shrink-0">{labels.worked}</span>
             <span className="t-body-md flex-1 text-body">{child.props.children}</span>
           </p>
         </li>
@@ -145,7 +145,7 @@ export function Problem() {
 export function Learned({ label, children }) {
   return (
     <div className="flex flex-col gap-xxs">
-      <p className="t-mono-label text-muted">{label}</p>
+      <p className="t-label text-muted">{label}</p>
       <div className="t-body-lg text-body [&_p]:m-0">{children}</div>
     </div>
   );
@@ -167,7 +167,7 @@ export function Screenshots({ children }) {
 
 export function Shot({ src, alt = "" }) {
   return (
-    <a href={src} target="_blank" rel="noopener noreferrer" className="block border border-hairline bg-surface-sunken">
+    <a href={src} target="_blank" rel="noopener noreferrer" className="block overflow-hidden rounded-media bg-surface-sunken">
       {/* eslint-disable-next-line @next/next/no-img-element -- screenshots keep their own aspect ratio */}
       <img src={src} alt={alt} loading="lazy" className="aspect-4/3 w-full object-cover object-top" />
     </a>
@@ -190,7 +190,7 @@ export function createMdxComponents({ headings = [], lang = "en" } = {}) {
       );
     },
     h3: ({ children }) => <h3 className="t-title-md pt-xs text-ink">{children}</h3>,
-    h4: ({ children }) => <h4 className="t-mono-label pt-xs text-muted">{children}</h4>,
+    h4: ({ children }) => <h4 className="t-label pt-xs text-muted">{children}</h4>,
     p: ({ children }) => {
       // An image on its own line arrives wrapped in a paragraph; render the figure bare so
       // it is valid HTML and can use the full article width.
@@ -199,7 +199,7 @@ export function createMdxComponents({ headings = [], lang = "en" } = {}) {
       return <p className="t-body-lg text-body">{children}</p>;
     },
     ul: ({ children }) => <ul className="t-body-lg flex list-disc flex-col gap-xs pl-lg text-body marker:text-faint">{children}</ul>,
-    ol: ({ children }) => <ol className="t-body-lg flex list-decimal flex-col gap-xs pl-lg text-body marker:t-mono-meta marker:text-faint">{children}</ol>,
+    ol: ({ children }) => <ol className="t-body-lg flex list-decimal flex-col gap-xs pl-lg text-body marker:t-meta marker:text-faint">{children}</ol>,
     li: ({ children }) => <li className="pl-xxs">{children}</li>,
     strong: ({ children }) => <strong className="font-medium text-ink">{children}</strong>,
     a: ({ href = "", children }) => {
@@ -216,20 +216,20 @@ export function createMdxComponents({ headings = [], lang = "en" } = {}) {
       );
     },
     blockquote: ({ children }) => (
-      <blockquote className="t-quote flex flex-col gap-lg border border-hairline bg-surface p-xl text-ink [&_p]:t-quote [&_p]:text-ink">
+      <blockquote className="t-quote flex flex-col gap-lg rounded-card bg-surface p-xl text-ink [&_p]:t-quote [&_p]:text-ink">
         {children}
       </blockquote>
     ),
     hr: () => <hr className="border-hairline" />,
     table: Table,
     th: ({ children }) => (
-      <th className="t-mono-label border-b border-hairline py-sm pr-md align-top text-muted last:pr-0">{children}</th>
+      <th className="t-label border-b border-hairline py-sm pr-md align-top text-muted last:pr-0">{children}</th>
     ),
     td: ({ children }) => (
       <td className="t-body-sm border-b border-hairline py-sm pr-md align-top text-body last:pr-0">{children}</td>
     ),
     pre: (props) => <CodeBlock {...props} lang={lang} />,
-    code: ({ children }) => <code className="bg-surface-sunken px-1 py-px font-mono text-[0.88em] text-ink">{children}</code>,
+    code: ({ children }) => <code className="rounded-pill bg-surface-sunken px-1.5 py-px font-mono text-[0.88em] text-ink">{children}</code>,
     img: Figure,
     YouTube,
     Callout: (props) => <Callout {...props} lang={lang} />,
