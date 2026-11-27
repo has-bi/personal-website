@@ -42,7 +42,7 @@ export function buildAiContext(post) {
   const labels = dict.ai;
   const url = `${SITE_URL}${localize(post.lang, `/writing/${post.slug}`)}`;
   const facts = [
-    `${labels.author}: ${post.author}`,
+    `${labels.author}: ${SITE_NAME}`,
     `${labels.published}: ${formatDate(post.date).replace(/ · /g, "-")}`,
     `${labels.type}: ${dict.types[post.type] || post.type}`,
     post.topic ? `${labels.topic}: ${dict.topics[post.topic] || post.topic}` : null,

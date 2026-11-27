@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { NAV_ITEMS } from "@/lib/site";
+import { NAV_ITEMS, SITE_NAME } from "@/lib/site";
 import { localize, otherLocale, splitLocale, t } from "@/lib/i18n";
 import ThemeToggle from "@/components/site/ThemeToggle";
 
@@ -60,11 +60,9 @@ function navPillClass(active) {
 }
 
 // Wordmark left, pill links centred, language pill right (the reference's layout).
-// `sections` comes from sectionNumbers(); an item it leaves out (Projects, while none is
-// published) is not shown, so no nav item leads to an empty page.
-export default function SiteNav({ lang, postLanguages = {}, sections }) {
+export default function SiteNav({ lang, postLanguages = {} }) {
   const labels = t(lang).nav;
-  const items = NAV_ITEMS.filter((item) => sections[item.key]).map((item) => ({
+  const items = NAV_ITEMS.map((item) => ({
     ...item,
     label: labels[item.key],
     to: localize(lang, item.href),
@@ -95,7 +93,7 @@ export default function SiteNav({ lang, postLanguages = {}, sections }) {
       <div className="band hidden h-16 items-center lg:grid lg:grid-cols-[1fr_auto_1fr]">
         <Link href={localize(lang, "/")} className="t-nav flex min-h-11 items-center gap-sm justify-self-start text-ink">
           <LogoMark />
-          Hasbi Hassadiqin
+          {SITE_NAME}
         </Link>
         <nav aria-label={labels.primary} className="flex items-center gap-xs">
           {items.map((item) => {
@@ -117,7 +115,7 @@ export default function SiteNav({ lang, postLanguages = {}, sections }) {
       <div className="flex h-14 items-center justify-between px-md lg:hidden">
         <Link href={localize(lang, "/")} className="t-nav flex min-h-11 items-center gap-[10px] text-ink">
           <LogoMark />
-          Hasbi
+          <span className="max-sm:sr-only">{SITE_NAME}</span>
         </Link>
         <div className="flex items-center gap-xs">
           <ThemeToggle labels={labels} />

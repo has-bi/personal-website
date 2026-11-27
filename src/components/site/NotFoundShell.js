@@ -7,7 +7,7 @@ import { t } from "@/lib/i18n";
 
 // The whole page for global-not-found.js. `lang` comes from the x-locale header that
 // src/middleware.js sets, because a global 404 gets no params.
-export default function NotFoundShell({ lang, sections, postLanguages }) {
+export default function NotFoundShell({ lang, postLanguages }) {
   return (
     <>
       <a
@@ -16,7 +16,7 @@ export default function NotFoundShell({ lang, sections, postLanguages }) {
       >
         {t(lang).skip}
       </a>
-      <SiteNav lang={lang} postLanguages={postLanguages} sections={sections} />
+      <SiteNav lang={lang} postLanguages={postLanguages} />
       <main id="main">
         <NotFoundBody lang={lang} />
       </main>

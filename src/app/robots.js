@@ -1,3 +1,5 @@
+import { SITE_URL } from "@/lib/site";
+
 export default function robots() {
   return {
     rules: [
@@ -7,7 +9,7 @@ export default function robots() {
         disallow: ["/api/"],
       },
     ],
-    sitemap: "https://www.hasbi.pro/sitemap.xml",
-    host: "https://www.hasbi.pro",
+    sitemap: `${SITE_URL}/sitemap.xml`,
+    host: SITE_URL,
   };
 }

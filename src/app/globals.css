@@ -345,19 +345,3 @@
     display: none;
   }
 }
-
-/* About intro (owner's words): short paragraphs at a readable measure, no orphan words.
-   Unlayered on purpose so it wins over the MDX paragraph utility. */
-.intro-flow {
-  display: flex;
-  flex-direction: column;
-  gap: 0.6em;
-  max-width: 24em;
-}
-.intro-flow p {
-  margin: 0;
-  color: inherit;
-  font: inherit;
-  letter-spacing: inherit;
-  text-wrap: pretty;
-}

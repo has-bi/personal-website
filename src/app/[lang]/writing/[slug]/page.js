@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { notFound, redirect } from "next/navigation";
 import { getPost, getPostLanguages, getPosts } from "@/utils/content";
-import { alternates, EMAIL, formatDate, LANGS, SITE_URL } from "@/lib/site";
+import { alternates, formatDate, LANGS, SITE_NAME, SITE_URL } from "@/lib/site";
 import { localize, t } from "@/lib/i18n";
 import {
   ButtonGhost,
@@ -119,7 +119,8 @@ export default async function ArticlePage({ params }) {
     datePublished: post.date,
     inLanguage: post.lang,
     url,
-    author: { "@type": "Person", name: post.author, url: SITE_URL },
+    author: { "@type": "Organization", name: SITE_NAME, url: SITE_URL },
+    publisher: { "@type": "Organization", name: SITE_NAME, url: SITE_URL },
     image: post.coverImage ? `${SITE_URL}${post.coverImage}` : undefined,
     mainEntityOfPage: url,
     keywords: post.tags.join(", "),
@@ -158,12 +159,6 @@ export default async function ArticlePage({ params }) {
         <div className="article-flow flex min-w-0 flex-1 flex-col gap-lg">
           {post.type === "tutorial" && post.headings.length ? <LessonBrief post={post} labels={labels} /> : null}
           {post.content}
-          <p className="t-body-md text-body">
-            {labels.stuck}{" "}
-            <a href={`mailto:${EMAIL}`} className="text-accent underline underline-offset-2 hover:decoration-2">
-              {EMAIL}
-            </a>
-          </p>
         </div>
       </div>
 

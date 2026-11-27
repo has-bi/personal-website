@@ -2,6 +2,7 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { ImageResponse } from "next/og";
 import { t } from "@/lib/i18n";
+import { SITE_NAME, SITE_URL } from "@/lib/site";
 
 // Open Graph cards: white page, hairlines, small sans label, large light-feeling title. Fonts are bundled TTFs so the build does not depend on the network.
 export const OG_SIZE = { width: 1200, height: 630 };
@@ -24,7 +25,7 @@ export async function renderOg({ label, title, accent, lang, footer = t(lang).si
         <div style={{ display: "flex", alignItems: "center", gap: 18, height: 96, padding: "0 64px", borderBottom: "2px solid #ddd8ed" }}>
           {/* eslint-disable-next-line @next/next/no-img-element -- rendered by next/og, not the browser */}
           <img src={logoSrc} width={56} height={40} alt="" />
-          <div style={{ ...smallText, display: "flex" }}>Hasbi Hassadiqin</div>
+          <div style={{ ...smallText, display: "flex" }}>{SITE_NAME}</div>
         </div>
         <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", flex: 1, padding: "0 64px", gap: 28 }}>
           {label ? <div style={{ ...smallText, display: "flex", color: "#6c667e" }}>{label}</div> : null}
@@ -37,7 +38,7 @@ export async function renderOg({ label, title, accent, lang, footer = t(lang).si
           style={{ ...smallText, display: "flex", justifyContent: "space-between", alignItems: "center", height: 80, padding: "0 64px", borderTop: "2px solid #ddd8ed", background: "#f8f6ff", color: "#5f5a72" }}
         >
           <span>{footer}</span>
-          <span style={{ color: "#201936" }}>hasbi.pro</span>
+          <span style={{ color: "#201936" }}>{new URL(SITE_URL).host}</span>
         </div>
       </div>
     ),

@@ -3,10 +3,9 @@ import { notFound } from "next/navigation";
 import ClientRuntimeGuards from "@/components/ClientRuntimeGuards";
 import SiteFooter from "@/components/site/SiteFooter";
 import SiteNav from "@/components/site/SiteNav";
-import { sectionNumbers, SITE_URL } from "@/lib/site";
+import { SITE_NAME, SITE_URL } from "@/lib/site";
 import { isLocale, LOCALES, t } from "@/lib/i18n";
-import { CURRENT_ROLE } from "@/app/[lang]/about/data";
-import { getPostLanguages, getProjects } from "@/utils/content";
+import { getPostLanguages } from "@/utils/content";
 import { funnelSans, jetbrainsMono } from "@/lib/fonts";
 import { DEFAULT_THEME, themeScript } from "@/lib/theme";
 
@@ -25,27 +24,26 @@ export async function generateMetadata({ params }) {
     metadataBase: new URL(SITE_URL),
     title: {
       default: site.title,
-      template: "%s | Hasbi Hassadiqin",
+      template: `%s | ${SITE_NAME}`,
     },
     description: site.description,
-    keywords: ["Solutions Engineer", "Solutions Architect", "AI", "LLM", "RAG", "Automation", "Hasbi Hassadiqin"],
-    authors: [{ name: "Hasbi Hassadiqin", url: SITE_URL }],
-    creator: "Hasbi Hassadiqin",
-    publisher: "Hasbi Hassadiqin",
+    keywords: ["AI", "LLM", "Automation", "Guides", SITE_NAME],
+    authors: [{ name: SITE_NAME, url: SITE_URL }],
+    creator: SITE_NAME,
+    publisher: SITE_NAME,
     openGraph: {
       type: "website",
       locale: ogLocale,
       url: SITE_URL,
       title: site.title,
       description: site.description,
-      siteName: "Hasbi Hassadiqin",
+      siteName: SITE_NAME,
     },
 
     twitter: {
       card: "summary_large_image",
       title: site.title,
       description: site.description,
-      creator: "@hssdqn",
     },
 
     icons: {
@@ -96,26 +94,18 @@ export const viewport = {
   initialScale: 1,
 };
 
-const personSchema = (lang) => ({
+const websiteSchema = (lang) => ({
   "@context": "https://schema.org",
-  "@type": "Person",
-  name: "Hasbi Hassadiqin",
+  "@type": "WebSite",
+  name: SITE_NAME,
   url: SITE_URL,
-  sameAs: [
-    "https://twitter.com/hssdqn",
-    "https://www.linkedin.com/in/hasbi-hassadiqin/",
-    "https://github.com/has-bi",
-  ],
-  jobTitle: CURRENT_ROLE.title,
-  worksFor: { "@type": "Organization", name: CURRENT_ROLE.org },
-  description: t(lang).site.person,
+  inLanguage: lang,
 });
 
 export default async function RootLayout({ children, params }) {
   const { lang } = await params;
   if (!isLocale(lang)) notFound();
-  const [postLanguages, projects] = await Promise.all([getPostLanguages(), getProjects()]);
-  const sections = sectionNumbers({ hasProjects: projects.length > 0 });
+  const postLanguages = await getPostLanguages();
 
   return (
     <html
@@ -130,7 +120,7 @@ export default async function RootLayout({ children, params }) {
       <body id="top">
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(personSchema(lang)) }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema(lang)) }}
         />
         <a
           href="#main"
@@ -139,7 +129,7 @@ export default async function RootLayout({ children, params }) {
           {t(lang).skip}
         </a>
         <ClientRuntimeGuards />
-        <SiteNav lang={lang} postLanguages={postLanguages} sections={sections} />
+        <SiteNav lang={lang} postLanguages={postLanguages} />
         <main id="main">{children}</main>
         <SiteFooter lang={lang} />
       </body>

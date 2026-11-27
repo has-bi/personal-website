@@ -63,7 +63,7 @@ export function WritingList({ posts, lang, filters = { type: "all", topic: "all"
             action={
               filtered
                 ? { href: pathname, label: labels.seeAll }
-                : { href: localize(lang, "/projects"), label: labels.seeProjects }
+                : { href: localize(lang, "/"), label: dict.nav.index }
             }
           >
             {filtered ? labels.emptyFiltered : labels.emptyAll}
