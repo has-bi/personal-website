@@ -29,19 +29,19 @@ function routesFor(lang, posts, otherPosts) {
   ].filter((route) => route.show);
 }
 
-// hero-band: fits one screen. Height is the viewport minus the sticky nav (56px mobile,
-// 64px from lg). The text (light two-tone headline, abstract, call to action) sits at the
-// top; the photo fills the rest with object-cover, anchored at 78% of its height: the two
-// figures span 53% to 88% of the photo, so on short, wide screens the crop keeps them and
-// takes the hills' tops and the bottom strip of grass instead.
-// A fade at the photo's top edge blends a cropped hill into the dark page instead of
-// leaving a hard line.
-const HERO_IMAGE = "/images/hero-archive-v1.webp";
+// hero-band: the light two-tone headline, the abstract and the call to action sit in the
+// photo's sky; the photo shows in full at the page's width. The sky is transparent, so the
+// photo is pulled up under the text by a negative top margin. A percentage margin is
+// measured against the width, like the sky's own height (about 24% of the width), so the
+// text stays clear of the grass at every width (12% below lg, where the text wraps to more
+// lines; from lg 20%, capped at 384px so very wide screens keep the photo below the nav).
+// The photo's bottom edge fades into the page.
+const HERO_IMAGE = { src: "/images/hero-archive-v1.webp", width: 2688, height: 1520 };
 
 function Hero({ lang, role }) {
   const labels = t(lang).home;
   return (
-    <section className="relative flex h-[calc(100svh-3.5rem)] min-h-[560px] flex-col lg:h-[calc(100svh-4rem)] lg:min-h-[640px]">
+    <section className="relative">
       <div className="band relative z-10 flex flex-col items-center gap-md pt-xl text-center lg:gap-lg lg:pt-xxl">
         <h1 className="t-hero">
           <span className="block text-faint">{labels.hero[0]}</span>
@@ -57,9 +57,15 @@ function Hero({ lang, role }) {
         </div>
       </div>
 
-      <div className="relative min-h-[200px] flex-1 [mask-image:linear-gradient(to_bottom,transparent,black_18%)]">
-        <Image src={HERO_IMAGE} alt={labels.heroAlt} fill priority sizes="100vw" className="object-cover object-[50%_78%]" />
-      </div>
+      <Image
+        src={HERO_IMAGE.src}
+        width={HERO_IMAGE.width}
+        height={HERO_IMAGE.height}
+        alt={labels.heroAlt}
+        priority
+        sizes="100vw"
+        className="-mt-[12%] block h-auto w-full [mask-image:linear-gradient(to_bottom,black_72%,transparent)] lg:-mt-[min(20%,384px)]"
+      />
     </section>
   );
 }
