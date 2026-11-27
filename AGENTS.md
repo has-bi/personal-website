@@ -25,6 +25,7 @@ Do not say a change works until `npm run verify` passes. If it fails, report the
 - `src/lib/ai-context.js`: "Copy context for AI" (post to Markdown). **A new MDX component must be taught here too.**
 - `src/lib/i18n.js`: languages, `localize(lang, path)`, and **every interface string** in both languages (`t(lang)`). New UI text goes here, in both languages, never inline in JSX.
 - `src/middleware.js`: rewrites root paths to `[lang]=id`, redirects `/id/*` to the root. `next.config.mjs`: redirects English-only post URLs to `/en`.
+- `src/lib/series.js`: the three series (`normal` / `creative` / `worker`: key, slug, image, alt key); posts join with front matter `series`. Route `src/app/[lang]/series/[slug]/` is built only for series with posts; Home cards (`src/components/site/SeriesCards.js`) show "Segera" and are not links otherwise.
 - `src/lib/site.js`: site constants (`SITE_NAME` "Human meets Hack", `OWNER_NAME`; no email or personal links), `TOPICS` / `TYPES` / `LANGS` keys, nav, `alternates(path, lang, langs)` (canonical + hreflang).
 - `src/app/[lang]/`: every page, built once per language (`/`, `/writing`, `/writing/[slug]`, OG images; `/about`, `/projects`, `/contact` redirect to the language home). `src/app/sitemap.js` and `robots.js` stay at the root.
 - `src/components/ui/`, `src/components/site/`: shared UI, nav, footer (credit line only).

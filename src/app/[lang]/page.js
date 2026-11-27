@@ -1,6 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { getPosts, getWritingFor } from "@/utils/content";
+import SeriesCards from "@/components/site/SeriesCards";
+import { SERIES } from "@/lib/series";
 import {
   ButtonGhost,
   ButtonPrimary,
@@ -180,10 +182,15 @@ export default async function Home({ params }) {
     getPosts({ lang: otherLocale(lang) }),
   ]);
   const routes = routesFor(lang, posts, otherPosts);
+  // Post count per series in this language's list; 0 renders the "Coming soon" card.
+  const counts = Object.fromEntries(
+    SERIES.map((series) => [series.key, posts.filter((post) => post.series === series.key).length])
+  );
 
   return (
     <>
       <Hero lang={lang} />
+      <SeriesCards counts={counts} lang={lang} />
       {routes.length ? <StartHere routes={routes} lang={lang} /> : null}
       {/* The /writing band stays hidden until at least two posts are published. */}
       {posts.length >= 2 ? <LatestWriting posts={posts} lang={lang} /> : null}
