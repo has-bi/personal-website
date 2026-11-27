@@ -78,7 +78,9 @@
 /* Type scale. Mobile sizes come from the 390px Figma frames. */
 @utility t-hero {
   font-family: var(--font-sans);
-  font-size: clamp(40px, 6.4vw, 92px);
+  /* Width-based, but never more than 9% of the screen height, so the one-screen home hero
+     keeps room for its photo on short laptops. */
+  font-size: clamp(40px, min(6.4vw, 9svh), 92px);
   font-weight: 300;
   line-height: 1.05;
   letter-spacing: -0.035em;

@@ -29,47 +29,36 @@ function routesFor(lang, posts, otherPosts) {
   ].filter((route) => route.show);
 }
 
-// hero-band (reference layout): a light two-tone headline and a short abstract, centred
-// in the photo's sky; the photo; then the call to action centred at the bottom. The sky
-// is transparent, so the photo is pulled up under the text by a negative top margin; a
-// percentage margin is measured against the width, like the sky's own height (about 24%
-// of the width), so the text never reaches the grass (12% below lg, where the text wraps
-// to more lines; capped at 384px so very wide screens do not pull the photo under the
-// nav). From 1700px the button and its note sit on the darkest strip of grass at the
-// bottom centre, below the two figures (white text there measures 5:1 or better); below
-// that the strip is too short, so they follow the photo on the white page.
-const HERO_IMAGE = { src: "/images/hero-archive-v1.webp", width: 2688, height: 1520 };
+// hero-band: fits one screen. Height is the viewport minus the sticky nav (56px mobile,
+// 64px from lg). The text (light two-tone headline, abstract, call to action) sits at the
+// top; the photo fills the rest with object-cover, anchored at 78% of its height: the two
+// figures span 53% to 88% of the photo, so on short, wide screens the crop keeps them and
+// takes the hills' tops and the bottom strip of grass instead.
+// A fade at the photo's top edge blends a cropped hill into the dark page instead of
+// leaving a hard line.
+const HERO_IMAGE = "/images/hero-archive-v1.webp";
 
 function Hero({ lang, role }) {
   const labels = t(lang).home;
   return (
-    <section className="relative">
-      <div className="band relative z-10 flex flex-col items-center gap-lg pt-xxxl text-center lg:pt-xxl">
+    <section className="relative flex h-[calc(100svh-3.5rem)] min-h-[560px] flex-col lg:h-[calc(100svh-4rem)] lg:min-h-[640px]">
+      <div className="band relative z-10 flex flex-col items-center gap-md pt-xl text-center lg:gap-lg lg:pt-xxl">
         <h1 className="t-hero">
           <span className="block text-faint">{labels.hero[0]}</span>
           <span className="block text-ink">{labels.hero[1]}</span>
         </h1>
-        <p className="t-body-md max-w-[46ch] text-muted">{labels.abstractText(role.title, role.org)}</p>
-      </div>
-
-      <div className="relative -mt-[12%] lg:-mt-[min(20%,384px)]">
-        <Image
-          src={HERO_IMAGE.src}
-          width={HERO_IMAGE.width}
-          height={HERO_IMAGE.height}
-          alt={labels.heroAlt}
-          priority
-          sizes="100vw"
-          className="block h-auto w-full"
-        />
-        {/* On the grass the note and the focus ring are white in both themes: the photo does not change with the theme. */}
-        <div className="flex flex-col items-center gap-xs pb-xxl pt-lg min-[1700px]:absolute min-[1700px]:inset-x-0 min-[1700px]:bottom-[2%] min-[1700px]:p-0 min-[1700px]:[&_a:focus-visible]:outline-white">
+        <p className="t-body-md max-w-[70ch] text-muted">{labels.abstractText(role.title, role.org)}</p>
+        <div className="flex flex-col items-center gap-xs pt-xs">
           <ButtonPrimary href={localize(lang, "/writing")}>{labels.startReading}</ButtonPrimary>
-          <p className="t-meta flex items-center gap-xs text-muted min-[1700px]:text-white">
+          <p className="t-meta flex items-center gap-xs text-muted">
             <span aria-hidden="true">•</span>
             {labels.heroNote}
           </p>
         </div>
+      </div>
+
+      <div className="relative min-h-[200px] flex-1 [mask-image:linear-gradient(to_bottom,transparent,black_18%)]">
+        <Image src={HERO_IMAGE} alt={labels.heroAlt} fill priority sizes="100vw" className="object-cover object-[50%_78%]" />
       </div>
     </section>
   );

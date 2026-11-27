@@ -204,10 +204,6 @@ components:
     backgroundColor: "{colors.canvas}"
     textColor: "{colors.body}"
     typography: "{typography.body-md}"
-  hero-abstract-on-photo:
-    textColor: "{colors.on-primary}"
-    typography: "{typography.body-sm}"
-    width: 23%
   button-primary:
     backgroundColor: "{colors.primary}"
     textColor: "{colors.on-primary}"
@@ -584,7 +580,7 @@ All three are self-hosted, subset to Latin, `font-display: swap`. Paid fonts see
 ```
 [logo] HASBI HASSADIQIN  [ 00 ] INDEX  [ 01 ] WRITING  [ 02 ] PROJECTS  [ 03 ] ABOUT            EN / ID
 
-§ 00 · INDEX                 hero-band ("Notes on AI / & automation." over the photo; abstract + START READING on the grass)
+§ 00 · INDEX                 hero-band (two-tone headline, abstract, START READING; photo below; fits one screen)
 § 00.1 · START HERE  /start  router table: YOU ARE · START WITH · LEADS TO (3 rows)
 § 01 · WRITING  /writing     latest post-rows (band hidden until ≥ 2 posts are published)
 § 02 · PROJECTS  /projects   project-card grid (personal projects only)
@@ -668,9 +664,9 @@ There are **no box-shadows** in the system. Depth comes from tone steps and bord
 
 ### Hero
 
-**`hero-band`**: centered `§ 00` `{component.section-label}` and headline in `{typography.display-xl}` on `{colors.canvas}`; the second line uses `{component.hero-accent-line}` (`{colors.accent}`). Below it, the full-bleed hero photo (`/images/hero-archive-v1.webp`: a person on a green hill beside a figure made of ASCII characters). Its sky is transparent, and the photo is pulled up under the headline by a negative top margin of 20% of the width (the sky is about 24% of the width), so the headline sits in the sky and never reaches the grass. Below `lg` the headline can wrap to three lines, so the pull there is 12%.
+**`hero-band`**: fits one screen: height `100svh` minus the sticky nav (56px mobile, 64px from `lg`), never shorter than 560px (640px from `lg`). At the top, centred: the light two-tone headline in `t-hero` (first part `{colors.faint}`, key part `{colors.ink}`), the abstract in `{typography.body-md}` `{colors.muted}` (max 70ch, about three lines on desktop), then the primary pill (`START READING`) with a small note under it. The photo (`/images/hero-archive-v1.webp`: a person on a green hill beside a figure made of ASCII characters, transparent sky) fills the remaining height with `object-cover` anchored at 78% of its height (the figures span 53% to 88%), so the crop on short, wide screens takes the hills' tops and the bottom grass and keeps the figures; `t-hero` is capped at 9% of the screen height for the same reason and a fade on the photo's top edge (mask, 18%) blends them into the page.
 
-**`hero-abstract`**: an `ABSTRACT` `{component.section-label}`, 2–3 sentences in `{typography.body-md}` (what is taught, by whom), then one `{component.button-primary}` labelled `START READING`. From `2xl` it sits on the grass at the lower left (left 3%, bottom 3%, 23% wide, body in `{typography.body-sm}`) as `{component.hero-abstract-on-photo}`: the one area of the photo where white text measures 4.8:1 or better (grass from 75% to 97% of the photo's height), clear of the figures, which start at 29% of the width. Narrower screens cannot fit the text in that area, so below `2xl` it follows the photo on the white page in `{colors.body}`. On the grass the focus ring is `{colors.on-primary}`: the accent ring is too dark on green.
+**`hero-abstract`**: the abstract and call to action above; nothing sits on the photo.
 
 ### Buttons
 
@@ -878,7 +874,7 @@ Not allowed: intro loaders, WebGL backgrounds, sound, scroll-hijacking, "best vi
 
 ### Collapsing Strategy
 - Reduce columns, never scale cards down.
-- Display type is fluid via `clamp()`; the hero must fit in 3 lines at 375px, and stay in the photo's sky (the photo is pulled up by 12% of the width below lg, 20% from lg).
+- Display type is fluid via `clamp()`; the hero headline must fit in 3 lines at 375px, and the whole hero (text and photo) fits one screen.
 - Mono labels never go below 11px.
 
 ### Image Behavior
@@ -921,8 +917,9 @@ Logged decisions:
 - 2026-11-26, market: the site is **Indonesian first**. Indonesian lives at the root (`/writing`), English under `/en` (`/en/writing`); URLs stay English words in both. All interface text is translated, mono labels included (`MULAI MEMBACA`, `SALIN KONTEKS UNTUK AI`, `DI HALAMAN INI`); slash headings (`/writing`) stay as they are because they are paths. Reader is "kamu", author "saya". Until a post's Indonesian version is published, the Indonesian list shows the English post with its `EN` code and links to `/en/writing/<slug>`; the old English URL redirects there (307). The language toggle (`ID / EN`) is always shown. The Indonesian UI copy and the three post translations are agent drafts awaiting the owner's review (posts stay `draft: true` until then).
 - 2026-11-26, owner: the profile picture is a pixel-art portrait (`/images/me-pixelated.webp`) on a lavender ground, rendered with `image-rendering: pixelated` so the blocks stay sharp.
 - 2026-11-27, redesign (landing page, step 1): the home hero becomes a centered headline over a full-bleed photo (`/images/hero-archive-v1.webp`), composition taken from the owner's reference; nav, buttons, mono labels and zero radius stay as they are (the reference's pill nav and rounded buttons are **not** adopted). The hero grid lines are dropped (closes audit #12). The abstract and `START READING` sit on the grass at the lower left from `2xl` (1536px); narrower screens show them under the photo, because the grass there is too short to hold them legibly. The current headline stays as a placeholder until the owner writes the new one.
-- 2026-11-27, redesign (whole site, owner's call): the reference's visual language applies site-wide, not only its composition: centred pill nav, pill buttons and chips, soft-cornered cards and images, one sans typeface with sentence-case furniture, no `§` / `[ 01 ]` numbering or slash headings, light two-tone hero headline (muted then ink), the call to action centred under the hero photo (on the grass from 1700px). Replaces the zero-radius rule, the mono label system, the uppercase furniture and the numbered section labels. See **Direction v2**.
+- 2026-11-27, redesign (whole site, owner's call): the reference's visual language applies site-wide, not only its composition: centred pill nav, pill buttons and chips, soft-cornered cards and images, one sans typeface with sentence-case furniture, no `§` / `[ 01 ]` numbering or slash headings, light two-tone hero headline (muted then ink), the call to action under the abstract, the whole hero fitting one screen (owner, 2026-11-27). Replaces the zero-radius rule, the mono label system, the uppercase furniture and the numbered section labels. See **Direction v2**.
 - 2026-11-27, theme (owner's call): **dark mode is the default** for every reader, regardless of system setting; the light theme stays available from a theme pill in the nav and is remembered per browser. Reverses audit 001's "keep the page light" (dark closing band entry above) for the page as a whole. The hero photo's transparent sky now reads as a night sky over the green hills, close to the reference. Palette in **Direction v2**.
+- 2026-11-27, hero (owner): the home hero fits one screen. The call to action moves from under the photo to under the abstract; the photo fills the remaining height (cover, bottom centre) with a fade at its top edge.
 
 ## Iteration Guide
 
