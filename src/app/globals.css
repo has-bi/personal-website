@@ -48,6 +48,33 @@
   --container-content: 1280px;
 }
 
+/* Dark theme: the default (redesign v2, 2026-11-27). <html data-theme="dark"> is set on the
+   server; the theme toggle switches to "light" and remembers it. Only the colour tokens
+   change, so every utility (bg-canvas, text-ink, ...) follows. Contrast on canvas: ink
+   17.4, body 11.9, muted 7.9, faint 5.7, accent 7.1. */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --color-primary: #f3f0ff;
+  --color-primary-active: #d9d3ee;
+  --color-accent: #a98bf5;
+  --color-accent-active: #c4b2fb;
+  --color-ink: #f3f0ff;
+  --color-body: #cdc7dd;
+  --color-muted: #a8a2b8;
+  --color-faint: #8e88a0;
+  --color-canvas: #0e0b17;
+  --color-surface: #17131f;
+  --color-surface-sunken: #221c2e;
+  --color-hairline: #2c2539;
+  --color-surface-dark-elevated: #1c1727;
+  --color-on-primary: #0e0b17;
+  --color-domain-ai: #c4b2fb;
+  --color-domain-automation: #6fdcb0;
+  --color-tint-ai: #251c3d;
+  --color-tint-automation: #0d2a21;
+  --color-focus-ring: #a98bf5;
+}
+
 /* Type scale. Mobile sizes come from the 390px Figma frames. */
 @utility t-hero {
   font-family: var(--font-sans);

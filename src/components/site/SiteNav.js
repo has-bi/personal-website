@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { NAV_ITEMS } from "@/lib/site";
 import { localize, otherLocale, splitLocale, t } from "@/lib/i18n";
+import ThemeToggle from "@/components/site/ThemeToggle";
 
 // `path` is the language-neutral path ("/writing/x"), so active state works in both languages.
 function isActive(path, href) {
@@ -106,7 +107,10 @@ export default function SiteNav({ lang, postLanguages = {}, sections }) {
             );
           })}
         </nav>
-        <LanguageToggle {...toggle} className="justify-self-end" />
+        <div className="flex items-center gap-xs justify-self-end">
+          <ThemeToggle labels={labels} />
+          <LanguageToggle {...toggle} />
+        </div>
       </div>
 
       {/* Mobile */}
@@ -116,6 +120,7 @@ export default function SiteNav({ lang, postLanguages = {}, sections }) {
           Hasbi
         </Link>
         <div className="flex items-center gap-xs">
+          <ThemeToggle labels={labels} />
           <LanguageToggle {...toggle} />
           <button
             type="button"

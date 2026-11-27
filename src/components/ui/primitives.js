@@ -38,20 +38,14 @@ function ActionLink({ href, className, children, ...props }) {
   );
 }
 
-// button-primary: a solid pill. One per viewport. `tone="light"` is the white pill for
-// photos and dark grounds (the hero's grass), like the reference's "Launch now".
-const PRIMARY_TONES = {
-  dark: "bg-primary text-on-primary hover:bg-primary-active",
-  light: "bg-canvas text-ink hover:bg-surface",
-};
-
-export function ButtonPrimary({ href, children, tone = "dark", className }) {
+// button-primary: a solid pill, one per viewport. It inverts with the theme: a light pill
+// with dark text on the dark default (the reference's "Launch now"), an ink pill on light.
+export function ButtonPrimary({ href, children, className }) {
   return (
     <ActionLink
       href={href}
       className={cx(
-        "t-button inline-flex h-12 shrink-0 items-center rounded-pill px-xl transition-colors",
-        PRIMARY_TONES[tone],
+        "t-button inline-flex h-12 shrink-0 items-center rounded-pill bg-primary px-xl text-on-primary transition-colors hover:bg-primary-active",
         className
       )}
     >

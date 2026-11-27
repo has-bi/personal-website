@@ -8,6 +8,7 @@ import { isLocale, LOCALES, t } from "@/lib/i18n";
 import { CURRENT_ROLE } from "@/app/[lang]/about/data";
 import { getPostLanguages, getProjects } from "@/utils/content";
 import { funnelSans, jetbrainsMono } from "@/lib/fonts";
+import { DEFAULT_THEME, themeScript } from "@/lib/theme";
 
 
 // Each language is its own root layout, so <html lang> is right from the first byte.
@@ -89,7 +90,8 @@ export async function generateMetadata({ params }) {
 }
 
 export const viewport = {
-  themeColor: "#ffffff",
+  // The dark canvas (DESIGN.md, Direction v2); the light theme is opt-in.
+  themeColor: "#0e0b17",
   width: "device-width",
   initialScale: 1,
 };
@@ -116,7 +118,15 @@ export default async function RootLayout({ children, params }) {
   const sections = sectionNumbers({ hasProjects: projects.length > 0 });
 
   return (
-    <html lang={lang} className={`${funnelSans.variable} ${jetbrainsMono.variable}`}>
+    <html
+      lang={lang}
+      data-theme={DEFAULT_THEME}
+      suppressHydrationWarning
+      className={`${funnelSans.variable} ${jetbrainsMono.variable}`}
+    >
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+      </head>
       <body id="top">
         <script
           type="application/ld+json"

@@ -62,12 +62,10 @@ function Hero({ lang, role }) {
           sizes="100vw"
           className="block h-auto w-full"
         />
-        {/* On the grass the button turns white and so does the focus ring: purple is too dark on green. */}
-        <div className="flex flex-col items-center gap-xs pb-xxl pt-lg min-[1700px]:absolute min-[1700px]:inset-x-0 min-[1700px]:bottom-[2%] min-[1700px]:p-0 min-[1700px]:[&_a:focus-visible]:outline-on-primary">
-          <ButtonPrimary href={localize(lang, "/writing")} className="min-[1700px]:bg-canvas min-[1700px]:text-ink min-[1700px]:hover:bg-surface">
-            {labels.startReading}
-          </ButtonPrimary>
-          <p className="t-meta flex items-center gap-xs text-muted min-[1700px]:text-on-primary">
+        {/* On the grass the note and the focus ring are white in both themes: the photo does not change with the theme. */}
+        <div className="flex flex-col items-center gap-xs pb-xxl pt-lg min-[1700px]:absolute min-[1700px]:inset-x-0 min-[1700px]:bottom-[2%] min-[1700px]:p-0 min-[1700px]:[&_a:focus-visible]:outline-white">
+          <ButtonPrimary href={localize(lang, "/writing")}>{labels.startReading}</ButtonPrimary>
+          <p className="t-meta flex items-center gap-xs text-muted min-[1700px]:text-white">
             <span aria-hidden="true">•</span>
             {labels.heroNote}
           </p>
