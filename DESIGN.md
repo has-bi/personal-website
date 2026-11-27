@@ -922,6 +922,7 @@ Logged decisions:
 - 2026-11-27, hero (owner): the home hero fits one screen. The call to action moves from under the photo to under the abstract; the photo fills the remaining height (cover, bottom centre) with a fade at its top edge.
 - 2026-11-27, hero (owner): the photo shows in full at the page's width, with no fade at the top and a fade at its bottom edge. This takes priority over fitting one screen: on wide screens the faded grass runs below the fold.
 - 2026-11-27, hero (owner): the whole photo fits one screen; the text may overlap it. The photo is pinned to the bottom of a screen-high hero (only its transparent sky is clipped), and the abstract and button sit over the hills on short screens.
+- 2026-11-27, hero photo (owner): upscaled with Magnific (Precision "sublime", 2x to 5376x3040), resized to 3840x2171 for the site, transparent sky restored from the original alpha. Sharper ASCII figure, hair and grass; a few ASCII glyphs changed shape slightly in the upscale.
 
 ## Iteration Guide
 

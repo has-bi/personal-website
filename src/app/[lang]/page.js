@@ -55,8 +55,8 @@ function routesFor(lang, posts, otherPosts) {
 // the photo fitting one screen comes first). The photo's bottom edge fades into the page.
 const HERO_IMAGE = {
   src: "/images/hero-archive-v1.webp",
-  width: 2688,
-  height: 1520,
+  width: 3840,
+  height: 2171,
 };
 
 function Hero({ lang, role }) {
