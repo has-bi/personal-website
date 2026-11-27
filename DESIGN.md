@@ -926,6 +926,7 @@ Logged decisions:
 - 2026-11-27, hero motion (owner): an ASCII "waterfall" animates the hero background, falling through the photo's sky into the hills. Home hero only; still frame for reduced motion. See **Direction v2**, Motion.
 - 2026-11-27, hero photo (owner): "Human meets Hacks". A person and a figure with a CRT monitor for a head, both in plain white, on green hills whose far side is still binary (the world rendering). Simple figures, no Greek costume; the owner chose this over oil paintings and object studies. The hero is a light surface in both themes with dark text on the pale sky (owner's call), over a light haze.
 - 2026-11-27, theme and motion (owner): **light mode is the default again** (the dark theme stays available from the nav pill), and the ASCII rain animation is **removed** from the hero.
+- 2026-11-27, hero copy (owner): the headline is **"Human meets Hack"** (both languages; two tones: "Human meets" faint, "Hack" ink). The abstract below it describes a collection of ways to use AI across domains (agent draft from the owner's brief, awaiting the owner's wording); the RAG mention is gone (audit 002 #7).
 
 ## Iteration Guide
 

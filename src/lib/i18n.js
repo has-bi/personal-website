@@ -47,13 +47,14 @@ const en = {
   topics: { ai: "AI", automation: "Automation", web: "Web" },
   types: { tutorial: "Tutorial", note: "Note" },
   home: {
-    // Two tones: [muted, ink]. Placeholder until the owner writes the new headline.
-    hero: ["Notes on", "AI & automation."],
+    // Two tones: [muted, ink]. The site's title, the same in both languages (owner, 2026-11-27).
+    hero: ["Human meets", "Hack"],
     heroNote: "Free to read, no sign-up",
     heroAlt: "A person and a figure with an old computer monitor for a head sit side by side on green hills, looking at distant hills still drawn in binary code.",
     abstract: "Abstract",
     abstractText: (role, org) =>
-      `Plain-language notes on LLMs, RAG and workflow automation, from finding the real problem to choosing the solution. By Hasbi Hassadiqin, ${role} at ${org}.`,
+      // Draft from the owner's brief ("a collection of how to use AI across domains"); owner to approve.
+      `A collection of ways to put AI to work across different domains, from everyday work to business and automation, explained in plain language. By Hasbi Hassadiqin, ${role} at ${org}.`,
     startReading: "Start reading",
     startHere: "Start here",
     youAre: "You are",
@@ -228,13 +229,14 @@ const id = {
   topics: { ai: "AI", automation: "Otomasi", web: "Web" },
   types: { tutorial: "Tutorial", note: "Catatan" },
   home: {
-    // Two tones: [muted, ink]. Placeholder until the owner writes the new headline.
-    hero: ["Catatan tentang", "AI & otomasi."],
+    // Two tones: [muted, ink]. The site's title, the same in both languages (owner, 2026-11-27).
+    hero: ["Human meets", "Hack"],
     heroNote: "Gratis dibaca, tanpa daftar",
     heroAlt: "Seseorang dan sosok berkepala monitor komputer lama duduk berdampingan di bukit hijau, memandang bukit di kejauhan yang masih tergambar dalam kode biner.",
     abstract: "Abstrak",
     abstractText: (role, org) =>
-      `Catatan berbahasa sederhana tentang LLM, RAG, dan otomasi alur kerja, dari menemukan masalah yang sebenarnya sampai memilih solusinya. Oleh Hasbi Hassadiqin, ${role} di ${org}.`,
+      // Draft from the owner's brief ("kumpulan cara memanfaatkan AI di berbagai bidang"); owner to approve.
+      `Kumpulan cara memanfaatkan AI di berbagai bidang, dari pekerjaan sehari-hari sampai bisnis dan otomasi, dijelaskan dengan bahasa sederhana. Oleh Hasbi Hassadiqin, ${role} di ${org}.`,
     startReading: "Mulai membaca",
     startHere: "Mulai dari sini",
     youAre: "Kamu",
