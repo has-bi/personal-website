@@ -14,6 +14,7 @@ import {
 import { PostRow, PostTableHeader } from "@/components/ui/PostRow";
 import { ProjectGrid } from "@/components/ui/ProjectCard";
 import { aboutData } from "@/app/[lang]/about/data";
+import AsciiRain from "@/components/site/AsciiRain";
 import { alternates } from "@/lib/site";
 import { localize, otherLocale, t } from "@/lib/i18n";
 
@@ -53,6 +54,7 @@ function routesFor(lang, posts, otherPosts) {
 // above the top edge (clipped), so the hills and both figures always show in full. On
 // short screens the abstract and the call to action overlap the hills (owner's call:
 // the photo fitting one screen comes first). The photo's bottom edge fades into the page.
+// Behind both, an ASCII rain (AsciiRain) falls through the transparent sky.
 const HERO_IMAGE = {
   src: "/images/hero-archive-v1.webp",
   width: 3840,
@@ -63,6 +65,9 @@ function Hero({ lang, role }) {
   const labels = t(lang).home;
   return (
     <section className="relative h-[calc(100svh-3.5rem)] min-h-[560px] overflow-hidden lg:h-[calc(100svh-4rem)] lg:min-h-[640px]">
+      {/* Background: ASCII rain falling into the hills (it shows through the photo's
+          transparent sky). Dimmed behind the headline so the text stays easy to read. */}
+      <AsciiRain className="absolute inset-0 size-full [mask-image:radial-gradient(ellipse_45%_40%_at_50%_28%,rgba(0,0,0,0.15),black)]" />
       <Image
         src={HERO_IMAGE.src}
         width={HERO_IMAGE.width}
